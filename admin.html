@@ -1,0 +1,2283 @@
+<!-- admin.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Panel</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // Users data from localStorage
+        function getUsers() {
+            return JSON.parse(localStorage.getItem('users')) || [];
+        }
+        function saveUsers(users) {
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+        // Get activity logs
+        function getActivityLogs() {
+            return JSON.parse(localStorage.getItem('activityLogs')) || [];
+        }
+        function saveActivityLogs(logs) {
+            localStorage.setItem('activityLogs', JSON.stringify(logs));
+        }
+        var usersData = getUsers();
+        var uploadsData = [
+            { date: '2023-11-01 10:00:00', fullname: 'John Doe', filename: 'document.pdf', path: 'uploads/document.pdf' },
+            { date: '2023-11-02 11:30:00', fullname: 'Jane Smith', filename: 'image.jpg', path: 'uploads/image.jpg' },
+            { date: '2023-11-03 14:15:00', fullname: 'Alice Johnson', filename: 'report.pdf', path: 'uploads/report.pdf' },
+            { date: '2023-11-04 09:45:00', fullname: 'Bob Wilson', filename: 'photo.png', path: 'uploads/photo.png' }
+        ];
+        var suggestionsData = [
+            {
+                id: 'USER001',
+                date: '2023-11-05 10:00:00',
+                fullname: 'John Doe',
+                role: 'senior_high',
+                section: 'Grade 12 STEM',
+                suggestion_text: 'Improve the user interface for better navigation.',
+                image_path: null
+            },
+            {
+                id: 'USER003',
+                date: '2023-11-06 14:30:00',
+                fullname: 'Alice Johnson',
+                role: 'college',
+                section: 'BSIT 3A',
+                suggestion_text: 'Add more tutorial videos for new users.',
+                image_path: 'uploads/suggestion1.jpg'
+            },
+            {
+                id: 'USER002',
+                date: '2023-11-07 09:15:00',
+                fullname: 'Jane Smith',
+                role: 'teacher',
+                section: 'Faculty SHS',
+                suggestion_text: 'Enhance security features for file uploads.',
+                image_path: null
+            }
+        ];
+        let currentGraphType = 'bar';
+        let chartInstances = {};
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            transition: margin-left 0.3s;
+        }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            border-radius: 0px 20px 0px 0px;
+            background-color: #132A3F;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .sidebar img {
+            max-width: 140px;
+            height: 105px;
+            margin-bottom: 30px;
+            object-fit: contain;
+        }
+        .sidebar.collapsed {
+            transform: translateX(-250px);
+        }
+        .sidebar ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+            padding-left: 0;
+        }
+        .sidebar ul li {
+            padding: 15px 0;
+            transition: background-color 0.3s;
+            width: 100%;
+            text-align: left;
+        }
+        .text {
+            transition: opacity 0.3s;
+        }
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            padding-left: 20px;
+            padding-right: 20px;
+            box-sizing: border-box;
+        }
+        .sidebar ul li a i {
+            width: 24px;
+            text-align: center;
+            font-size: 18px;
+        }
+        .sidebar ul li:not(.users-dropdown):not(.uploads-dropdown):hover {
+            background-color: #555;
+        }
+        .users-dropdown,
+        .uploads-dropdown {
+            position: relative;
+            background-color: transparent !important;
+        }
+        .users-dropdown > a,
+        .uploads-dropdown > a {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding-left: 20px !important;
+            padding-right: 20px !important;
+        }
+        .users-dropdown .arrow,
+        .uploads-dropdown .arrow {
+            font-size: 12px;
+            transition: transform 0.3s;
+        }
+        .users-dropdown.open .arrow,
+        .uploads-dropdown.open .arrow {
+            transform: rotate(180deg);
+        }
+        .submenu {
+            list-style: none;
+            padding: 0;
+            margin: 8px 0 0 0;
+            background: #132A3F;
+            border-radius: 0 0 8px 8px;
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        .submenu li {
+            padding: 10px 0 10px 40px !important;
+        }
+        .submenu li a {
+            padding: 0 !important;
+            font-size: 14px;
+        }
+        .users-dropdown.open .submenu,
+        .uploads-dropdown.open .submenu {
+            max-height: 200px;
+            padding: 8px 0;
+        }
+        .submenu li:hover {
+            background-color: #555;
+        }
+        body.dark-mode .submenu {
+            background: #0f1a41;
+        }
+        .main-content {
+            margin-left: 270px;
+            margin-top: 70px;
+            padding: 40px 20px 20px 20px;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+            transition: margin-left 0.3s;
+        }
+        .header {
+            background-color: white;
+            padding: 20px 20px 20px 40px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 240px;
+            width: calc(100% - 230px);
+            z-index: 2;
+            transition: left 0.3s, width 0.3s;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .notification-bell {
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #FFA500;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .notification-bell i {
+            font-size: 20px;
+        }
+        .notification-bell:hover {
+            background-color: #f0f0f0;
+        }
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #ff4444;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            display: none;
+        }
+        .dark-mode-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #777;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .dark-mode-toggle i {
+            font-size: 20px;
+        }
+        .dark-mode-toggle:hover {
+            background-color: #f0f0f0;
+        }
+        .profile-dropdown {
+            position: relative;
+        }
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 20px;
+            transition: background-color 0.3s;
+        }
+        .profile-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .profile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            min-width: 180px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            border-radius: 8px;
+            z-index: 1001;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .profile-dropdown.open .profile-menu {
+            display: block;
+        }
+        .profile-menu li {
+            padding: 10px 15px;
+        }
+        .profile-menu a {
+            color: #333;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background-color 0.3s;
+        }
+        .profile-menu a:hover {
+            background-color: #f0f0f0;
+        }
+        .profile-menu .logout-item {
+            border-top: 1px solid #eee;
+            color: #ff4444;
+        }
+        .profile-menu .logout-item:hover {
+            background-color: #ffebee;
+        }
+        body.dark-mode .profile-menu {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+        body.dark-mode .profile-menu a {
+            color: white;
+        }
+        body.dark-mode .profile-menu a:hover {
+            background-color: #3d3d3d;
+        }
+        body.dark-mode .profile-menu .logout-item {
+            border-top-color: #444;
+            color: #ff4444;
+        }
+        body.dark-mode .profile-menu .logout-item:hover {
+            background-color: #4d2d2d;
+        }
+        body.dark-mode {
+            background-color: #181f2a;
+            color: #ffffff;
+        }
+        body.dark-mode .header {
+            background-color: #232f41;
+            color: #ffffff;
+        }
+        body.dark-mode .toggle-btn {
+            color: #ffd700;
+        }
+        body.dark-mode .card {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+        body.dark-mode .sidebar {
+            background-color: #0f1a41;
+        }
+        body.dark-mode .users-section,
+        body.dark-mode .settings-section,
+        body.dark-mode .reports-section,
+        body.dark-mode .upload-section,
+        body.dark-mode .statistics-section {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+        body.dark-mode table {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+        body.dark-mode th {
+            background-color: #3d3d3d;
+        }
+        body.dark-mode .modal-content {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+        body.dark-mode #report-content div {
+            background: #2d2d2d !important;
+            color: #ffffff !important;
+        }
+        body.dark-mode .notification-bell {
+            color: #FFA500;
+        }
+        body.dark-mode .dark-mode-toggle {
+            color: #ccc;
+        }
+        body.dark-mode .notification-bell:hover,
+        body.dark-mode .dark-mode-toggle:hover,
+        body.dark-mode .profile-btn:hover {
+            background-color: #3d3d3d;
+        }
+        body.dark-mode .profile-btn span {
+            color: white;
+        }
+        body.dark-mode .graphs-section h2 {
+            color: white;
+        }
+        body.dark-mode .graph-item {
+            background: #2d2d2d;
+        }
+        body.dark-mode .graph-item h4 {
+            color: white;
+        }
+        body.dark-mode .graph label {
+            color: #ccc;
+        }
+        .toggle-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+        .dashboard {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 200px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            user-select: none;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .card h3 {
+            margin-bottom: 10px;
+        }
+        .card p {
+            color: #666;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .graphs-section {
+            margin-top: 40px;
+        }
+        .graphs-section h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .graph-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .graph-item {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .graph-item h4 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .users-section, .settings-section, .reports-section, .upload-section, .statistics-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 8px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: black;
+        }
+        .notification-modal {
+            display: none;
+            position: fixed;
+            z-index: 2001;
+            right: 20px;
+            top: 70px;
+            width: 350px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border: 1px solid #ddd;
+        }
+        .notification-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .notification-header h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+        .notification-close {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: #666;
+        }
+        .notification-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .notification-item {
+            padding: 12px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s;
+        }
+        .notification-item:hover {
+            background-color: #f8f9fa;
+        }
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+        .notification-type {
+            font-weight: bold;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        .notification-type.new-user {
+            color: #28a745;
+        }
+        .notification-type.upload {
+            color: #007bff;
+        }
+        .notification-type.suggestion {
+            color: #ffc107;
+        }
+        .notification-content {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        .notification-time {
+            font-size: 12px;
+            color: #666;
+        }
+        .notification-footer {
+            padding: 12px 20px;
+            text-align: center;
+            border-top: 1px solid #eee;
+        }
+        .view-all-btn {
+            background: none;
+            border: none;
+            color: #007bff;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: underline;
+        }
+        .view-all-btn:hover {
+            color: #0056b3;
+        }
+        body.dark-mode .notification-modal {
+            background-color: #2d2d2d;
+            border-color: #444;
+        }
+        body.dark-mode .notification-header {
+            border-bottom-color: #444;
+        }
+        body.dark-mode .notification-header h3 {
+            color: #ffffff;
+        }
+        body.dark-mode .notification-close {
+            color: #ccc;
+        }
+        body.dark-mode .notification-item {
+            border-bottom-color: #444;
+        }
+        body.dark-mode .notification-item:hover {
+            background-color: #3d3d3d;
+        }
+        body.dark-mode .notification-content {
+            color: #ffffff;
+        }
+        body.dark-mode .notification-time {
+            color: #ccc;
+        }
+        body.dark-mode .notification-footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .user-info-container {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+        .notification-placeholder {
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            font-size: 16px;
+        }
+        body.dark-mode .notification-placeholder {
+            color: #ccc;
+        }
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            padding: 0 15px;
+        }
+        .sidebar-header img {
+            max-width: 140px;
+            height: 105px;
+            margin: 20px;
+            object-fit: contain;
+        }
+        .sidebar-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+            .sidebar-header {
+                margin-bottom: 20px;
+                padding: 0 10px;
+            }
+            .sidebar-header img {
+                max-width: 150px;
+                height: 70px;
+                margin: 15px;
+                border-radius: 10px;
+            }
+            .sidebar ul li {
+                padding: 12px 10px;
+                font-size: 14px;
+            }
+            .main-content {
+                margin-left: 220px;
+                padding: 20px 15px;
+            }
+            .header {
+                left: 180px;
+                width: calc(100% - 180px);
+            }
+        }
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 180px;
+            }
+            .sidebar-header img {
+                max-width: 120px;
+                height: 50px;
+                border-radius: 10px;
+            }
+            .sidebar ul li {
+                padding: 10px 8px;
+                font-size: 12px;
+            }
+            .main-content {
+                margin-left: 200px;
+                padding: 15px 10px;
+            }
+            .header {
+                left: 160px;
+                width: calc(100% - 160px);
+            }
+        }
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .sidebar {
+                width: 220px;
+            }
+            .sidebar-header img {
+                max-width: 140px;
+                height: 70px;
+                margin: 10px;
+                border-radius: 10px;
+            }
+            .main-content {
+                margin-left: 240px;
+            }
+            .header {
+                left: 200px;
+                width: calc(100% - 200px);
+            }
+        }
+        @media (min-width: 1200px) {
+            .sidebar {
+                width: 280px;
+            }
+            .sidebar-header img {
+                max-width: 160px;
+                height: 100px;
+                border-radius: 10px;
+                margin:10px;
+            }
+            .main-content {
+                margin-left: 300px;
+            }
+            .header {
+                left: 260px;
+                width: calc(100% - 260px);
+            }
+        }
+        .welcome-container {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .welcome-container h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        .welcome-container p {
+            margin: 0;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        .uploads-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .uploads-table th,
+        .uploads-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .uploads-table th {
+            background-color: #f2f2f2;
+        }
+        .preview-cell {
+            text-align: center;
+        }
+        .preview-thumb {
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .pdf-icon {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: #ff5722;
+            color: white;
+            text-align: center;
+            line-height: 50px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        #file-preview-modal .modal-content {
+            width: 80%;
+            max-width: 800px;
+            height: 80%;
+            display: flex;
+            flex-direction: column;
+            margin: 5% auto;
+        }
+        #preview-content {
+            flex: 1;
+            overflow: auto;
+        }
+        #preview-content img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        #preview-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        body.dark-mode .uploads-table th {
+            background-color: #3d3d3d;
+            color: white;
+        }
+        body.dark-mode .uploads-table {
+            color: white;
+        }
+        body.dark-mode .uploads-table td {
+            border-bottom-color: #444;
+        }
+        .user-subsection {
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid var(--border-color);
+        }
+        body.dark-mode .user-subsection {
+            background-color: #2d2d2d;
+            border-left-color: var(--border-color);
+        }
+        .role-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: white;
+        }
+        .role-badge.senior_high { background-color: #007bff; }
+        .role-badge.college { background-color: #28a745; }
+        .role-badge.teacher { background-color: #dc3545; }
+        .role-badge.admin { background-color: #6f42c1; }
+        .btn-sm {
+            padding: 4px 8px;
+            font-size: 12px;
+            margin: 2px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-success { background-color: #28a745; color: white; }
+        .btn-success:hover { background-color: #218838; }
+        .btn-danger { background-color: #dc3545; color: white; }
+        .btn-danger:hover { background-color: #c82333; }
+        .btn-warning { background-color: #ffc107; color: #212529; }
+        .btn-warning:hover { background-color: #e0a800; }
+        .btn-info { background-color: #17a2b8; color: white; }
+        .btn-info:hover { background-color: #138496; }
+        .btn-primary { background-color: #007bff; color: white; }
+        .btn-primary:hover { background-color: #0069d9; }
+        body.dark-mode .btn-success { background-color: #28a745; }
+        body.dark-mode .btn-success:hover { background-color: #218838; }
+        body.dark-mode .btn-danger { background-color: #dc3545; }
+        body.dark-mode .btn-danger:hover { background-color: #c82333; }
+        body.dark-mode .btn-warning { background-color: #ffc107; color: #212529; }
+        body.dark-mode .btn-warning:hover { background-color: #e0a800; }
+        body.dark-mode .btn-info { background-color: #17a2b8; }
+        body.dark-mode .btn-info:hover { background-color: #138496; }
+        body.dark-mode .btn-primary { background-color: #007bff; }
+        body.dark-mode .btn-primary:hover { background-color: #0069d9; }
+        .user-subsection h3 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--header-color);
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            font-style: italic;
+        }
+        body.dark-mode .empty-state {
+            color: #ccc;
+        }
+        .user-subsection table {
+            margin-top: 15px;
+        }
+        .user-subsection table th {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .user-subsection table td {
+            vertical-align: middle;
+        }
+        .suggestions-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .suggestions-table th,
+        .suggestions-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .suggestions-table th {
+            background-color: #f2f2f2;
+        }
+        .suggestion-container {
+            max-width: 200px;
+            word-wrap: break-word;
+        }
+        .suggestion-container img {
+            max-width: 100px;
+            max-height: 100px;
+            margin-top: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #reply-modal .modal-content {
+            width: 80%;
+            max-width: 500px;
+        }
+        #reply-modal textarea {
+            font-family: Arial, sans-serif;
+        }
+        body.dark-mode .suggestions-table th {
+            background-color: #3d3d3d;
+            color: white;
+        }
+        body.dark-mode .suggestions-table {
+            color: white;
+        }
+        body.dark-mode .suggestions-table td {
+            border-bottom-color: #444;
+        }
+        body.dark-mode #reply-modal .modal-content {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+        body.dark-mode #reply-modal textarea {
+            background-color: #3d3d3d;
+            color: #ffffff;
+            border-color: #555;
+        }
+        body.dark-mode #reply-modal h3 {
+            color: #ffffff;
+        }
+        body.dark-mode #reply-user-info {
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+        .img-preview {
+            width: 50px;
+            height: 50px;
+            background: #ff9500f5;
+            color: #fff;
+            border-radius: 4px;
+            line-height: 50px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: normal;
+            font-size: 12px;
+            display: inline-block;
+        }
+        body.dark-mode .main-content {
+            background-color: #181f2a;
+        }
+        @media (max-width: 768px) {
+            .users-section table {
+                font-size: 12px;
+                min-width: 600px;
+            }
+            .users-section {
+                overflow-x: auto;
+            }
+            .user-subsection h3 {
+                font-size: 16px;
+            }
+            .user-subsection p {
+                font-size: 14px;
+            }
+        }
+        .bar-abm { background: #FF5722; }
+        .bar-cularts { background: #9C27B0; }
+        .bar-itmawd { background: #4CAF50; }
+        .bar-stem { background: #2196F3; }
+        .bar-bsba { background: #FF9800; }
+        .bar-bscs { background: #F44336; }
+        .bar-bsit { background: #9E9E9E; }
+        .bar-faculty { background: #607D8B; }
+        .bar-students { background: #4CAF50; }
+        .bar-teachers { background: #FF9800; }
+        .analytics-card {
+            background-color: #007bff;
+            color: white;
+        }
+        .analytics-card h3 {
+            color: white;
+        }
+        .analytics-card p {
+            color: white;
+            font-size: 24px;
+        }
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .filter-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .filter-btn:hover {
+            background-color: #0056b3;
+        }
+        .filter-btn.active {
+            background-color: #0056b3;
+        }
+        .article {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 6px #0001;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .article:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px #0002;
+        }
+        .article h3 {
+            margin: 0 0 10px 0;
+            color: #0057b8;
+            font-size: 18px;
+        }
+        .meta {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .summary {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        .source-tag {
+            display: inline-block;
+            background-color: #e9ecef;
+            color: #495057;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .actions span {
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        .actions .cite-btn {
+            background-color: #007bff;
+            color: white;
+        }
+        .actions .cite-btn:hover {
+            background-color: #0056b3;
+        }
+        .actions .related-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        .actions .related-btn:hover {
+            background-color: #1e7e34;
+        }
+        .actions .edit-btn {
+            background-color: #ffc107;
+            color: black;
+        }
+        .actions .edit-btn:hover {
+            background-color: #e0a800;
+        }
+        .actions .delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+        .actions .delete-btn:hover {
+            background-color: #c82333;
+        }
+        .citation-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        .citation-modal.show {
+            display: flex;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .citation-modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            position: relative;
+            display: block;
+            visibility: visible;
+            opacity: 1;
+            animation: modalContentFadeIn 0.3s ease-out 0.1s both;
+            font-size: 14px;
+            width: 600px;
+            max-width: 90vw;
+        }
+        @keyframes modalContentFadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .citation-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            position: relative;
+        }
+        .citation-modal-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .citation-close {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: #666;
+            padding: 3px;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+        .citation-close:hover {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        .citation-format-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            overflow-x: auto;
+        }
+        .citation-tab {
+            background: none;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .citation-tab.active {
+            color: #007bff;
+            border-bottom-color: #007bff;
+            background-color: #f8f9fa;
+        }
+        .citation-tab:hover {
+            color: #007bff;
+            background-color: #f8f9fa;
+        }
+        .citation-content {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+            white-space: normal;
+            word-wrap: break-word;
+        }
+        .citation-copy-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+        }
+        .citation-copy-btn:hover {
+            background-color: #0056b3;
+        }
+        .citation-copy-btn.copied {
+            background-color: #28a745;
+        }
+        .tab-container {
+            margin-top: 20px;
+        }
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #f1f1f1;
+            border: none;
+            border-radius: 4px 4px 0 0;
+            margin-right: 5px;
+        }
+        .tab.active {
+            background-color: #007bff;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .tab-content textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        .related-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        .related-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .related-item input {
+            margin-right: 10px;
+        }
+        .related-item label {
+            font-size: 14px;
+        }
+        body.dark-mode .article {
+            background-color: #2d2d2d;
+            color: #ffffff;
+            border-color: #444;
+        }
+        body.dark-mode .article h3 {
+            color: #ffffff;
+        }
+        body.dark-mode .meta {
+            color: #ccc;
+        }
+        body.dark-mode .summary {
+            color: #ffffff;
+        }
+        body.dark-mode .source-tag {
+            background-color: #444;
+            color: #ffffff;
+        }
+        body.dark-mode .citation-modal-content {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+        body.dark-mode .citation-modal-header {
+            border-bottom-color: #444;
+        }
+        body.dark-mode .citation-modal-header h2 {
+            color: #ffffff;
+        }
+        body.dark-mode .citation-close {
+            color: #ccc;
+        }
+        body.dark-mode .citation-close:hover {
+            background-color: #3d3d3d;
+            color: #ffffff;
+        }
+        body.dark-mode .citation-format-tabs {
+            border-bottom-color: #444;
+        }
+        body.dark-mode .citation-tab {
+            color: #ccc;
+        }
+        body.dark-mode .citation-tab.active {
+            color: #ffd700;
+            border-bottom-color: #ffd700;
+            background-color: #3d3d3d;
+        }
+        body.dark-mode .citation-tab:hover {
+            color: #ffd700;
+            background-color: #3d3d3d;
+        }
+        body.dark-mode .citation-content {
+            background-color: #3d3d3d;
+            color: #ffffff;
+        }
+        /* RAF Preview Modal */
+        #raf-preview-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        #raf-preview-modal .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 800px;
+            max-height: 90vh;
+            width: 90%;
+            overflow: auto;
+        }
+        #raf-preview-modal .close-modal {
+            float: right;
+            font-size: 28px;
+            cursor: pointer;
+        }
+        /* Welcome Modal */
+        #welcome-modal {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 40px;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 3000;
+            text-align: center;
+            display: none;
+        }
+        #welcome-modal h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+        #welcome-modal p {
+            margin: 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        /* Permissions badge */
+        .permissions-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-right: 4px;
+            background: #e9ecef;
+            color: #495057;
+        }
+        body.dark-mode .permissions-badge {
+            background: #444;
+            color: #e0e0e0;
+        }
+        /* Activity log table */
+        .activity-log-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .activity-log-item:last-child {
+            border-bottom: none;
+        }
+        .activity-log-time {
+            font-size: 12px;
+            color: #666;
+        }
+        body.dark-mode .activity-log-time {
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div id="welcome-modal">
+        <h1>Welcome Admin!</h1>
+        <p>Here's what's happening with your business today</p>
+    </div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="./img/STI Logo.png" alt="STI Logo" >
+        </div>
+        <ul>
+            <li><a href="#" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> <span class="text">Dashboard</span></a></li>
+            <li><a href="#" data-section="statistics"><i class="fas fa-chart-bar"></i> <span class="text">Statistics</span></a></li>
+            <li class="users-dropdown" id="users-dropdown">
+                <a href="#" onclick="toggleUsersDropdown(event)">
+                    <i class="fas fa-users"></i> <span class="text">Users</span>
+                    <span class="arrow">▼</span>
+                </a>
+                <ul class="submenu">
+                    <li><a href="#" onclick="scrollToUserSection('verified');"><i class="fas fa-check-circle"></i> Verified Users</a></li>
+                    <li><a href="#" onclick="scrollToUserSection('signing-up');"><i class="fas fa-clock"></i> Signing Up Users</a></li>
+                    <li><a href="#" onclick="scrollToUserSection('rejected');"><i class="fas fa-times-circle"></i> Rejected Users</a></li>
+                    <li><a href="#" onclick="scrollToUserSection('banned');"><i class="fas fa-ban"></i> Banned Users</a></li>
+                    <li><a href="#" onclick="scrollToUserSection('admins');"><i class="fas fa-user-shield"></i> Admin Accounts</a></li>
+                </ul>
+            </li>
+            <li class="uploads-dropdown" id="uploads-dropdown">
+                <a href="#" onclick="toggleUploadsDropdown(event)">
+                    <i class="fas fa-upload"></i> <span class="text">Upload</span>
+                    <span class="arrow">▼</span>
+                </a>
+                <ul class="submenu">
+                    <li><a href="#" onclick="navigateToUploads('admin');"><i class="fas fa-user-tie"></i> Uploaded by Admin</a></li>
+                    <li><a href="#" onclick="navigateToUploads('users');"><i class="fas fa-users"></i> Uploaded by Users</a></li>
+                </ul>
+            </li>
+            <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> <span class="text">Settings</span></a></li>
+            <li><a href="#" data-section="reports"><i class="fas fa-clipboard-list"></i> <span class="text">Reports</span></a></li>
+        </ul>
+    </div>
+    <div class="header">
+        <div style="display: flex; align-items: center;">
+            <button class="toggle-btn" id="toggle-btn">☰</button>
+            <h1 id="page-title"></h1>
+        </div>
+        <div class="header-right">
+            <button class="notification-bell" title="Notifications" onclick="toggleNotificationModal()">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">0</span>
+            </button>
+            <button class="dark-mode-toggle" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+            <div class="profile-dropdown" id="profile-dropdown">
+                <button class="profile-btn" onclick="toggleProfileDropdown()">
+                    <div class="profile-avatar">A</div>
+                    <span>Admin</span>
+                </button>
+                <ul class="profile-menu">
+                    <li><a href="#" onclick="handleProfileClick();"><i class="fas fa-user-cog"></i> Profile Settings</a></li>
+                    <li class="logout-item"><a href="#" onclick="handleLogoutClick();"><i class="fas fa-sign-out-alt"></i> Log out</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="main-content" id="main-content">
+        <div id="dashboard" class="content-section active">
+            <div class="dashboard">
+                <div class="card" onclick="navigateToUsers()">
+                    <h3>Verified Users</h3>
+                    <p id="verified-users-count">0</p>
+                </div>
+                <div class="card" onclick="navigateToUsers()">
+                    <h3>Signing Up Users</h3>
+                    <p id="signing-up-users-count">0</p>
+                </div>
+                <div class="card" onclick="navigateToUploads('all')">
+                    <h3>Uploads</h3>
+                    <p id="revenue-count">0</p>
+                </div>
+                <div class="card">
+                    <h3>Avg Time</h3>
+                    <p id="orders-count">0 min</p>
+                </div>
+                <div class="card" onclick="navigateToReports()">
+                    <h3>Suggestions</h3>
+                    <p id="messages-count">0</p>
+                </div>
+            </div>
+            <div class="graphs-section">
+                <h2>User Statistics</h2>
+                <div class="graph-container">
+                    <div class="graph-item">
+                        <h4>Total Users - SHS & College</h4>
+                        <div class="chart-container">
+                            <canvas id="user-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="graph-item">
+                        <h4>Uploads</h4>
+                        <div class="chart-container">
+                            <canvas id="uploads-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="graph-item">
+                        <h4>Avg Time</h4>
+                        <div class="chart-container">
+                            <canvas id="time-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="graph-item">
+                        <h4>Suggestions</h4>
+                        <div class="chart-container">
+                            <canvas id="suggestions-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="statistics" class="content-section">
+            <div class="statistics-section">
+                <h2>Statistics Overview</h2>
+                <p>Detailed analytics and insights.</p>
+                <div class="empty-state">No statistics data available yet.</div>
+            </div>
+        </div>
+        <div id="upload" class="content-section">
+            <div class="upload-section">
+                <h2>Article Management</h2>
+                <div class="admn-U_A">
+                    <form id="article-upload-form" style="display: grid; gap: 15px; max-width: 600px;">
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: center;">
+                            <label for="article-title" style="font-weight: bold;">Title:</label>
+                            <input type="text" id="article-title" required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: center;">
+                            <label for="article-authors" style="font-weight: bold;">Authors:</label>
+                            <input type="text" id="article-authors" required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: center;">
+                            <label for="article-meta" style="font-weight: bold;">Meta:</label>
+                            <input type="text" id="article-meta" placeholder="e.g., Authors – Year – Institution" required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: start;">
+                            <label for="article-summary" style="font-weight: bold;">Summary:</label>
+                            <textarea id="article-summary" rows="4" required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; resize: vertical;"></textarea>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: center;">
+                            <label for="article-category" style="font-weight: bold;">Category:</label>
+                            <select id="article-category" required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                                <option value="research">Research</option>
+                                <option value="capstone">Capstone</option>
+                            </select>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: center;">
+                            <label for="article-strand" style="font-weight: bold;">Strand/Program:</label>
+                            <input type="text" id="article-strand" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: center;">
+                            <label for="article-level" style="font-weight: bold;">Level:</label>
+                            <select id="article-level" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                                <option value="shs">Senior High School</option>
+                                <option value="college">College</option>
+                            </select>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: center;">
+                            <label for="article-program" style="font-weight: bold;">Program:</label>
+                            <input type="text" id="article-program" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: center;">
+                            <label for="article-year" style="font-weight: bold;">Year:</label>
+                            <input type="number" id="article-year" required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: center;">
+                            <label for="article-type" style="font-weight: bold;">Type:</label>
+                            <input type="text" id="article-type" value="research" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: start;">
+                            <label for="article-citation" style="font-weight: bold;">Citation:</label>
+                            <textarea id="article-citation" rows="3" placeholder="Enter citation text" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; resize: vertical;"></textarea>
+                        </div>
+                        <div style="grid-column: span 2; text-align: center;">
+                            <button type="submit" class="btn" style="background-color: #0057b8; color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px;">Upload Article</button>
+                        </div>
+                    </form>
+                    <h3 style="color: #0057b8; margin: 40px 0 20px 0;">Uploaded Articles by Admin</h3>
+                    <div id="admin-uploaded-articles" style="max-width: 800px;">
+                        <p class="empty-state">No articles uploaded by admin yet.</p>
+                    </div>
+                    <h3 style="color: #0057b8; margin: 40px 0 20px 0;">Uploaded Articles by Users</h3>
+                    <div id="user-uploaded-articles" style="max-width: 800px;">
+                        <p class="empty-state">No articles uploaded by users yet.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="users" class="content-section">
+            <div class="users-section">
+                <h2>Users Management</h2>
+                <p>Manage user accounts and registration requests.</p>
+                <!-- Verified Users Section -->
+                <div id="verified-section" class="user-subsection" style="--border-color: #28a745; --header-color: #28a745;">
+                    <h3 style="color: var(--header-color);">✅ Verified Users</h3>
+                    <p style="margin-bottom: 20px;">Users who have been granted access by the admin.</p>
+                    <table id="verified-users-table">
+                        <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Verified</th><th>RAF Preview</th><th>Actions</th></tr></thead>
+                        <tbody id="verified-users-tbody"></tbody>
+                    </table>
+                </div>
+                <!-- Signing Up Users Section -->
+                <div id="signing-up-section" class="user-subsection" style="--border-color: #ffc107; --header-color: #ffc107;">
+                    <h3 style="color: var(--header-color);">⏳ Signing Up Users</h3>
+                    <p style="margin-bottom: 20px;">Users trying to sign up and awaiting admin approval.</p>
+                    <table id="signing-up-users-table">
+                        <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Signed Up</th><th>RAF Preview</th><th>Actions</th></tr></thead>
+                        <tbody id="signing-up-users-tbody"></tbody>
+                    </table>
+                </div>
+                <!-- Rejected Users Section -->
+                <div id="rejected-section" class="user-subsection" style="--border-color: #6c757d; --header-color: #6c757d;">
+                    <h3 style="color: var(--header-color);">❌ Rejected Users</h3>
+                    <p style="margin-bottom: 20px;">Users whose sign-up requests were rejected by the admin.</p>
+                    <table id="rejected-users-table">
+                        <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Rejected</th><th>RAF Preview</th><th>Actions</th></tr></thead>
+                        <tbody id="rejected-users-tbody"></tbody>
+                    </table>
+                </div>
+                <!-- Banned Users Section -->
+                <div id="banned-section" class="user-subsection" style="--border-color: #dc3545; --header-color: #dc3545;">
+                    <h3 style="color: var(--header-color);">🚫 Banned Users</h3>
+                    <p style="margin-bottom: 20px;">Users who have been banned by the admin.</p>
+                    <table id="banned-users-table">
+                        <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Banned</th><th>RAF Preview</th><th>Actions</th></tr></thead>
+                        <tbody id="banned-users-tbody"></tbody>
+                    </table>
+                </div>
+                <!-- Admin Accounts Section -->
+                <div id="admins-section" class="user-subsection" style="--border-color: #6f42c1; --header-color: #6f42c1;">
+                    <h3 style="color: var(--header-color);">🛡️ Admin Accounts</h3>
+                    <p style="margin-bottom: 20px;">Co-administrators who can manage the system.</p>
+                    <button class="btn btn-primary" onclick="window.location.href='coadmin.html'">+ Create New Admin</button>
+                    <table id="admins-table" style="margin-top: 15px;">
+                        <thead>
+                            <tr>
+                                <th>Admin ID</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Permissions</th>
+                                <th>Date Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admins-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="settings" class="content-section">
+            <div class="settings-section">
+                <h2>Settings</h2>
+                <form id="settings-form">
+                    <label for="site-title">Site Title:</label>
+                    <input type="text" id="site-title" name="site-title" value="STI Archives"><br><br>
+                    <label for="admin-email">Admin Email:</label>
+                    <input type="email" id="admin-email" name="admin-email" value="admin@sti.archives.clmb"><br><br>
+                    <button class="btn" type="submit">Save Settings</button>
+                </form>
+            </div>
+        </div>
+        <div id="reports" class="content-section">
+            <div class="reports-section">
+                <h2>Reports</h2>
+                <p>View system activity and co-admin actions.</p>
+                <h3 style="margin-top: 30px;">Co-Admin Activity Logs</h3>
+                <div id="activity-logs-container">
+                    <div id="activity-logs-list"></div>
+                    <div id="no-activity" class="empty-state" style="display: none;">No activity logs yet.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- RAF Preview Modal -->
+    <div id="raf-preview-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeRafModal()">&times;</span>
+            <h3>RAF Preview</h3>
+            <div id="raf-preview-content" style="margin-top: 15px;"></div>
+        </div>
+    </div>
+    <!-- Notification Modal -->
+    <div id="notification-modal" class="notification-modal">
+        <div class="notification-header">
+            <h3>Notifications</h3>
+            <button class="notification-close" onclick="toggleNotificationModal()">&times;</button>
+        </div>
+        <div class="notification-list" id="notification-list">
+            <div class="notification-placeholder">No new notifications.</div>
+        </div>
+        <div class="notification-footer">
+            <button class="view-all-btn">View All</button>
+        </div>
+    </div>
+    <script>
+        // Utility: Get users from localStorage
+        function getUsers() {
+            return JSON.parse(localStorage.getItem('users')) || [];
+        }
+        function saveUsers(users) {
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+        function getActivityLogs() {
+            return JSON.parse(localStorage.getItem('activityLogs')) || [];
+        }
+        function saveActivityLogs(logs) {
+            localStorage.setItem('activityLogs', JSON.stringify(logs));
+        }
+        function formatRole(role) {
+            if (role === 'senior_high') return 'SHS';
+            if (role === 'college') return 'College';
+            if (role === 'admin') return 'Admin';
+            return 'Teacher';
+        }
+        // === USER ACTIONS ===
+        function banUser(id) {
+            if (!confirm('Ban this user permanently?')) return;
+            const users = getUsers();
+            const user = users.find(u => u.id === id);
+            if (user) {
+                user.banned = true;
+                user.banned_at = new Date().toISOString();
+                user.verified = false;
+                user.rejected = false;
+                saveUsers(users);
+                populateUsersTable();
+                alert('User banned.');
+            }
+        }
+        function unbanUser(id) {
+            if (!confirm('Unban this user?')) return;
+            const users = getUsers();
+            const user = users.find(u => u.id === id);
+            if (user) {
+                user.banned = false;
+                delete user.banned_at;
+                saveUsers(users);
+                populateUsersTable();
+                alert('User unbanned.');
+            }
+        }
+        function approveUser(id) {
+            if (!confirm('Approve this user?')) return;
+            const users = getUsers();
+            const user = users.find(u => u.id === id);
+            if (user) {
+                user.verified = true;
+                user.approved_at = new Date().toISOString();
+                user.rejected = false;
+                user.banned = false;
+                saveUsers(users);
+                populateUsersTable();
+                alert('User approved!');
+            }
+        }
+        function rejectUser(id) {
+            if (!confirm('Reject this user?')) return;
+            const users = getUsers();
+            const user = users.find(u => u.id === id);
+            if (user) {
+                user.rejected = true;
+                user.rejected_at = new Date().toISOString();
+                user.verified = false;
+                user.banned = false;
+                saveUsers(users);
+                populateUsersTable();
+                alert('User rejected.');
+            }
+        }
+        function revokeUser(id) {
+            if (!confirm('Revoke access for this user?')) return;
+            const users = getUsers();
+            const user = users.find(u => u.id === id);
+            if (user) {
+                user.verified = false;
+                saveUsers(users);
+                populateUsersTable();
+                alert('Access revoked.');
+            }
+        }
+        function deleteAdmin(id) {
+            if (!confirm('Delete this admin account? This cannot be undone.')) return;
+            const users = getUsers();
+            const index = users.findIndex(u => u.id === id);
+            if (index !== -1) {
+                users.splice(index, 1);
+                saveUsers(users);
+                populateUsersTable();
+                alert('Admin deleted.');
+            }
+        }
+        function editAdmin(id) {
+            window.location.href = `coadmin.html?id=${id}`;
+        }
+        // === PERMISSIONS ===
+        function formatPermissions(permissions) {
+            const perms = [];
+            if (permissions.view) perms.push('View');
+            if (permissions.edit) perms.push('Edit');
+            if (permissions.delete) perms.push('Delete');
+            if (permissions.manage_users) perms.push('Manage Users');
+            if (permissions.manage_uploads) perms.push('Manage Uploads');
+            return perms.length ? perms.join(', ') : 'None';
+        }
+        // === POPULATE TABLES ===
+        function populateUsersTable() {
+            const verifiedTbody = document.getElementById('verified-users-tbody');
+            const signingUpTbody = document.getElementById('signing-up-users-tbody');
+            const rejectedTbody = document.getElementById('rejected-users-tbody');
+            const bannedTbody = document.getElementById('banned-users-tbody');
+            const adminsTbody = document.getElementById('admins-tbody');
+            verifiedTbody.innerHTML = '';
+            signingUpTbody.innerHTML = '';
+            rejectedTbody.innerHTML = '';
+            bannedTbody.innerHTML = '';
+            adminsTbody.innerHTML = '';
+            const users = getUsers();
+            const verifiedUsers = users.filter(u => u.verified && !u.banned && !u.rejected && u.role !== 'admin');
+            const signingUpUsers = users.filter(u => !u.verified && !u.banned && !u.rejected && u.role !== 'admin');
+            const rejectedUsers = users.filter(u => u.rejected && !u.banned && u.role !== 'admin');
+            const bannedUsers = users.filter(u => u.banned && u.role !== 'admin');
+            const adminUsers = users.filter(u => u.role === 'admin');
+            // Verified users
+            if (verifiedUsers.length === 0) {
+                verifiedTbody.innerHTML = `<tr><td colspan="8" class="empty-state">No verified users.</td></tr>`;
+            } else {
+                verifiedUsers.forEach(user => {
+                    const tr = document.createElement('tr');
+                    const date = new Date(user.approved_at || user.created_at);
+                    const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                    tr.innerHTML = `
+                        <td>${user.user_id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td><span class="role-badge ${user.role}">${formatRole(user.role)}</span></td>
+                        <td>${user.section}</td>
+                        <td>${formattedDate}</td>
+                        <td>${user.raf_path ? `<button class="btn btn-sm btn-info" onclick="previewRaf('${user.raf_path}')">View RAF</button>` : 'N/A'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-warning" onclick="revokeUser('${user.id}')">🚫 Revoke</button>
+                            <button class="btn btn-sm btn-danger" onclick="banUser('${user.id}')">⛔ Ban</button>
+                        </td>
+                    `;
+                    verifiedTbody.appendChild(tr);
+                });
+            }
+            // Signing up users
+            if (signingUpUsers.length === 0) {
+                signingUpTbody.innerHTML = `<tr><td colspan="8" class="empty-state">No pending sign-ups.</td></tr>`;
+            } else {
+                signingUpUsers.forEach(user => {
+                    const tr = document.createElement('tr');
+                    const date = new Date(user.created_at);
+                    const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                    tr.innerHTML = `
+                        <td>${user.user_id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td><span class="role-badge ${user.role}">${formatRole(user.role)}</span></td>
+                        <td>${user.section}</td>
+                        <td>${formattedDate}</td>
+                        <td>${user.raf_path ? `<button class="btn btn-sm btn-info" onclick="previewRaf('${user.raf_path}')">View RAF</button>` : 'N/A'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-success" onclick="approveUser('${user.id}')">✅ Approve</button>
+                            <button class="btn btn-sm btn-secondary" onclick="rejectUser('${user.id}')">❌ Reject</button>
+                            <button class="btn btn-sm btn-danger" onclick="banUser('${user.id}')">⛔ Ban</button>
+                        </td>
+                    `;
+                    signingUpTbody.appendChild(tr);
+                });
+            }
+            // Rejected users
+            if (rejectedUsers.length === 0) {
+                rejectedTbody.innerHTML = `<tr><td colspan="8" class="empty-state">No rejected users.</td></tr>`;
+            } else {
+                rejectedUsers.forEach(user => {
+                    const tr = document.createElement('tr');
+                    const date = new Date(user.rejected_at || user.created_at);
+                    const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                    tr.innerHTML = `
+                        <td>${user.user_id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td><span class="role-badge ${user.role}">${formatRole(user.role)}</span></td>
+                        <td>${user.section}</td>
+                        <td>${formattedDate}</td>
+                        <td>${user.raf_path ? `<button class="btn btn-sm btn-info" onclick="previewRaf('${user.raf_path}')">View RAF</button>` : 'N/A'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-success" onclick="approveUser('${user.id}')">✅ Approve</button>
+                            <button class="btn btn-sm btn-danger" onclick="banUser('${user.id}')">⛔ Ban</button>
+                        </td>
+                    `;
+                    rejectedTbody.appendChild(tr);
+                });
+            }
+            // Banned users
+            if (bannedUsers.length === 0) {
+                bannedTbody.innerHTML = `<tr><td colspan="8" class="empty-state">No banned users.</td></tr>`;
+            } else {
+                bannedUsers.forEach(user => {
+                    const tr = document.createElement('tr');
+                    const date = new Date(user.banned_at || user.created_at);
+                    const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                    tr.innerHTML = `
+                        <td>${user.user_id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td><span class="role-badge ${user.role}">${formatRole(user.role)}</span></td>
+                        <td>${user.section}</td>
+                        <td>${formattedDate}</td>
+                        <td>${user.raf_path ? `<button class="btn btn-sm btn-info" onclick="previewRaf('${user.raf_path}')">View RAF</button>` : 'N/A'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-success" onclick="unbanUser('${user.id}')">✅ Unban</button>
+                        </td>
+                    `;
+                    bannedTbody.appendChild(tr);
+                });
+            }
+            // Admin users
+            if (adminUsers.length === 0) {
+                adminsTbody.innerHTML = `<tr><td colspan="6" class="empty-state">No admin accounts.</td></tr>`;
+            } else {
+                adminUsers.forEach(user => {
+                    const tr = document.createElement('tr');
+                    const date = new Date(user.created_at);
+                    const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                    tr.innerHTML = `
+                        <td>${user.user_id || 'N/A'}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>
+                            <div style="max-width: 200px; word-wrap: break-word;">
+                                ${formatPermissions(user.permissions || {})}
+                            </div>
+                        </td>
+                        <td>${formattedDate}</td>
+                        <td>
+                            <button class="btn btn-sm btn-info" onclick="editAdmin('${user.id}')">✏️ Edit</button>
+                            <button class="btn btn-sm btn-danger" onclick="deleteAdmin('${user.id}')">🗑️ Delete</button>
+                        </td>
+                    `;
+                    adminsTbody.appendChild(tr);
+                });
+            }
+            // Update dashboard counts
+            document.getElementById('verified-users-count').textContent = verifiedUsers.length;
+            document.getElementById('signing-up-users-count').textContent = signingUpUsers.length;
+            // Update notification badge
+            const notificationBadge = document.querySelector('.notification-badge');
+            const pendingCount = signingUpUsers.length;
+            if (pendingCount > 0) {
+                notificationBadge.textContent = pendingCount;
+                notificationBadge.style.display = 'flex';
+                generateNotifications(signingUpUsers);
+            } else {
+                notificationBadge.style.display = 'none';
+                document.getElementById('notification-list').innerHTML = '<div class="notification-placeholder">No new notifications.</div>';
+            }
+        }
+        // === ACTIVITY LOGS ===
+        function renderActivityLogs() {
+            const logsContainer = document.getElementById('activity-logs-list');
+            const noActivity = document.getElementById('no-activity');
+            const logs = getActivityLogs().reverse();
+            if (logs.length === 0) {
+                logsContainer.innerHTML = '';
+                noActivity.style.display = 'block';
+                return;
+            }
+            noActivity.style.display = 'none';
+            let html = '';
+            logs.forEach(log => {
+                const date = new Date(log.timestamp);
+                html += `
+                    <div class="activity-log-item">
+                        <strong>${log.adminName}</strong> 
+                        <span style="color: ${log.action === 'delete' ? '#dc3545' : log.action === 'edit' ? '#ffc107' : '#28a745'};">
+                            ${log.action}
+                        </span> 
+                        ${log.targetType} 
+                        <em>"${log.targetName}"</em>
+                        <div class="activity-log-time">${date.toLocaleString()}</div>
+                    </div>
+                `;
+            });
+            logsContainer.innerHTML = html;
+        }
+        function generateNotifications(users) {
+            const list = document.getElementById('notification-list');
+            list.innerHTML = '';
+            users.forEach(user => {
+                const date = new Date(user.created_at);
+                const item = document.createElement('div');
+                item.className = 'notification-item';
+                item.innerHTML = `
+                    <div class="notification-type new-user">New User</div>
+                    <div class="notification-content">${user.name} (${formatRole(user.role)}) is requesting access.</div>
+                    <div class="notification-time">${date.toLocaleString()}</div>
+                `;
+                list.appendChild(item);
+            });
+        }
+        // === RAF PREVIEW ===
+        function previewRaf(path) {
+            const modal = document.getElementById('raf-preview-modal');
+            const content = document.getElementById('raf-preview-content');
+            if (path.endsWith('.pdf')) {
+                content.innerHTML = `<iframe src="${path}" width="100%" height="600px"></iframe>`;
+            } else if (path.match(/\.(doc|docx)$/)) {
+                content.innerHTML = `<p>Document preview not available. <a href="${path}" target="_blank" download>Download RAF</a></p>`;
+            } else {
+                content.innerHTML = `<p>Preview not available.</p>`;
+            }
+            modal.style.display = 'flex';
+        }
+        function closeRafModal() {
+            document.getElementById('raf-preview-modal').style.display = 'none';
+        }
+        // === CHARTS ===
+        function renderCharts() {
+            const users = getUsers().filter(u => u.verified && !u.banned && !u.rejected && u.role !== 'admin');
+            const shsCount = users.filter(u => u.role === 'senior_high').length;
+            const collegeCount = users.filter(u => u.role === 'college').length;
+            const userChartEl = document.getElementById('user-chart');
+            if (chartInstances['user']) {
+                chartInstances['user'].destroy();
+            }
+            chartInstances['user'] = new Chart(userChartEl, {
+                type: 'bar',
+                data: {
+                    labels: ['SHS', 'College'],
+                    datasets: [{
+                        label: 'Verified Users',
+                        data: [shsCount, collegeCount],
+                        backgroundColor: ['#2196F3', '#4CAF50']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { precision: 0 }
+                        }
+                    }
+                }
+            });
+            document.getElementById('revenue-count').textContent = uploadsData.length;
+            document.getElementById('messages-count').textContent = suggestionsData.length;
+        }
+        // === DROPDOWNS ===
+        function toggleUsersDropdown(e) {
+            e.preventDefault();
+            const dropdown = document.getElementById('users-dropdown');
+            dropdown.classList.toggle('open');
+        }
+        function toggleUploadsDropdown(e) {
+            e.preventDefault();
+            const dropdown = document.getElementById('uploads-dropdown');
+            dropdown.classList.toggle('open');
+        }
+        function toggleProfileDropdown() {
+            const dropdown = document.getElementById('profile-dropdown');
+            dropdown.classList.toggle('open');
+        }
+        // ✅ TOGGLE NOTIFICATION MODAL
+        function toggleNotificationModal() {
+            const modal = document.getElementById('notification-modal');
+            if (modal.style.display === 'block') {
+                modal.style.display = 'none';
+            } else {
+                modal.style.display = 'block';
+            }
+        }
+        // === NAVIGATION ===
+        function scrollToUserSection(type) {
+            showSection('users');
+            const targetId = type === 'verified' ? 'verified-section' :
+                             type === 'signing-up' ? 'signing-up-section' :
+                             type === 'rejected' ? 'rejected-section' :
+                             type === 'admins' ? 'admins-section' :
+                             'banned-section';
+            const target = document.getElementById(targetId);
+            if (target) {
+                const offsetTop = target.offsetTop - 80;
+                window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+            }
+        }
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            document.getElementById('page-title').textContent = 
+                sectionId === 'dashboard' ? 'Dashboard' :
+                sectionId === 'statistics' ? 'Statistics' :
+                sectionId === 'upload' ? 'Upload' :
+                sectionId === 'users' ? 'Users Management' :
+                sectionId === 'settings' ? 'Settings' :
+                'Reports';
+            if (sectionId === 'users') {
+                populateUsersTable();
+            } else if (sectionId === 'dashboard') {
+                renderCharts();
+            } else if (sectionId === 'reports') {
+                renderActivityLogs();
+            }
+            window.scrollTo(0, 0);
+        }
+        function navigateToUsers() {
+            showSection('users');
+        }
+        function navigateToUploads(type = 'all') {
+            showSection('upload');
+        }
+        function navigateToReports() {
+            showSection('reports');
+        }
+        // === SETTINGS ===
+        document.getElementById('settings-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const siteTitle = document.getElementById('site-title').value;
+            const adminEmail = document.getElementById('admin-email').value;
+            localStorage.setItem('adminSettings', JSON.stringify({ siteTitle, adminEmail }));
+            alert('Settings saved!');
+        });
+        // === OTHER UTILS ===
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+            const mainContent = document.querySelector('.main-content');
+            const header = document.querySelector('.header');
+            if (sidebar.classList.contains('collapsed')) {
+                mainContent.style.marginLeft = '20px';
+                header.style.left = '0';
+                header.style.width = '100%';
+            } else {
+                mainContent.style.marginLeft = '';
+                header.style.left = '';
+                header.style.width = '';
+            }
+        }
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const toggleBtn = document.querySelector('.dark-mode-toggle i');
+            if (document.body.classList.contains('dark-mode')) {
+                toggleBtn.className = 'fas fa-sun';
+                toggleBtn.style.color = '#FFD700';
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                toggleBtn.className = 'fas fa-moon';
+                toggleBtn.style.color = '#777';
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        }
+        function handleProfileClick() {
+            toggleProfileDropdown();
+            alert('Profile settings');
+        }
+        function handleLogoutClick() {
+            toggleProfileDropdown();
+            logout();
+        }
+        function showWelcomeModal() {
+            const modal = document.getElementById('welcome-modal');
+            modal.style.display = 'block';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 4000);
+        }
+        // === INIT ===
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dark mode
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+                document.querySelector('.dark-mode-toggle i').className = 'fas fa-sun';
+                document.querySelector('.dark-mode-toggle i').style.color = '#FFD700';
+            }
+            // Load settings
+            const savedSettings = JSON.parse(localStorage.getItem('adminSettings')) || {};
+            document.getElementById('site-title').value = savedSettings.siteTitle || 'STI Archives';
+            document.getElementById('admin-email').value = savedSettings.adminEmail || 'admin@sti.archives.clmb';
+            // Sidebar navigation
+            document.querySelectorAll('.sidebar a[data-section]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.getAttribute('data-section');
+                    showSection(section);
+                });
+            });
+            // Close dropdowns on outside click (except notification modal)
+            document.addEventListener('click', function(e) {
+                const usersDropdown = document.getElementById('users-dropdown');
+                const uploadsDropdown = document.getElementById('uploads-dropdown');
+                const profileDropdown = document.getElementById('profile-dropdown');
+                if (!usersDropdown.contains(e.target)) usersDropdown.classList.remove('open');
+                if (!uploadsDropdown.contains(e.target)) uploadsDropdown.classList.remove('open');
+                if (!profileDropdown.contains(e.target)) profileDropdown.classList.remove('open');
+                // Do NOT auto-close notification modal on outside click
+            });
+            // Buttons
+            document.getElementById('toggle-btn').addEventListener('click', toggleSidebar);
+            document.querySelector('.dark-mode-toggle').addEventListener('click', toggleDarkMode);
+            // Initialize
+            showSection('dashboard');
+            renderCharts();
+            populateUsersTable();
+            showWelcomeModal();
+        });
+    </script>
+</body>
+</html>

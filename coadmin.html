@@ -1,0 +1,723 @@
+<!-- coadmin.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Co-Admin Panel | STI Archives</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            transition: margin-left 0.3s;
+        }
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            border-radius: 0px 20px 0px 0px;
+            background-color: #132A3F;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .sidebar img {
+            max-width: 140px;
+            height: 105px;
+            margin-bottom: 30px;
+            object-fit: contain;
+        }
+        .sidebar.collapsed {
+            transform: translateX(-250px);
+        }
+        .sidebar ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+            padding-left: 0;
+        }
+        .sidebar ul li {
+            padding: 15px 0;
+            transition: background-color 0.3s;
+            width: 100%;
+            text-align: left;
+        }
+        .text {
+            transition: opacity 0.3s;
+        }
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            padding-left: 20px;
+            padding-right: 20px;
+            box-sizing: border-box;
+        }
+        .sidebar ul li:hover {
+            background-color: #555;
+        }
+        .main-content {
+            margin-left: 270px;
+            margin-top: 70px;
+            padding: 40px 20px 20px 20px;
+            min-height: 100vh;
+            background-color: #f8f9fa;
+            transition: margin-left 0.3s;
+        }
+        .header {
+            background-color: white;
+            padding: 20px 20px 20px 40px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 240px;
+            width: calc(100% - 230px);
+            z-index: 2;
+            transition: left 0.3s, width 0.3s;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .dark-mode-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #777;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .dark-mode-toggle i {
+            font-size: 20px;
+        }
+        .dark-mode-toggle:hover {
+            background-color: #f0f0f0;
+        }
+        .profile-dropdown {
+            position: relative;
+        }
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 20px;
+            transition: background-color 0.3s;
+        }
+        .profile-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #6f42c1;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .profile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            min-width: 150px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            border-radius: 8px;
+            z-index: 1001;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .profile-dropdown.open .profile-menu {
+            display: block;
+        }
+        .profile-menu li {
+            padding: 10px 15px;
+        }
+        .profile-menu a {
+            color: #333;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s;
+        }
+        .profile-menu a:hover {
+            background-color: #f0f0f0;
+        }
+        .profile-menu .logout-item {
+            border-top: 1px solid #eee;
+            color: #ff4444;
+        }
+        .profile-menu .logout-item:hover {
+            background-color: #ffebee;
+        }
+        body.dark-mode .profile-menu {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+        body.dark-mode .profile-menu a {
+            color: white;
+        }
+        body.dark-mode .profile-menu a:hover {
+            background-color: #3d3d3d;
+        }
+        body.dark-mode .profile-menu .logout-item {
+            border-top-color: #444;
+            color: #ff4444;
+        }
+        body.dark-mode .profile-menu .logout-item:hover {
+            background-color: #4d2d2d;
+        }
+        body.dark-mode {
+            background-color: #181f2a;
+            color: #ffffff;
+        }
+        body.dark-mode .header {
+            background-color: #232f41;
+            color: #ffffff;
+        }
+        body.dark-mode .toggle-btn {
+            color: #ffd700;
+        }
+        body.dark-mode .card {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+        body.dark-mode .sidebar {
+            background-color: #0f1a41;
+        }
+        body.dark-mode .users-section,
+        body.dark-mode .settings-section,
+        body.dark-mode .reports-section,
+        body.dark-mode .upload-section {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+        body.dark-mode table {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+        body.dark-mode th {
+            background-color: #3d3d3d;
+        }
+        .toggle-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+        .dashboard {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 200px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            user-select: none;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .card h3 {
+            margin-bottom: 10px;
+        }
+        .card p {
+            color: #666;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .users-section, .upload-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .role-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: white;
+        }
+        .role-badge.senior_high { background-color: #007bff; }
+        .role-badge.college { background-color: #28a745; }
+        .role-badge.teacher { background-color: #dc3545; }
+        .btn-sm {
+            padding: 4px 8px;
+            font-size: 12px;
+            margin: 2px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-success { background-color: #28a745; color: white; }
+        .btn-success:hover { background-color: #218838; }
+        .btn-danger { background-color: #dc3545; color: white; }
+        .btn-danger:hover { background-color: #c82333; }
+        .btn-warning { background-color: #ffc107; color: #212529; }
+        .btn-warning:hover { background-color: #e0a800; }
+        .btn-info { background-color: #17a2b8; color: white; }
+        .btn-info:hover { background-color: #138496; }
+        body.dark-mode .btn-success { background-color: #28a745; }
+        body.dark-mode .btn-success:hover { background-color: #218838; }
+        body.dark-mode .btn-danger { background-color: #dc3545; }
+        body.dark-mode .btn-danger:hover { background-color: #c82333; }
+        body.dark-mode .btn-warning { background-color: #ffc107; color: #212529; }
+        body.dark-mode .btn-warning:hover { background-color: #e0a800; }
+        body.dark-mode .btn-info { background-color: #17a2b8; }
+        body.dark-mode .btn-info:hover { background-color: #138496; }
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            font-style: italic;
+        }
+        body.dark-mode .empty-state {
+            color: #ccc;
+        }
+        .user-subsection {
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid var(--border-color);
+        }
+        body.dark-mode .user-subsection {
+            background-color: #2d2d2d;
+            border-left-color: var(--border-color);
+        }
+        .user-subsection h3 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--header-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="./img/STI Logo.png" alt="STI Logo" >
+        </div>
+        <ul id="sidebar-menu">
+            <!-- Dynamically populated based on permissions -->
+        </ul>
+    </div>
+    <div class="header">
+        <div style="display: flex; align-items: center;">
+            <button class="toggle-btn" id="toggle-btn">☰</button>
+            <h1 id="page-title">Co-Admin Panel</h1>
+        </div>
+        <div class="header-right">
+            <button class="dark-mode-toggle" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
+            <div class="profile-dropdown">
+                <button class="profile-btn" onclick="toggleProfile()">
+                    <div class="profile-avatar" id="coadmin-avatar">C</div>
+                    <span id="coadmin-name">Co-Admin</span>
+                </button>
+                <ul class="profile-menu">
+                    <li><a href="#" onclick="toggleProfile(); alert('Profile settings');">Profile Settings</a></li>
+                    <li class="logout-item"><a href="#" onclick="logout(); toggleProfile();">Log out</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="main-content" id="main-content">
+        <div id="dashboard" class="content-section active">
+            <div class="dashboard">
+                <div class="card" onclick="navigateToUsers()">
+                    <h3>Verified Users</h3>
+                    <p id="verified-users-count">0</p>
+                </div>
+                <div class="card" onclick="navigateToUploads()">
+                    <h3>Uploads</h3>
+                    <p id="revenue-count">0</p>
+                </div>
+            </div>
+        </div>
+        <div id="users" class="content-section">
+            <div class="users-section">
+                <h2>Users Management</h2>
+                <div id="verified-section" class="user-subsection" style="--border-color: #28a745; --header-color: #28a745;">
+                    <h3 style="color: var(--header-color);">✅ Verified Users</h3>
+                    <table id="verified-users-table">
+                        <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Verified</th><th>RAF Preview</th><th>Actions</th></tr></thead>
+                        <tbody id="verified-users-tbody"></tbody>
+                    </table>
+                </div>
+                <div id="signing-up-section" class="user-subsection" style="--border-color: #ffc107; --header-color: #ffc107;">
+                    <h3 style="color: var(--header-color);">⏳ Signing Up Users</h3>
+                    <table id="signing-up-users-table">
+                        <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Signed Up</th><th>RAF Preview</th><th>Actions</th></tr></thead>
+                        <tbody id="signing-up-users-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="upload" class="content-section">
+            <div class="upload-section">
+                <h2>Article Management</h2>
+                <div id="user-uploaded-articles">
+                    <p class="empty-state">No articles uploaded by users yet.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Utility functions
+        function getUsers() {
+            return JSON.parse(localStorage.getItem('users')) || [];
+        }
+        function saveUsers(users) {
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+        function getActivityLogs() {
+            return JSON.parse(localStorage.getItem('activityLogs')) || [];
+        }
+        function saveActivityLogs(logs) {
+            localStorage.setItem('activityLogs', JSON.stringify(logs));
+        }
+        function logActivity(action, targetType, targetName) {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const logs = getActivityLogs();
+            logs.push({
+                id: Date.now().toString(),
+                adminId: currentUser.id,
+                adminName: currentUser.name,
+                action: action,
+                targetType: targetType,
+                targetName: targetName,
+                timestamp: new Date().toISOString()
+            });
+            saveActivityLogs(logs);
+        }
+        function formatRole(role) {
+            if (role === 'senior_high') return 'SHS';
+            if (role === 'college') return 'College';
+            return 'Teacher';
+        }
+        // Current co-admin permissions
+        let currentPermissions = {};
+        let currentUserId = '';
+
+        // Approve user (with logging)
+        function approveUser(id) {
+            if (!confirm('Approve this user?')) return;
+            const users = getUsers();
+            const user = users.find(u => u.id === id);
+            if (user) {
+                user.verified = true;
+                user.approved_at = new Date().toISOString();
+                user.rejected = false;
+                user.banned = false;
+                saveUsers(users);
+                populateUsersTable();
+                logActivity('approve', 'User', user.name);
+                alert('User approved!');
+            }
+        }
+        // Reject user (with logging)
+        function rejectUser(id) {
+            if (!confirm('Reject this user?')) return;
+            const users = getUsers();
+            const user = users.find(u => u.id === id);
+            if (user) {
+                user.rejected = true;
+                user.rejected_at = new Date().toISOString();
+                user.verified = false;
+                user.banned = false;
+                saveUsers(users);
+                populateUsersTable();
+                logActivity('reject', 'User', user.name);
+                alert('User rejected.');
+            }
+        }
+        // Revoke user (with logging)
+        function revokeUser(id) {
+            if (!confirm('Revoke access for this user?')) return;
+            const users = getUsers();
+            const user = users.find(u => u.id === id);
+            if (user) {
+                user.verified = false;
+                saveUsers(users);
+                populateUsersTable();
+                logActivity('revoke', 'User', user.name);
+                alert('Access revoked.');
+            }
+        }
+        // Ban user (with logging)
+        function banUser(id) {
+            if (!confirm('Ban this user permanently?')) return;
+            const users = getUsers();
+            const user = users.find(u => u.id === id);
+            if (user) {
+                user.banned = true;
+                user.banned_at = new Date().toISOString();
+                user.verified = false;
+                user.rejected = false;
+                saveUsers(users);
+                populateUsersTable();
+                logActivity('ban', 'User', user.name);
+                alert('User banned.');
+            }
+        }
+        // Unban user (with logging)
+        function unbanUser(id) {
+            if (!confirm('Unban this user?')) return;
+            const users = getUsers();
+            const user = users.find(u => u.id === id);
+            if (user) {
+                user.banned = false;
+                delete user.banned_at;
+                saveUsers(users);
+                populateUsersTable();
+                logActivity('unban', 'User', user.name);
+                alert('User unbanned.');
+            }
+        }
+        // Populate tables based on permissions
+        function populateUsersTable() {
+            const verifiedTbody = document.getElementById('verified-users-tbody');
+            const signingUpTbody = document.getElementById('signing-up-users-tbody');
+            verifiedTbody.innerHTML = '';
+            signingUpTbody.innerHTML = '';
+            const users = getUsers();
+            const verifiedUsers = users.filter(u => u.verified && !u.banned && !u.rejected && u.role !== 'admin');
+            const signingUpUsers = users.filter(u => !u.verified && !u.banned && !u.rejected && u.role !== 'admin');
+            // Verified users
+            if (verifiedUsers.length === 0) {
+                verifiedTbody.innerHTML = `<tr><td colspan="8" class="empty-state">No verified users.</td></tr>`;
+            } else {
+                verifiedUsers.forEach(user => {
+                    const tr = document.createElement('tr');
+                    const date = new Date(user.approved_at || user.created_at);
+                    const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                    let actions = '';
+                    if (currentPermissions.edit) {
+                        actions += `<button class="btn btn-sm btn-warning" onclick="revokeUser('${user.id}')">🚫 Revoke</button>`;
+                    }
+                    if (currentPermissions.delete) {
+                        actions += `<button class="btn btn-sm btn-danger" onclick="banUser('${user.id}')">⛔ Ban</button>`;
+                    }
+                    tr.innerHTML = `
+                        <td>${user.user_id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td><span class="role-badge ${user.role}">${formatRole(user.role)}</span></td>
+                        <td>${user.section}</td>
+                        <td>${formattedDate}</td>
+                        <td>${user.raf_path ? `<button class="btn btn-sm btn-info" onclick="previewRaf('${user.raf_path}')">View RAF</button>` : 'N/A'}</td>
+                        <td>${actions || 'No permissions'}</td>
+                    `;
+                    verifiedTbody.appendChild(tr);
+                });
+            }
+            // Signing up users
+            if (signingUpUsers.length === 0) {
+                signingUpTbody.innerHTML = `<tr><td colspan="8" class="empty-state">No pending sign-ups.</td></tr>`;
+            } else {
+                signingUpUsers.forEach(user => {
+                    const tr = document.createElement('tr');
+                    const date = new Date(user.created_at);
+                    const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                    let actions = '';
+                    if (currentPermissions.manage_users) {
+                        actions += `<button class="btn btn-sm btn-success" onclick="approveUser('${user.id}')">✅ Approve</button>`;
+                        actions += `<button class="btn btn-sm btn-secondary" onclick="rejectUser('${user.id}')">❌ Reject</button>`;
+                    }
+                    if (currentPermissions.delete) {
+                        actions += `<button class="btn btn-sm btn-danger" onclick="banUser('${user.id}')">⛔ Ban</button>`;
+                    }
+                    tr.innerHTML = `
+                        <td>${user.user_id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td><span class="role-badge ${user.role}">${formatRole(user.role)}</span></td>
+                        <td>${user.section}</td>
+                        <td>${formattedDate}</td>
+                        <td>${user.raf_path ? `<button class="btn btn-sm btn-info" onclick="previewRaf('${user.raf_path}')">View RAF</button>` : 'N/A'}</td>
+                        <td>${actions || 'No permissions'}</td>
+                    `;
+                    signingUpTbody.appendChild(tr);
+                });
+            }
+            // Update dashboard counts
+            document.getElementById('verified-users-count').textContent = verifiedUsers.length;
+        }
+        function previewRaf(path) {
+            alert('RAF preview not implemented in co-admin view.');
+        }
+        // Navigation
+        function showSection(section) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(section).classList.add('active');
+            if (section === 'users') {
+                populateUsersTable();
+            }
+            window.scrollTo(0, 0);
+        }
+        function navigateToUsers() {
+            if (currentPermissions.manage_users || currentPermissions.view) {
+                showSection('users');
+            } else {
+                alert('You do not have permission to view users.');
+            }
+        }
+        function navigateToUploads() {
+            if (currentPermissions.manage_uploads || currentPermissions.view) {
+                showSection('upload');
+            } else {
+                alert('You do not have permission to view uploads.');
+            }
+        }
+        // Sidebar setup based on permissions
+        function setupSidebar() {
+            const menu = document.getElementById('sidebar-menu');
+            menu.innerHTML = `
+                <li><a href="#" onclick="showSection('dashboard'); event.preventDefault();"><i class="fas fa-tachometer-alt"></i> <span class="text">Dashboard</span></a></li>
+            `;
+            if (currentPermissions.manage_users || currentPermissions.view) {
+                menu.innerHTML += `
+                    <li><a href="#" onclick="navigateToUsers(); event.preventDefault();"><i class="fas fa-users"></i> <span class="text">Users</span></a></li>
+                `;
+            }
+            if (currentPermissions.manage_uploads || currentPermissions.view) {
+                menu.innerHTML += `
+                    <li><a href="#" onclick="navigateToUploads(); event.preventDefault();"><i class="fas fa-upload"></i> <span class="text">Upload</span></a></li>
+                `;
+            }
+        }
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser || currentUser.role !== 'admin') {
+                alert('Access denied. Redirecting to login...');
+                window.location.href = 'index.html';
+                return;
+            }
+            currentUserId = currentUser.id;
+            currentPermissions = currentUser.permissions || {};
+            document.getElementById('coadmin-name').textContent = currentUser.name;
+            document.getElementById('coadmin-avatar').textContent = currentUser.name.charAt(0).toUpperCase();
+            setupSidebar();
+            showSection('dashboard');
+            populateUsersTable();
+            // Dark mode
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+                document.querySelector('.dark-mode-toggle i').className = 'fas fa-sun';
+                document.querySelector('.dark-mode-toggle i').style.color = '#FFD700';
+            }
+            document.querySelector('.dark-mode-toggle').addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+                const icon = document.querySelector('.dark-mode-toggle i');
+                if (document.body.classList.contains('dark-mode')) {
+                    icon.className = 'fas fa-sun';
+                    icon.style.color = '#FFD700';
+                    localStorage.setItem('darkMode', 'enabled');
+                } else {
+                    icon.className = 'fas fa-moon';
+                    icon.style.color = '#777';
+                    localStorage.setItem('darkMode', 'disabled');
+                }
+            });
+            document.getElementById('toggle-btn').addEventListener('click', function() {
+                document.getElementById('sidebar').classList.toggle('collapsed');
+                const mainContent = document.querySelector('.main-content');
+                const header = document.querySelector('.header');
+                if (document.getElementById('sidebar').classList.contains('collapsed')) {
+                    mainContent.style.marginLeft = '20px';
+                    header.style.left = '0';
+                    header.style.width = '100%';
+                } else {
+                    mainContent.style.marginLeft = '';
+                    header.style.left = '';
+                    header.style.width = '';
+                }
+            });
+            document.querySelector('.logout-item a').addEventListener('click', function() {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Space STI ARCHIVES</title>
+  
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style> 
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f6f8;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .main-content {
+        display: flex;
+        height: calc(100vh - 50px);
+        margin-top: 50px;
+      }
+    .main-navbar {
+           display: flex;
+
+           align-items: center;
+           position: fixed;
+           justify-content: space-between;
+
+             top:0;
+             height: 50px;
+             width: 100%;
+
+
+             color: #0057b8;
+             background: #fff;
+             box-shadow: 0 2px 8px #0001;
+             padding: 0 12px;
+             transition: all 0.3s ease;
+             z-index: 1000;
+
+
+         }
+       /* Shrink effect */
+      .main-navbar.shrink {
+      padding: 10px 30px;
+      position:fixed;
+      background: #fff;
+      height: 50px;
+
+    }
+     .main-navbar .sti-logo {
+            height: 44px;
+            width: auto;
+            border-radius: 6px;
+            margin-left:30px;
+            margin-top:2px;
+        } 
+        /* Shrink effect */
+        .main-navbar.shrink .sti-logo {
+            height: 35px;
+
+        }
+        .main-navbar.shrink .nav-icon {
+            display: none;
+        }
+        .main-navbar.shrink .nav-text {
+            font-family: "Font Awesome 6 Free";
+        }
+        .main-navbar span {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0057b8;
+            margin-left: 10px;
+            font-family: 'Poppins', Arial, sans-serif;
+            user-select: none;
+        }
+        /* Shrink effect */
+        .main-navbar.shrink span {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0057b8;
+            margin-left: 10px;
+            font-family: 'Poppins', Arial, sans-serif;
+            user-select: none;
+        }
+        .nav-icons-center span {
+            font-family: "Font Awesome 6 Free";
+        }
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Poppins', Arial, sans-serif;
+            font-weight: 600;
+            color: #132a3f;
+            font-size: 18px;
+            margin-right:30px;
+        }
+        .navbar-right i {
+            font-size: 28px;
+            color: #0057b8;
+        }
+        .dark-mode-toggle {
+            border: none;
+            background: transparent;
+        }
+        .dark-mode .main-navbar {
+            background: #232f41;
+            
+        }
+        .dark-mode .navbar-right i {
+            color: #ffd700;
+        }
+        .dark-mode .nav-icon {
+            color: #ffd700;
+        }
+        .dark-mode .nav-icon:hover {
+            color: #fff;
+        }
+        .dark-mode .navbar-right.user-nav-fixed .user-name {
+            color: #ffd700;
+        }
+        .navbar-right.user-nav-fixed {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-family: 'Poppins', Arial, sans-serif;
+            font-weight: 600;
+            color: #132a3f;
+            font-size: 18px;
+            z-index: 20;
+        }
+        .navbar-right.user-nav-fixed .user-name {
+            font-size: 18px;
+            color: #132a3f;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .navbar-right.user-nav-fixed .fa-user-circle {
+            font-size: 32px;
+            color: #0057b8;
+        }
+        .dark-mode .navbar-right.user-nav-fixed .fa-user-circle {
+            font-size: 32px;
+            color: #ffd700;
+        }
+        .nav-icons-center {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            font-family: 'Poppins', Arial, sans-serif;
+        }
+        .nav-icon {
+            font-size: 20px;
+            color: #132a3f;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            
+        }
+        .nav-icon:hover {
+            color: #0057b8;
+        }
+        .nav-icon {
+       font-size: 20px;
+       color: #0057b8;
+       margin: 0 0 2px 0;
+       cursor: pointer;
+       transition: color 0.3s;
+     }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+        }
+        .nav-item a {
+            text-decoration: none;
+            cursor: pointer ;
+            
+        }
+        .nav-text {
+            font-size: 20px;
+            color: #0057b8;
+            cursor: default;
+            margin: 0;
+            transition: color 0.3s;
+        }
+        .dark-mode .nav-text {
+            color: #ffd700;
+        }
+        .dark-mode .main-navbar.shrink .nav-text {
+            color: #ffd700;
+        }
+
+        .STI-logo {
+            display: flex;
+            align-items: center;
+        }
+        .STI-logo a {
+            text-decoration: none;
+        }
+        .STI-logo span {
+            vertical-align: middle;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 8%;
+            margin-right:10px;
+            right: -320px;
+            width: 230px;
+            height: 65%;
+            background: #fff;
+            box-shadow: -2px 0 16px #0002;
+            z-index: 100;
+            transition: right 0.3s cubic-bezier(.4,2,.6,1), visibility 0.3s;
+            display: flex;
+            flex-direction: column;
+            visibility: hidden; /* Hide by default */
+            pointer-events: none; /* Prevent interaction when hidden */
+            z-index: 10002;
+        }
+        .sidebar.open {
+            right: 0;
+            visibility: visible; /* Show when open */
+            pointer-events: auto;
+        }
+        .sidebar-content {
+            padding: 32px 24px 24px 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .close-sidebar {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #0057b8;
+            align-self: flex-end;
+            cursor: pointer;
+            margin-bottom: 16px;
+        }
+        .sidebar-content h3 {
+            margin: 0 0 24px 0;
+            color: #0057b8;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        .sidebar-content ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex: 1;
+        }
+        .sidebar-content ul li {
+            margin-bottom: 18px;
+        }
+        .sidebar-content ul li a {
+            color: #132a3f;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .sidebar-content ul li a:hover {
+            color: #0057b8;
+        }
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .user-info {
+            margin-left: 10px;
+        }
+        .user-name {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #0057b8;
+            font-weight: 600;
+        }
+        .user-status {
+            margin: 2px 0 0 0;
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: 500;
+        }
+        .sidebar-nav {
+            display: none;
+        }
+        .dark-mode .sidebar {
+            background: #232f41;
+            color: #ffd700;
+            box-shadow: -2px 0 16px #0008;
+        }
+        .dark-mode .sidebar-content h3 {
+            color: #ffd700;
+        }
+        .dark-mode .sidebar-content ul li a {
+            color: #ffd700;
+        }
+        .dark-mode .sidebar-content ul li a:hover {
+            color: #fff;
+        }
+        .dark-mode .close-sidebar {
+            color: #ffd700;
+        }
+    .file-viewer {
+    width: 50%;
+    background: #fff;
+    border-right: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
+}
+
+    /* Dark mode styles */
+    .dark-mode body {
+      background: #181f2a;
+    }
+
+    .dark-mode .file-viewer {
+      background: #2d2d2d;
+      border-right: 1px solid #444;
+    }
+
+    .dark-mode .doc-preview {
+      background: #2d2d2d;
+      color: white;
+    }
+
+
+    .dark-mode .editor {
+      background: #2d2d2d;
+    }
+
+    
+
+    .dark-mode .toolbar select, .dark-mode .toolbar button, .dark-mode .toolbar input[type="color"] {
+      background: #333;
+      color: white;
+      border: 1px solid #555;
+    }
+
+    .dark-mode .toolbar button:hover {
+      background: #444;
+    }
+
+    .dark-mode .document {
+      background: #2d2d2d;
+      color: white;
+    }
+
+    .dark-mode .committee p {
+      color: #ccc;
+    }
+
+    .dark-mode .committee em {
+      color: #aaa;
+    }
+
+
+.doc-preview {
+  text-align: center;
+  font-family: 'Times New Roman', serif;
+
+}
+
+.doc-preview h1 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.doc-preview .by {
+  font-size: 1rem;
+  margin: 10px 0;
+}
+
+.doc-preview h2 {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+.committee p {
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+}
+
+.committee em {
+  display: block;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+
+
+    .editor {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      background: #fff;
+    }
+
+    .toolbar {
+       display: flex;
+       gap: 10px;
+       margin-bottom: 15px;
+       flex-wrap: wrap;
+       align-items: center;
+       background: transparent;
+     }
+
+    .toolbar select, .toolbar button, .toolbar input[type="color"] {
+      padding: 6px 10px;
+      font-size: 0.9rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #f9f9f9;
+      cursor: pointer;
+    }
+
+    .toolbar button:hover {
+      background: #e0e0e0;
+    }
+
+    .document {
+      flex: 1;
+      max-width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      padding: 30px;
+      font-size: 1rem;
+      color: #333;
+      line-height: 1.6;
+      overflow-y: auto;
+      overflow-x: hidden;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      word-break: break-word;
+      white-space: normal;
+    }
+
+    .document[contenteditable="true"] {
+      outline: none;
+    }
+
+    /* Toggle Panel Styles */
+    .toggle-panel {
+      position: absolute;
+      top: 50%;
+      left: -15px;
+      transform: translateY(-50%);
+      z-index: 10;
+    }
+
+    .toggle-btn {
+      background: #2c2c2c;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+    }
+
+    .toggle-btn:hover {
+      background: #4dcedf;
+      transform: scale(1.1);
+    }
+
+    /* Editor collapse animation */
+    .editor {
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .editor.collapsed {
+      width: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    /* File viewer expand when editor is collapsed */
+    .file-viewer {
+      transition: width 0.3s ease;
+    }
+
+    .file-viewer.expanded {
+      width: 97%;
+    }
+
+    .file-viewer {
+      position: relative;
+    }
+
+    .select-article {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      padding: 40px;
+      border: 2px dashed #ccc;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      z-index: 10;
+    }
+
+    .select-article:hover {
+      background-color: #e9e9e9;
+    }
+
+    .select-article h2 {
+      margin: 0;
+      color: #555;
+      font-size: 1.5rem;
+    }
+
+    /* Dark mode for select article */
+    .dark-mode .select-article {
+      border-color: #666;
+      background-color: #2d2d2d;
+      color: #e2e8f0;
+    }
+
+    .dark-mode .select-article:hover {
+      background-color: #3d3d3d;
+    }
+
+    .dark-mode .select-article h2 {
+      color: #ffd700;
+    }
+
+    /* Hide toolbar and document when collapsed */
+    .editor.collapsed .toolbar,
+    .editor.collapsed .document {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="main-navbar"  id="main-navbar">
+       <div class="STI-logo">
+           <a href="Homepage.html"><img src="img/STI Logo.png" alt="STI Logo" class="sti-logo"></a>
+           <a href="Homepage.html"><span>ARCHIVES</span></a>
+       </div>
+       
+        <div style="flex:1"></div>
+
+        <div class="nav-icons-center">
+            <div class="nav-item">
+                <a href="#home"><span class="nav-text">Home</span></a>
+            </div>
+            <div class="nav-item">
+                <a href="library.html"><span class="nav-text">Library</span></a>
+            </div>
+            <div class="nav-item">
+                <a href="#help"><span class="nav-text">About</span></a>
+            </div>
+        </div>
+
+        <div class="navbar-right user-nav-fixed">
+            <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
+                <i class="fa fa-moon"></i>
+            </button>
+            <i class="fa fa-user-circle" id="userIcon" style="cursor:pointer;"></i>
+        </div>
+
+    </nav>
+
+    <div class="main-content">
+     <div class="file-viewer expanded">
+       <!-- Select Article Container -->
+       <div class="select-article" id="selectArticle" onclick="goToLibrary()">
+         <h2>Select an Article</h2>
+       </div>
+
+       <!-- Document Preview -->
+       <div class="doc-preview" id="docPreview" style="display: none;">
+         <!-- Pages will be generated dynamically -->
+       </div>
+     </div>
+
+
+
+  <!-- Document Editor -->
+  <div class="editor collapsed" id="editor">
+    <div class="toggle-panel">
+      <button class="toggle-btn" id="closeEditor" style="display: none;">></button>
+      <button class="toggle-btn" id="openEditor"><</button>
+    </div>
+    <div class="toolbar">
+      <select onchange="format('fontName', this.value)">
+        <option value="Arial">Arial</option>
+        <option value="Georgia">Georgia</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Courier New">Courier New</option>
+      </select>
+
+      <button onclick="adjustFontSize(1)">A+</button>
+      <button onclick="adjustFontSize(-1)">A−</button>
+
+      <button onclick="format('bold')"><b>B</b></button>
+      <button onclick="format('italic')"><i>I</i></button>
+
+      <select onchange="applyUnderlineStyle(this.value)">
+        <option value="underline">Underline: Solid</option>
+        <option value="dotted">Dotted</option>
+        <option value="dashed">Dashed</option>
+        <option value="wavy">Wavy</option>
+        <option value="none">None</option>
+      </select>
+
+      <input type="color" onchange="format('foreColor', this.value)" title="Text Color" />
+
+      <button onclick="format('justifyLeft')">⬅️</button>
+      <button onclick="format('justifyCenter')">↔️</button>
+      <button onclick="format('justifyRight')">➡️</button>
+      <button onclick="format('justifyFull')">📄</button>
+
+      <select onchange="setLineHeight(this.value)">
+        <option value="1.2">Line spacing: 1.2</option>
+        <option value="1.5">1.5</option>
+        <option value="2">2.0</option>
+        <option value="2.5">2.5</option>
+      </select>
+
+      <button onclick="downloadDocument()" title="Download Document"><i class="fas fa-download"></i></button>
+      <button onclick="printDocument()" title="Print Document"><i class="fas fa-print"></i></button>
+    </div>
+
+    <div class="document" contenteditable="true" id="doc" data-placeholder="Start Typing Your Document Here..">Start Typing Your Document Here..</div>
+  </div>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        // Article viewer functions (page navigation removed)
+
+
+        // Editor toggle functions
+        const closeEditor = document.getElementById('closeEditor');
+        const openEditor = document.getElementById('openEditor');
+        const editor = document.getElementById('editor');
+        const fileViewer = document.querySelector('.file-viewer');
+
+        closeEditor.addEventListener('click', () => {
+            editor.classList.add('collapsed');
+            fileViewer.classList.add('expanded');
+            closeEditor.style.display = 'none';
+            openEditor.style.display = 'block';
+        });
+
+        openEditor.addEventListener('click', () => {
+            editor.classList.remove('collapsed');
+            fileViewer.classList.remove('expanded');
+            closeEditor.style.display = 'block';
+            openEditor.style.display = 'none';
+        });
+
+        // Document writer tools functions
+        function format(command, value) {
+            document.execCommand(command, false, value);
+        }
+
+        function adjustFontSize(delta) {
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                const selectedText = range.toString();
+                if (selectedText) {
+                    const span = document.createElement('span');
+                    const currentSize = window.getComputedStyle(range.startContainer.parentElement).fontSize;
+                    const newSize = parseInt(currentSize) + delta;
+                    span.style.fontSize = newSize + 'px';
+                    span.textContent = selectedText;
+                    range.deleteContents();
+                    range.insertNode(span);
+                }
+            }
+        }
+
+        function applyUnderlineStyle(style) {
+            if (style === 'none') {
+                document.execCommand('underline', false, false);
+            } else {
+                document.execCommand('underline', false, true);
+            }
+        }
+
+        function setLineHeight(value) {
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                const selectedText = range.toString();
+                if (selectedText) {
+                    const div = document.createElement('div');
+                    div.style.lineHeight = value;
+                    div.textContent = selectedText;
+                    range.deleteContents();
+                    range.insertNode(div);
+                }
+            }
+        }
+
+        function downloadDocument() {
+            const doc = document.getElementById('doc');
+            const content = doc.innerHTML;
+            const blob = new Blob([content], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'document.html';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function printDocument() {
+            const navbar = document.querySelector('.main-navbar');
+            const fileViewer = document.querySelector('.file-viewer');
+            const togglePanel = document.querySelector('.toggle-panel');
+            const toolbar = document.querySelector('.toolbar');
+            const documentElement = document.querySelector('.document');
+
+            // Hide other elements and modify document styling for print
+            const originalDisplays = {};
+            const originalDocumentStyles = {};
+
+            if (navbar) {
+                originalDisplays.navbar = navbar.style.display;
+                navbar.style.display = 'none';
+            }
+            if (fileViewer) {
+                originalDisplays.fileViewer = fileViewer.style.display;
+                fileViewer.style.display = 'none';
+            }
+            if (togglePanel) {
+                originalDisplays.togglePanel = togglePanel.style.display;
+                togglePanel.style.display = 'none';
+            }
+            if (toolbar) {
+                originalDisplays.toolbar = toolbar.style.display;
+                toolbar.style.display = 'none';
+            }
+            if (documentElement) {
+                // Remove border, border-radius, and padding for clean printing
+                originalDocumentStyles.border = documentElement.style.border;
+                originalDocumentStyles.borderRadius = documentElement.style.borderRadius;
+                originalDocumentStyles.padding = documentElement.style.padding;
+                documentElement.style.border = 'none';
+                documentElement.style.borderRadius = '0';
+                documentElement.style.padding = '0';
+            }
+
+            // Create print-specific styles
+            const printStyle = document.createElement('style');
+            printStyle.id = 'print-styles';
+            printStyle.textContent = `
+                @media print {
+                    @page {
+                        size: auto;
+                        margin: 0;
+                        margin-bottom: 0;
+                    }
+                    html, body {
+                        height: auto !important;
+                        overflow: visible !important;
+                    }
+                    body::before, body::after {
+                        display: none !important;
+                    }
+                    .document {
+                        page-break-inside: avoid;
+                        break-inside: avoid;
+                    }
+                }
+            `;
+            document.head.appendChild(printStyle);
+
+            // Print the page
+            window.print();
+
+            // Remove print styles and restore original displays and styles
+            const addedStyle = document.getElementById('print-styles');
+            if (addedStyle) {
+                document.head.removeChild(addedStyle);
+            }
+
+            if (navbar) navbar.style.display = originalDisplays.navbar || '';
+            if (fileViewer) fileViewer.style.display = originalDisplays.fileViewer || '';
+            if (togglePanel) togglePanel.style.display = originalDisplays.togglePanel || '';
+            if (toolbar) toolbar.style.display = originalDisplays.toolbar || '';
+            if (documentElement) {
+                documentElement.style.border = originalDocumentStyles.border || '';
+                documentElement.style.borderRadius = originalDocumentStyles.borderRadius || '';
+                documentElement.style.padding = originalDocumentStyles.padding || '';
+            }
+        }
+
+
+        // Study viewer functionality
+        function goToLibrary() {
+            window.location.href = 'library.html';
+        }
+
+        function loadStudy(studyId) {
+            // First, check if it's a predefined study
+            const predefinedStudies = {
+                'professional_perspective': {
+                    title: 'Professionals Perspective on the Structural Relialibility of Bamboo in Philippines Housing Projects',
+                    fileIds: ['1ZJd0BAeDr0wUiFzhm45hcwx6EGlIvwYG']
+                },
+                'perceptions': {
+                    title: 'Farmers Perceptions on the Effectiveness of Ventilation to Hinder Pesticide Exposure',
+                    fileIds: ['1ZJd0BAeDr0wUiFzhm45hcwx6EGlIvwYG']
+                },
+                'safety_measure': {
+                    title: 'Exploring Public Awareness and Safety Measures for Microplastic Consumption in Fish',
+                    fileIds: ['1Gr3-XbFEkM4Y5hhT4jDABXus0htk3FBS']
+                },
+                'safety_protocols': {
+                    title: 'Analyzing Safety Protocals Adherence in Gasoline Stations: Urban vs. Rural Perspectives',
+                    fileIds: ['1oycCEjyM5Wwlyz9HYzo8B-Hv_yjddemN']
+                },
+                'trash_treasure': {
+                    title: 'Trash to Treasure: The Role of Recycling Technologies in Sustainable Future',
+                    fileIds: ['1zGFTJMgLXbqTEwOhOK7YhcoJyGtHBYhn']
+                },
+                'lagundi_oil': {
+                    title: 'The Effectiveness of Lagundi Essential Oil as an Inhaler in Terms of Marketability Among Selected Grade-11 Senior High School Students in STI College Calamba',
+                    fileIds: ['1nLccvtasOdYnOOWEDiUBBXQmj2nTelrZ']
+                }
+            };
+
+            let study = predefinedStudies[studyId];
+
+            // If not a predefined study, look in allArticles from localStorage
+            if (!study) {
+                const allArticles = JSON.parse(localStorage.getItem('allArticles')) || [];
+                const article = allArticles.find(a => {
+                    const articleStudyId = a.title.toLowerCase().replace(/[^a-z0-9]/g, '').substring(0, 20);
+                    return articleStudyId === studyId;
+                });
+
+                if (article) {
+                    study = {
+                        title: article.title,
+                        authors: article.authors,
+                        summary: article.summary,
+                        fileIds: article.fileIds || []
+                    };
+                }
+            }
+
+            if (study) {
+                document.getElementById('selectArticle').style.display = 'none';
+                document.getElementById('docPreview').style.display = 'block';
+
+                // Clear existing pages
+                const docPreview = document.getElementById('docPreview');
+                docPreview.innerHTML = '';
+
+                if (study.fileIds && study.fileIds.length > 0) {
+                    // Generate pages dynamically based on file IDs
+                    study.fileIds.forEach((fileId, index) => {
+                        const pageNum = index + 1;
+                        const pageDiv = document.createElement('div');
+                        pageDiv.id = `page${pageNum}`;
+                        pageDiv.style.display = pageNum === 1 ? 'block' : 'none';
+
+                        const iframe = document.createElement('iframe');
+                        iframe.src = `https://drive.google.com/file/d/${fileId}/preview`;
+                        iframe.style.width = '100%';
+                        iframe.style.height = '93vh';
+                        iframe.style.border = 'none';
+
+                        pageDiv.appendChild(iframe);
+                        docPreview.appendChild(pageDiv);
+                    });
+                } else {
+                    // No PDF available, show article details
+                    docPreview.innerHTML = `
+                        <div class="doc-preview">
+                            <h1>${study.title}</h1>
+                            ${study.authors ? `<div class="by">By: ${study.authors}</div>` : ''}
+                            ${study.summary ? `<h2>Abstract</h2><p>${study.summary}</p>` : ''}
+                            <p><em>PDF not yet uploaded. Please check back later.</em></p>
+                        </div>
+                    `;
+                }
+            } else {
+                // Study not found, show error
+                document.getElementById('selectArticle').innerHTML = '<h2>Article not found</h2><p>The requested article could not be found.</p>';
+            }
+        }
+
+        // Check for study parameter on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const studyId = urlParams.get('study');
+            if (studyId) {
+                loadStudy(studyId);
+            }
+        });
+
+        // Placeholder for document editor
+        const doc = document.getElementById('doc');
+        const placeholder = doc.dataset.placeholder;
+
+        doc.addEventListener('focus', function() {
+            if (doc.textContent.trim() === placeholder) {
+                doc.textContent = '';
+            }
+        });
+
+        doc.addEventListener('blur', function() {
+            if (doc.textContent.trim() === '') {
+                doc.textContent = placeholder;
+            }
+        });
+    </script>
+</body>
+</html>
+
+

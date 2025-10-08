@@ -1,0 +1,137 @@
+// Search bar
+    const search = document.getElementById('search');
+    const clearIcon = document.getElementById('clearIcon');
+    const searchBar = document.querySelector('.search-bar');
+
+    if (search && clearIcon) {
+        // Show/hide clear icon based on input value
+        search.addEventListener('input', function() {
+            if (this.value.length > 0) {
+                clearIcon.style.display = 'block';
+            } else {
+                clearIcon.style.display = 'none';
+            }
+        });
+
+        // Clear input when X is clicked
+        clearIcon.addEventListener('click', function() {
+            search.value = '';
+            search.focus();
+            clearIcon.style.display = 'none';
+            // Close the result box
+            if (resultBox) resultBox.innerHTML = '';
+            if (searchBar) searchBar.classList.remove('expanded');
+        });
+    }
+    //Search Bar Result Box for Homepage
+    let availableKeywords = [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "How to learn coding online",
+        "Where to study online",
+        "Where to learn web design",
+        "Learn web development",
+        "Work budget limits"
+    ];
+
+    const resultBox = document.querySelector(".result-box");
+    let recentSearches = JSON.parse(localStorage.getItem('recentSearches')) || [];
+
+    // Homepage search functionality
+    if (search && resultBox) {
+    // Make the entire recent search box clickable (li)
+    resultBox.addEventListener('click', function(e) {
+      const li = e.target.closest('li');
+      if (!li) return;
+      // Ignore clicks on remove icon
+      if (e.target.classList.contains('remove-icon')) return;
+      // Get the search term from the recent-content
+      const recentContent = li.querySelector('.recent-content');
+      if (recentContent) {
+        // Extract text, remove icon
+        let text = recentContent.textContent.replace(/\uf017/g, '').replace(/\s+/g, ' ').trim();
+        window.location.href = 'library.html?search=' + encodeURIComponent(text);
+      }
+    });
+    // Helper for navigation
+    function handleRecentNavigation(e) {
+      const target = e.target;
+      if (target.closest('.recent-content')) {
+        const recentContent = target.closest('.recent-content');
+        let text = recentContent.textContent.replace(/\uf017/g, '').replace(/\s+/g, ' ').trim();
+        console.log('Navigate to library.html with:', text);
+        window.location.href = 'library.html?search=' + encodeURIComponent(text);
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }
+    // Always show recent searches when input is focused or clicked
+    function showRecentIfEmpty() {
+      if (search.value === '') {
+        displayRecent();
+      }
+    }
+    search.addEventListener('focus', showRecentIfEmpty);
+    search.addEventListener('click', showRecentIfEmpty);
+    search.addEventListener('input', function() {
+      if (this.value === '') {
+        displayRecent();
+      }
+    });
+
+        search.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const query = search.value.trim();
+                if (query) {
+                    addToRecent(query);
+                    window.location.href = 'library.html?search=' + encodeURIComponent(query);
+                }
+            }
+        });
+
+        search.onkeyup = function () {
+            let result = [];
+            let input = search.value;
+            if (input.length) {
+                let suggestions = availableKeywords.filter((keyword) => {
+                    return keyword.toLowerCase().includes(input.toLowerCase());
+                });
+                let matchingRecent = recentSearches.filter((item) => {
+                    return item.toLowerCase().includes(input.toLowerCase()) && !suggestions.includes(item);
+                });
+                result = [...matchingRecent, ...suggestions];
+                displaySuggestions(result);
+            } else {
+                displayRecent();
+            }
+        };
+
+        // Event delegation for result box clicks
+        resultBox.addEventListener('click', function(e) {
+            const target = e.target;
+
+      if (target.classList.contains('remove-icon')) {
+        e.stopPropagation();
+        const li = target.closest('li');
+        const recentContent = li.querySelector('.recent-content');
+        let text = recentContent.textContent.replace(/\uf017/g, '').replace(/\s+/g, ' ').trim();
+        console.log('Remove recent:', text);
+        removeRecent(text);
+        return;
+      }
+      handleRecentNavigation(e);
+    // Also handle mousedown for reliability
+    resultBox.addEventListener('mousedown', function(e) {
+      const target = e.target;
+      if (target.classList.contains('remove-icon')) {
+        e.stopPropagation();
+        const li = target.closest('li');
+        const recentContent = li.querySelector('.recent-content');
+        let text = recentContent.textContent.replace(/\uf017/g, '').replace(/\s+/g, ' ').trim();
+        console.log('Remove recent (mousedown):', text);
+        removeRecent(text);
+        return;
+      }
+      handleRecentNavigation(e);
+    });
