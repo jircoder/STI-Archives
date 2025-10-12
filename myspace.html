@@ -28,7 +28,7 @@
            align-items: center;
            position: fixed;
            justify-content: space-between;
-
+            z-index:1000;
              top:0;
              height: 50px;
              width: 100%;
@@ -39,7 +39,7 @@
              box-shadow: 0 2px 8px #0001;
              padding: 0 12px;
              transition: all 0.3s ease;
-             z-index: 1000;
+             
 
 
          }
@@ -58,14 +58,7 @@
             margin-left:30px;
             margin-top:2px;
         } 
-        /* Shrink effect */
-        .main-navbar.shrink .sti-logo {
-            height: 35px;
-
-        }
-        .main-navbar.shrink .nav-icon {
-            display: none;
-        }
+        
         .main-navbar.shrink .nav-text {
             font-family: "Font Awesome 6 Free";
         }
@@ -77,7 +70,7 @@
             font-family: 'Poppins', Arial, sans-serif;
             user-select: none;
         }
-        /* Shrink effect */
+        
         .main-navbar.shrink span {
             font-size: 24px;
             font-weight: 700;
@@ -317,7 +310,7 @@
             color: #ffd700;
         }
     .file-viewer {
-    width: 50%;
+    flex: 0 0 50%;
     background: #fff;
     border-right: 1px solid #ccc;
     display: flex;
@@ -358,9 +351,86 @@
     }
 
     .dark-mode .document {
-      background: #2d2d2d;
-      color: white;
-    }
+       background: #2d2d2d;
+       color: white;
+     }
+
+     /* Modal styles */
+     .modal-content h2 {
+       color: #0057b8;
+     }
+
+     .dark-mode .modal-content {
+       color: #ffd700;
+     }
+
+     .dark-mode .modal-content h2 {
+       color: #ffd700;
+     }
+
+     .dark-mode .close {
+       color: #ffd700;
+     }
+
+     .close:hover, .close:focus {
+       color: #000;
+       text-decoration: none;
+       cursor: pointer;
+     }
+
+     .dark-mode .close:hover, .dark-mode .close:focus {
+       color: #fff;
+     }
+
+     /* Save Notification Modal */
+     .save-notification-modal {
+       position: fixed;
+       top: 20px;
+       right: -300px;
+       z-index: 10000;
+       transition: right 0.5s ease;
+     }
+
+     .save-notification-modal.show {
+       right: 20px;
+     }
+
+     .save-notification-content {
+       background: #4CAF50;
+       color: white;
+       padding: 15px 20px;
+       border-radius: 5px;
+       box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+       font-size: 16px;
+       font-weight: bold;
+     }
+
+     /* Mini document cards */
+     .dark-mode #savedDocumentsList > div {
+       background: #2d2d2d;
+       border-color: #444;
+       color: #e2e8f0;
+     }
+
+     .dark-mode #savedDocumentsList > div i {
+       color: #ffd700;
+     }
+
+     .dark-mode #savedDocumentsList > div h4 {
+       color: #ffd700;
+     }
+
+     .dark-mode #savedDocumentsList > div p {
+       color: #a0aec0;
+     }
+
+     .dark-mode #savedDocumentsList > div div {
+       color: #e2e8f0;
+       background: #3d3d3d;
+       border-color: #555;
+     }
+
+
 
     .dark-mode .committee p {
       color: #ccc;
@@ -409,12 +479,12 @@
 
 
     .editor {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      padding: 20px;
-      background: #fff;
-    }
+        flex: 0 0 50%;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        background: #fff;
+      }
 
     .toolbar {
        display: flex;
@@ -463,9 +533,13 @@
     .toggle-panel {
       position: absolute;
       top: 50%;
-      left: -15px;
+      left: calc(50% - 30px);
       transform: translateY(-50%);
       z-index: 10;
+    }
+
+    .file-viewer.expanded ~ .toggle-panel {
+      left: calc(97% - 30px);
     }
 
     .toggle-btn {
@@ -497,7 +571,7 @@
     }
 
     .editor.collapsed {
-      width: 0;
+      flex: 0 0 0;
       padding: 0;
       overflow: hidden;
     }
@@ -508,7 +582,7 @@
     }
 
     .file-viewer.expanded {
-      width: 97%;
+      flex: 0 0 97%;
     }
 
     .file-viewer {
@@ -606,14 +680,13 @@
        </div>
      </div>
 
-
-
-  <!-- Document Editor -->
-  <div class="editor collapsed" id="editor">
     <div class="toggle-panel">
       <button class="toggle-btn" id="closeEditor" style="display: none;">></button>
       <button class="toggle-btn" id="openEditor"><</button>
     </div>
+
+  <!-- Document Editor -->
+  <div class="editor collapsed" id="editor">
     <div class="toolbar">
       <select onchange="format('fontName', this.value)">
         <option value="Arial">Arial</option>
@@ -650,37 +723,47 @@
         <option value="2.5">2.5</option>
       </select>
 
+      <input type="text" id="docTitle" placeholder="Untitled document" style="padding: 6px 10px; font-size: 0.9rem; border: 1px solid #ccc; border-radius: 6px; background: #f9f9f9; margin-right: 10px; width: 200px;" />
+      <button onclick="saveDocument()" title="Save Document"><i class="fas fa-save"></i> Save</button>
+      <button onclick="resetDocument()" title="New Document"><i class="fas fa-file"></i> New</button>
+      <button onclick="openSavedDocumentsModal()" title="Saved Documents"><i class="fas fa-folder-open"></i> Menu</button>
       <button onclick="downloadDocument()" title="Download Document"><i class="fas fa-download"></i></button>
       <button onclick="printDocument()" title="Print Document"><i class="fas fa-print"></i></button>
     </div>
 
     <div class="document" contenteditable="true" id="doc" data-placeholder="Start Typing Your Document Here..">Start Typing Your Document Here..</div>
   </div>
+
+  <!-- Saved Documents Modal -->
+  <div id="savedDocumentsModal" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
+    <div class="modal-content" style="background-color: #fff; padding: 20px; width: 80%; max-width: 800px; border-radius: 8px;">
+      <span class="close" onclick="closeSavedDocumentsModal()" style="color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+      <h2 style="margin-top: 0;">Saved Documents</h2>
+      <div id="savedDocumentsList" style="max-height: 400px; overflow-y: auto;"></div>
+    </div>
+  </div>
+
+  <!-- Writer Modal -->
+  <div id="writerModal" style="display: block; position: absolute; left: calc(87% - 15px); top: calc(55% - 100px); background: rgba(0,0,0,0.3); width: auto; height: auto; border-radius: 5px;">
+    <div style="background: #fff; padding: 10px; border-radius: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); position: relative;">
+      <span style="padding-right: 20px;">Document Writer here</span>
+      <span onclick="closeWriterModal()" style="position: absolute; top: 5px; right: 5px; cursor: pointer; font-weight: bold;">&times;</span>
+    </div>
+  </div>
+
+  <!-- Save Notification Modal -->
+  <div id="saveNotificationModal" class="save-notification-modal" style="display: none;">
+    <div class="save-notification-content">
+      <span id="saveMessage">Document Saved Successfully!</span>
+    </div>
+  </div>
     </div>
     <script src="script.js"></script>
     <script>
+        let currentLoadedDocId = null;
         // Article viewer functions (page navigation removed)
 
 
-        // Editor toggle functions
-        const closeEditor = document.getElementById('closeEditor');
-        const openEditor = document.getElementById('openEditor');
-        const editor = document.getElementById('editor');
-        const fileViewer = document.querySelector('.file-viewer');
-
-        closeEditor.addEventListener('click', () => {
-            editor.classList.add('collapsed');
-            fileViewer.classList.add('expanded');
-            closeEditor.style.display = 'none';
-            openEditor.style.display = 'block';
-        });
-
-        openEditor.addEventListener('click', () => {
-            editor.classList.remove('collapsed');
-            fileViewer.classList.remove('expanded');
-            closeEditor.style.display = 'block';
-            openEditor.style.display = 'none';
-        });
 
         // Document writer tools functions
         function format(command, value) {
@@ -821,10 +904,154 @@
             }
         }
 
+        // Save document function
+        function saveDocument() {
+            const title = document.getElementById('docTitle').value.trim() || 'Untitled document';
+            const content = document.getElementById('doc').innerHTML;
+            const savedDocuments = JSON.parse(localStorage.getItem('savedDocuments')) || [];
+            const isDuplicate = savedDocuments.some(d => d.title === title && d.content === content);
+            if (isDuplicate) {
+                // Document already saved
+                document.getElementById('saveMessage').textContent = 'Document Already Saved!';
+            } else {
+                // Save the document
+                if (currentLoadedDocId) {
+                    const index = savedDocuments.findIndex(d => d.id === currentLoadedDocId);
+                    if (index !== -1) {
+                        // Update existing
+                        savedDocuments[index] = {
+                            ...savedDocuments[index],
+                            title: title,
+                            content: content,
+                            date: new Date().toISOString()
+                        };
+                    } else {
+                        // Document was deleted, save as new
+                        currentLoadedDocId = null;
+                        const doc = {
+                            id: Date.now(),
+                            title: title,
+                            content: content,
+                            date: new Date().toISOString()
+                        };
+                        savedDocuments.push(doc);
+                        currentLoadedDocId = doc.id;
+                    }
+                } else {
+                    // Add new
+                    const doc = {
+                        id: Date.now(),
+                        title: title,
+                        content: content,
+                        date: new Date().toISOString()
+                    };
+                    savedDocuments.push(doc);
+                    currentLoadedDocId = doc.id;
+                }
+                localStorage.setItem('savedDocuments', JSON.stringify(savedDocuments));
+                document.getElementById('saveMessage').textContent = 'Document Saved Successfully!';
+            }
+            // Show save notification modal
+            const modal = document.getElementById('saveNotificationModal');
+            modal.style.display = 'block';
+            modal.classList.add('show');
+            setTimeout(() => {
+                modal.classList.remove('show');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 500);
+            }, 5000);
+        }
+
+        // Reset document function
+        function resetDocument() {
+            document.getElementById('docTitle').value = '';
+            document.getElementById('doc').innerHTML = 'Start Typing Your Document Here..';
+            currentLoadedDocId = null;
+        }
+
+        // Open saved documents modal
+        function openSavedDocumentsModal() {
+            const modal = document.getElementById('savedDocumentsModal');
+            const modalContent = document.querySelector('#savedDocumentsModal .modal-content');
+            modal.style.display = 'block';
+            modalContent.style.position = 'relative';
+            modalContent.style.top = '50%';
+            modalContent.style.transform = 'translateY(-50%)';
+            modalContent.style.margin = '0 auto';
+            const list = document.getElementById('savedDocumentsList');
+            const savedDocuments = JSON.parse(localStorage.getItem('savedDocuments')) || [];
+            list.innerHTML = '';
+            if (savedDocuments.length === 0) {
+                list.innerHTML = '<p>No saved documents yet.</p>';
+            } else {
+                savedDocuments.forEach(doc => {
+                    const item = document.createElement('div');
+                    item.style.display = 'inline-block';
+                    item.style.width = '200px';
+                    item.style.height = '300px';
+                    item.style.margin = '10px';
+                    item.style.verticalAlign = 'top';
+                    item.style.background = '#f9f9f9';
+                    item.style.border = '1px solid #ccc';
+                    item.style.borderRadius = '8px';
+                    item.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+                    const contentPreview = doc.content.replace(/<[^>]*>/g, '').substring(0, 100) + (doc.content.replace(/<[^>]*>/g, '').length > 100 ? '...' : '');
+                    item.innerHTML = `
+                        <div class="sd-header" style="padding: 10px; margin-bottom: 10px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <span style="font-weight: bold; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1;">${doc.title}</span>
+                                <span style="font-size: 10px; color: #666;">${new Date(doc.date).toLocaleDateString()}</span>
+                            </div>
+                            <button onclick="loadDocument(${doc.id})" style="padding: 4px 8px; background: #0057b8; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; margin-right: 5px;">Load</button>
+                            <button onclick="deleteDocument(${doc.id})" style="padding: 4px 8px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">Delete</button>
+                        </div>
+                        <div class="document" style="border: 1px solid #ccc; border-radius: 0; padding: 8px; height: 200px; width: 150px; overflow: hidden; font-size: 10px; color: #333; background: #fff; margin: 0 auto;">${contentPreview}</div>
+                    `;
+                    list.appendChild(item);
+                });
+            }
+            modal.style.display = 'block';
+        }
+
+        // Close modal
+        function closeSavedDocumentsModal() {
+            document.getElementById('savedDocumentsModal').style.display = 'none';
+        }
+
+        // Close writer modal
+        function closeWriterModal() {
+            document.getElementById('writerModal').style.display = 'none';
+        }
+
+        // Load document
+        function loadDocument(id) {
+            const savedDocuments = JSON.parse(localStorage.getItem('savedDocuments')) || [];
+            const doc = savedDocuments.find(d => d.id === id);
+            if (doc) {
+                currentLoadedDocId = id;
+                document.getElementById('docTitle').value = doc.title;
+                document.getElementById('doc').innerHTML = doc.content;
+                closeSavedDocumentsModal();
+            }
+        }
+
+        // Delete document
+        function deleteDocument(id) {
+            const savedDocuments = JSON.parse(localStorage.getItem('savedDocuments')) || [];
+            const updated = savedDocuments.filter(d => d.id !== id);
+            localStorage.setItem('savedDocuments', JSON.stringify(updated));
+            openSavedDocumentsModal(); // Refresh the list
+        }
+
 
         // Study viewer functionality
         function goToLibrary() {
-            window.location.href = 'library.html';
+            // Save current editor state
+            const title = document.getElementById('docTitle').value;
+            const content = document.getElementById('doc').innerHTML;
+            localStorage.setItem('editorState', JSON.stringify({title, content}));
+            window.location.href = 'library.html?from=myspace';
         }
 
         function loadStudy(studyId) {
@@ -920,6 +1147,13 @@
 
         // Check for study parameter on page load
         document.addEventListener('DOMContentLoaded', function() {
+            // Load saved editor state
+            const editorState = JSON.parse(localStorage.getItem('editorState'));
+            if (editorState) {
+                document.getElementById('docTitle').value = editorState.title;
+                document.getElementById('doc').innerHTML = editorState.content;
+                localStorage.removeItem('editorState');
+            }
             const urlParams = new URLSearchParams(window.location.search);
             const studyId = urlParams.get('study');
             if (studyId) {

@@ -6,66 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Admin Panel</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-treemap@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        // Users data from localStorage
-        function getUsers() {
-            return JSON.parse(localStorage.getItem('users')) || [];
-        }
-        function saveUsers(users) {
-            localStorage.setItem('users', JSON.stringify(users));
-        }
-        // Get activity logs
-        function getActivityLogs() {
-            return JSON.parse(localStorage.getItem('activityLogs')) || [];
-        }
-        function saveActivityLogs(logs) {
-            localStorage.setItem('activityLogs', JSON.stringify(logs));
-        }
-        var usersData = getUsers();
-        var uploadsData = [
-            { date: '2023-11-01 10:00:00', fullname: 'John Doe', filename: 'document.pdf', path: 'uploads/document.pdf' },
-            { date: '2023-11-02 11:30:00', fullname: 'Jane Smith', filename: 'image.jpg', path: 'uploads/image.jpg' },
-            { date: '2023-11-03 14:15:00', fullname: 'Alice Johnson', filename: 'report.pdf', path: 'uploads/report.pdf' },
-            { date: '2023-11-04 09:45:00', fullname: 'Bob Wilson', filename: 'photo.png', path: 'uploads/photo.png' }
-        ];
-        var suggestionsData = [
-            {
-                id: 'USER001',
-                date: '2023-11-05 10:00:00',
-                fullname: 'John Doe',
-                role: 'senior_high',
-                section: 'Grade 12 STEM',
-                suggestion_text: 'Improve the user interface for better navigation.',
-                image_path: null
-            },
-            {
-                id: 'USER003',
-                date: '2023-11-06 14:30:00',
-                fullname: 'Alice Johnson',
-                role: 'college',
-                section: 'BSIT 3A',
-                suggestion_text: 'Add more tutorial videos for new users.',
-                image_path: 'uploads/suggestion1.jpg'
-            },
-            {
-                id: 'USER002',
-                date: '2023-11-07 09:15:00',
-                fullname: 'Jane Smith',
-                role: 'teacher',
-                section: 'Faculty SHS',
-                suggestion_text: 'Enhance security features for file uploads.',
-                image_path: null
-            }
-        ];
-        let currentGraphType = 'bar';
-        let chartInstances = {};
-    </script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+        html, body {
+            height: 100%;
+            overflow: hidden;
         }
         body {
             font-family: Arial, sans-serif;
@@ -73,12 +24,13 @@
             transition: margin-left 0.3s;
         }
         .sidebar {
-            width: 250px;
-            height: 100vh;
+            width: 200px;
+            max-width: 200px;
+            height: 100%;
             border-radius: 0px 20px 0px 0px;
-            background-color: #132A3F;
+            background-color: #0f1a41;
             color: white;
-            position: fixed;
+            position: absolute;
             top: 0;
             left: 0;
             padding: 20px;
@@ -90,13 +42,16 @@
             align-items: center;
         }
         .sidebar img {
-            max-width: 140px;
+            max-width: 120px;
             height: 105px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             object-fit: contain;
         }
         .sidebar.collapsed {
             transform: translateX(-250px);
+        }
+        .sidebar.collapsed  #user-chart {
+            padding-left:100px;
         }
         .sidebar ul {
             list-style: none;
@@ -134,78 +89,186 @@
         .sidebar ul li:not(.users-dropdown):not(.uploads-dropdown):hover {
             background-color: #555;
         }
+        .terms-dropdown a {
+            text-decoration: none !important;
+            align-items: left;
+        }
+        .terms-dropdown a:hover {
+            text-decoration: none !important;
+        }
+        .terms-dropdown .submenu {
+            background-color: #fff;
+        }
         .users-dropdown,
-        .uploads-dropdown {
+        .uploads-dropdown,
+        .reports-dropdown,
+        .terms-dropdown {
             position: relative;
             background-color: transparent !important;
+
+        }
+        .uploads-dropdown {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
         }
         .users-dropdown > a,
-        .uploads-dropdown > a {
+        .uploads-dropdown > a,
+        .reports-dropdown > a,
+        .terms-dropdown > a {
             display: flex;
             justify-content: space-between;
             align-items: center;
             width: 100%;
-            padding-left: 20px !important;
+
             padding-right: 20px !important;
         }
+        .uploads-dropdown > a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            padding-right: 20px !important;
+            justify-content: space-between;
+        }
         .users-dropdown .arrow,
-        .uploads-dropdown .arrow {
+        .uploads-dropdown .arrow,
+        .reports-dropdown .arrow,
+        .terms-dropdown .arrow {
             font-size: 12px;
             transition: transform 0.3s;
         }
+        .terms-dropdown a {
+            color: black !important;
+            justify-content: flex-start;
+        }
+        .terms-dropdown .arrow i.fa-chevron-down {
+            font-size: 10px;
+            transform: scaleX(1);
+            color: black;
+            padding-left:5px;
+        }
+        .terms-submenu {
+            background: none;
+        }
+        .edit-mode button {
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+        .edit-mode button:first-of-type {
+            background: #007bff;
+            color: white;
+        }
+        .edit-mode button:nth-of-type(2) {
+            background: #28a745;
+            color: white;
+            margin-left: 10px;
+        }
+        .edit-mode button:nth-of-type(3) {
+            background: #6c757d;
+            color: white;
+            margin-left: 10px;
+        }
+        body.dark-mode .edit-mode button:first-of-type {
+            background: #ffd700;
+            color: black;
+        }
+        body.dark-mode .edit-mode button:nth-of-type(2) {
+            background: #4caf50;
+            color: white;
+        }
+        body.dark-mode .edit-mode button:nth-of-type(3) {
+            background: #9e9e9e;
+            color: white;
+        }
+        body.dark-mode .settings-sidebar {
+            background: #2d2d2d !important;
+        }
+        body.dark-mode .settings-sidebar li {
+            background: #2d2d2d;
+            color: #e2e8f0;
+        }
         .users-dropdown.open .arrow,
-        .uploads-dropdown.open .arrow {
+        .uploads-dropdown.open .arrow,
+        .reports-dropdown.open .arrow,
+        .terms-dropdown.open .arrow {
             transform: rotate(180deg);
         }
+        
         .submenu {
             list-style: none;
             padding: 0;
             margin: 8px 0 0 0;
-            background: #132A3F;
+            background: #0f1a41;
             border-radius: 0 0 8px 8px;
             overflow: hidden;
             max-height: 0;
             transition: max-height 0.3s ease, padding 0.3s ease;
+            z-index: 1100;
+            position: relative;
         }
         .submenu li {
-            padding: 10px 0 10px 40px !important;
+            padding: 10px 0 10px 20px !important;
+            color: white !important;
         }
         .submenu li a {
             padding: 0 !important;
             font-size: 14px;
         }
         .users-dropdown.open .submenu,
-        .uploads-dropdown.open .submenu {
+        .uploads-dropdown.open .submenu,
+        .reports-dropdown.open .submenu,
+        .terms-dropdown.open .submenu {
             max-height: 200px;
             padding: 8px 0;
         }
         .submenu li:hover {
             background-color: #555;
         }
+        .submenu li a:hover {
+            text-decoration: none !important;
+        }
         body.dark-mode .submenu {
             background: #0f1a41;
-        }
-        .main-content {
-            margin-left: 270px;
-            margin-top: 70px;
-            padding: 40px 20px 20px 20px;
-            min-height: 100vh;
-            background-color: #f8f9fa;
-            transition: margin-left 0.3s;
+            color: white;
         }
         .header {
             background-color: white;
-            padding: 20px 20px 20px 40px;
+            padding: 20px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: fixed;
             top: 0;
-            left: 240px;
-            width: calc(100% - 230px);
+            left:100px;
+            width: 100%;
             z-index: 2;
             transition: left 0.3s, width 0.3s;
+        }
+        .main-content {
+            margin-left: 200px;
+            margin-top: 80px;
+            padding: 20px 50px 0 50px;
+            height: calc(100% - 80px);
+            background-color: #f8f9fa;
+            transition: margin-left 0.3s;
+            overflow-y: auto;
+        }
+        
+        #page-title {
+            font-size:30px;
+            font-weight: bold;
+            color: #333;
+            margin-left:20px;
+        }
+        body.dark-mode .header  #page-title{
+            background-color: #232f41;
+            color: #ffffff;
         }
         .header-right {
             display: flex;
@@ -293,7 +356,7 @@
         .profile-menu {
             display: none;
             position: absolute;
-            top: 100%;
+            top:100%;
             right: 0;
             background-color: white;
             min-width: 180px;
@@ -360,9 +423,6 @@
             background-color: #2d2d2d;
             color: #ffffff;
         }
-        body.dark-mode .sidebar {
-            background-color: #0f1a41;
-        }
         body.dark-mode .users-section,
         body.dark-mode .settings-section,
         body.dark-mode .reports-section,
@@ -413,6 +473,7 @@
             color: #ccc;
         }
         .toggle-btn {
+            margin-left:20px;
             background: none;
             border: none;
             font-size: 24px;
@@ -448,7 +509,8 @@
             font-weight: bold;
         }
         .graphs-section {
-            margin-top: 40px;
+            margin-top: 15px;
+            
         }
         .graphs-section h2 {
             margin-bottom: 20px;
@@ -459,9 +521,11 @@
             flex-wrap: wrap;
             gap: 20px;
         }
+        body.sidebar-collapsed .graph-container {
+            justify-content: center;
+        }
         .graph-item {
-            flex: 1;
-            min-width: 300px;
+            
             background: white;
             padding: 20px;
             border-radius: 8px;
@@ -474,8 +538,57 @@
         .chart-container {
             position: relative;
             height: 300px;
-            width: 100%;
+            width: 70%;
         }
+        /*USER STATISTIC EACH CONTAINER & CHARTS*/
+        #usr-grph{
+            
+            height:400px;
+            width: 550px;
+            
+        }
+        #usr-chart{
+            height:350px;
+            width: 520px;
+        }
+
+        #sgn-grph{
+            height:400px;
+            width: 600px;
+        }
+        
+        #sgn-chart{
+            height:350px;
+            width: 550px;
+        }
+        #upld-grph{
+            height:320px;
+            width: 280px;
+            
+        }
+        #upld-chart{
+            
+            height:240px;
+            width: 240px;
+        }
+        #avg-grph{
+            height:320px;
+            width: 300px;
+        }
+        #avg-chart{
+            height:280px;
+            width: 250px;
+        }
+        #sgst-grph{
+            height:320px;
+            width: 550px;
+        }
+        #sgst-chart{
+            height:450px;
+            width: 520px;
+        }
+
+        
         .content-section {
             display: none;
         }
@@ -602,6 +715,9 @@
         .notification-type.suggestion {
             color: #ffc107;
         }
+        .notification-type.bug {
+            color: #dc3545;
+        }
         .notification-content {
             font-size: 14px;
             color: #333;
@@ -626,6 +742,9 @@
         }
         .view-all-btn:hover {
             color: #0056b3;
+        }
+        .view-all-btn {
+            cursor: pointer;
         }
         body.dark-mode .notification-modal {
             background-color: #2d2d2d;
@@ -673,8 +792,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 30px;
-            padding: 0 15px;
+            
+            
         }
         .sidebar-header img {
             max-width: 140px;
@@ -688,7 +807,7 @@
         }
         @media (max-width: 768px) {
             .sidebar {
-                width: 200px;
+                width: 160px;
             }
             .sidebar-header {
                 margin-bottom: 20px;
@@ -700,39 +819,81 @@
                 margin: 15px;
                 border-radius: 10px;
             }
+            
             .sidebar ul li {
                 padding: 12px 10px;
                 font-size: 14px;
             }
+            .sidebar ul li a i {
+                width: auto;
+                text-align: left;
+            }
+            .sidebar ul li a{
+                padding-left:0px;
+                text-align: left;
+                margin-left:0px;
+            }
+            .sidebar ul li a ul{
+                padding-left:0px ;
+                text-align: left;
+                margin-left:0px;
+            }
+            .users-dropdown > a, .uploads-dropdown > a, .reports-dropdown > a {
+                padding-left: 0px !important;
+            }
+            .submenu li {
+                padding-left: 0px !important;
+            }
             .main-content {
-                margin-left: 220px;
+                margin-left: 150px;
                 padding: 20px 15px;
             }
             .header {
-                left: 180px;
-                width: calc(100% - 180px);
+                left: 140px;
+                width: calc(100% - 130px);
             }
         }
         @media (max-width: 480px) {
             .sidebar {
-                width: 180px;
+                width: 120px;
             }
             .sidebar-header img {
-                max-width: 120px;
+                max-width: 100px;
                 height: 50px;
                 border-radius: 10px;
             }
             .sidebar ul li {
-                padding: 10px 8px;
+                margin-left: 0;
+                padding-left: 0px;
                 font-size: 12px;
+                text-align: left;
+            }
+            .sidebar ul li a i {
+                width: auto;
+                text-align: left;
+            }
+            .users-dropdown > a, .uploads-dropdown > a, .reports-dropdown > a, .terms-dropdown > a {
+                padding-left: 0px !important;
+            }
+            .submenu li {
+                padding-left: 0px !important;
+            }
+            .sidebar ul li a ul {
+                padding-left:0px;
+                text-align: left;
+                margin-left:0px;
             }
             .main-content {
-                margin-left: 200px;
+                margin-left: 120px;
                 padding: 15px 10px;
             }
             .header {
-                left: 160px;
-                width: calc(100% - 160px);
+                left: 115px;
+                width: calc(100% - 110px);
+            }
+            .toggle-btn {
+                font-size: 25px;
+                margin-left:2px;
             }
         }
         @media (min-width: 769px) and (max-width: 1024px) {
@@ -742,34 +903,36 @@
             .sidebar-header img {
                 max-width: 140px;
                 height: 70px;
-                margin: 10px;
+                
                 border-radius: 10px;
             }
             .main-content {
-                margin-left: 240px;
+                margin-left: 195px;
             }
             .header {
-                left: 200px;
-                width: calc(100% - 200px);
+                left: 180px;
+                width: calc(100% - 180px);
             }
+            
         }
         @media (min-width: 1200px) {
             .sidebar {
-                width: 280px;
+                width: 200px;
             }
             .sidebar-header img {
                 max-width: 160px;
                 height: 100px;
                 border-radius: 10px;
-                margin:10px;
+                
             }
             .main-content {
-                margin-left: 300px;
+                margin-left: 200px;
             }
             .header {
-                left: 260px;
-                width: calc(100% - 260px);
+                left: 180px;
+                width: calc(100% - 180px);
             }
+           
         }
         .welcome-container {
             text-align: center;
@@ -789,6 +952,40 @@
             margin: 0;
             font-size: 1.2rem;
             opacity: 0.9;
+        }
+        .welcome-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        .welcome-modal.show {
+            display: flex;
+        }
+        .welcome-modal-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: welcomeFadeIn 0.5s ease-out;
+        }
+        @keyframes welcomeFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
         .uploads-table {
             width: 100%;
@@ -1009,6 +1206,24 @@
         body.dark-mode .main-content {
             background-color: #181f2a;
         }
+        body.dark-mode .content-text {
+            background: #1a2636 !important;
+            color: #e2e8f0 !important;
+            border-color: #374151 !important;
+        }
+        body.dark-mode .edit-mode textarea {
+            background: #1a2636 !important;
+            color: #e2e8f0 !important;
+            border-color: #374151 !important;
+        }
+        .settings-subsection,
+        .reports-subsection {
+            display: none;
+        }
+        .settings-subsection.active,
+        .reports-subsection.active {
+            display: block;
+        }
         @media (max-width: 768px) {
             .users-section table {
                 font-size: 12px;
@@ -1143,186 +1358,6 @@
         .actions .delete-btn:hover {
             background-color: #c82333;
         }
-        .citation-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 10000;
-            justify-content: center;
-            align-items: center;
-        }
-        .citation-modal.show {
-            display: flex;
-            animation: modalFadeIn 0.3s ease-out;
-        }
-        @keyframes modalFadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .citation-modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-            position: relative;
-            display: block;
-            visibility: visible;
-            opacity: 1;
-            animation: modalContentFadeIn 0.3s ease-out 0.1s both;
-            font-size: 14px;
-            width: 600px;
-            max-width: 90vw;
-        }
-        @keyframes modalContentFadeIn {
-            from { opacity: 0; transform: translateY(-5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .citation-modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-            position: relative;
-        }
-        .citation-modal-header h2 {
-            margin: 0;
-            color: #333;
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-        .citation-close {
-            background: none;
-            border: none;
-            font-size: 18px;
-            cursor: pointer;
-            color: #666;
-            padding: 3px;
-            border-radius: 50%;
-            width: 25px;
-            height: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background-color 0.3s;
-        }
-        .citation-close:hover {
-            background-color: #f0f0f0;
-            color: #333;
-        }
-        .citation-format-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #ddd;
-            overflow-x: auto;
-        }
-        .citation-tab {
-            background: none;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            font-size: 14px;
-            color: #666;
-            border-bottom: 2px solid transparent;
-            transition: all 0.3s;
-            white-space: nowrap;
-        }
-        .citation-tab.active {
-            color: #007bff;
-            border-bottom-color: #007bff;
-            background-color: #f8f9fa;
-        }
-        .citation-tab:hover {
-            color: #007bff;
-            background-color: #f8f9fa;
-        }
-        .citation-content {
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.6;
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #007bff;
-            white-space: normal;
-            word-wrap: break-word;
-        }
-        .citation-copy-btn {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            margin-top: 15px;
-            transition: background-color 0.3s;
-        }
-        .citation-copy-btn:hover {
-            background-color: #0056b3;
-        }
-        .citation-copy-btn.copied {
-            background-color: #28a745;
-        }
-        .tab-container {
-            margin-top: 20px;
-        }
-        .tabs {
-            display: flex;
-            border-bottom: 1px solid #ddd;
-        }
-        .tab {
-            padding: 10px 20px;
-            cursor: pointer;
-            background-color: #f1f1f1;
-            border: none;
-            border-radius: 4px 4px 0 0;
-            margin-right: 5px;
-        }
-        .tab.active {
-            background-color: #007bff;
-            color: white;
-        }
-        .tab-content {
-            display: none;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-top: none;
-            border-radius: 0 0 4px 4px;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        .tab-content textarea {
-            width: 100%;
-            height: 150px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            resize: vertical;
-        }
-        .related-list {
-            max-height: 300px;
-            overflow-y: auto;
-            margin-top: 20px;
-        }
-        .related-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .related-item input {
-            margin-right: 10px;
-        }
-        .related-item label {
-            font-size: 14px;
-        }
         body.dark-mode .article {
             background-color: #2d2d2d;
             color: #ffffff;
@@ -1338,133 +1373,375 @@
             color: #ffffff;
         }
         body.dark-mode .source-tag {
-            background-color: #444;
+            background: #444;
             color: #ffffff;
+        }
+        .article.editing {
+            background-color: #f0f0f0;
+        }
+        body.dark-mode .article.editing {
+            background-color: #333;
+        }
+        .citation-modal {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0,0,0,0.5);
+          z-index: 10000 !important;
+          justify-content: center;
+          align-items: center;
+        }
+        .citation-modal.show {
+          display: flex !important;
+          animation: modalFadeIn 0.3s ease-out;
+        }
+        @keyframes modalFadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .citation-modal-content {
+          background-color: white;
+          padding: 20px;
+          border-radius: 8px;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+          position: relative;
+          display: block !important;
+          visibility: visible !important;
+          opacity: 1 !important;
+          animation: modalContentFadeIn 0.3s ease-out 0.1s both;
+          font-size: 14px;
+          width: 600px;
+          max-width: 90vw;
+        }
+        @keyframes modalContentFadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(-5px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .citation-modal-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 15px;
+          padding-bottom: 10px;
+          border-bottom: 1px solid #eee;
+          position: relative;
+        }
+        .citation-modal-header h2 {
+          margin: 0;
+          color: #333;
+          font-size: 1.2rem;
+          font-weight: 600;
+        }
+        .citation-close {
+          background: none;
+          border: none;
+          font-size: 18px;
+          cursor: pointer;
+          color: #666;
+          padding: 3px;
+          border-radius: 50%;
+          width: 25px;
+          height: 25px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background-color 0.3s;
+        }
+        .citation-close:hover {
+          background-color: #f0f0f0;
+          color: #333;
+        }
+        .citation-format-tabs {
+          display: flex;
+          gap: 10px;
+          margin-bottom: 20px;
+          border-bottom: 1px solid #ddd;
+          overflow-x: auto;
+        }
+        .citation-tab {
+          background: none;
+          border: none;
+          padding: 10px 15px;
+          cursor: pointer;
+          font-size: 14px;
+          color: #666;
+          border-bottom: 2px solid transparent;
+          transition: all 0.3s;
+          white-space: nowrap;
+        }
+        .citation-tab.active {
+          color: #007bff;
+          border-bottom-color: #007bff;
+          background-color: #f8f9fa;
+        }
+        .citation-tab:hover {
+          color: #007bff;
+          background-color: #f8f9fa;
+        }
+        .citation-content {
+           font-family: 'Courier New', monospace;
+           font-size: 14px;
+           line-height: 1.6;
+           background-color: #f8f9fa;
+           padding: 20px;
+           border-radius: 8px;
+           border-left: 4px solid #007bff;
+           white-space: normal;
+           word-wrap: break-word;
+        }
+        .citation-copy-btn {
+          background-color: #007bff;
+          color: white;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 14px;
+          margin-top: 15px;
+          transition: background-color 0.3s;
+        }
+        .citation-copy-btn:hover {
+          background-color: #0056b3;
+        }
+        .citation-copy-btn.copied {
+          background-color: #28a745;
         }
         body.dark-mode .citation-modal-content {
-            background-color: #2d2d2d;
-            color: #ffffff;
+          background-color: #2d2d2d;
+          color: #ffffff;
         }
         body.dark-mode .citation-modal-header {
-            border-bottom-color: #444;
+          border-bottom-color: #444;
         }
         body.dark-mode .citation-modal-header h2 {
-            color: #ffffff;
+          color: #ffffff;
         }
         body.dark-mode .citation-close {
-            color: #ccc;
+          color: #ccc;
         }
         body.dark-mode .citation-close:hover {
-            background-color: #3d3d3d;
-            color: #ffffff;
+          background-color: #3d3d3d;
+          color: #ffffff;
         }
         body.dark-mode .citation-format-tabs {
-            border-bottom-color: #444;
+          border-bottom-color: #444;
         }
         body.dark-mode .citation-tab {
-            color: #ccc;
+          color: #ccc;
         }
         body.dark-mode .citation-tab.active {
-            color: #ffd700;
-            border-bottom-color: #ffd700;
-            background-color: #3d3d3d;
+          color: #ffd700;
+          border-bottom-color: #ffd700;
+          background-color: #3d3d3d;
         }
         body.dark-mode .citation-tab:hover {
-            color: #ffd700;
-            background-color: #3d3d3d;
+          color: #ffd700;
+          background-color: #3d3d3d;
         }
         body.dark-mode .citation-content {
-            background-color: #3d3d3d;
-            color: #ffffff;
+          background-color: #3d3d3d;
+          color: #ffffff;
         }
-        /* RAF Preview Modal */
-        #raf-preview-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.8);
-            z-index: 10000;
-            justify-content: center;
-            align-items: center;
-        }
-        #raf-preview-modal .modal-content {
+        /* === ARTICLE TEMPLATE STYLES === */
+        .article-template {
             background: white;
-            border-radius: 12px;
             padding: 20px;
-            max-width: 800px;
-            max-height: 90vh;
-            width: 90%;
-            overflow: auto;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            border-left: 4px solid #ffd700; /* Default: Research */
+            transition: border-left-color 0.3s;
         }
-        #raf-preview-modal .close-modal {
-            float: right;
-            font-size: 28px;
+        .article-template.capstone {
+            border-left-color: #0057b8;
+        }
+        .article-template h3 {
+            color: #0057b8;
+            font-size: 18px;
+            margin: 0 0 10px 0;
+            cursor: text;
+        }
+        .article-template .meta {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            cursor: text;
+        }
+        .article-template .summary {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            cursor: text;
+        }
+        .article-template .source-tag {
+            display: inline-block;
+            background-color: #e9ecef;
+            color: #495057;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-bottom: 15px;
             cursor: pointer;
         }
-        /* Welcome Modal */
-        #welcome-modal {
-            position: fixed;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .article-template .actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .article-template .actions span {
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        .article-template .actions span:first-child {
+            color: #1a0dab;
+            cursor: default;
+        }
+        .article-template .actions .save-btn {
+            background: none;
+            border: none;
+            color: #1a0dab;
+            padding: 0;
+            font-size: 14px;
+            cursor: default;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .article-template .actions .save-btn i {
+            color: #1a0dab;
+        }
+        .article-template .actions .save-btn:hover {
+            text-decoration: underline;
+        }
+        .article-template .actions .cite-btn {
+            background-color: #007bff;
             color: white;
-            padding: 20px 40px;
-            border-bottom-left-radius: 12px;
-            border-bottom-right-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            z-index: 3000;
-            text-align: center;
+        }
+        .article-template .actions .cite-btn:hover {
+            background-color: #0056b3;
+        }
+        .article-template .actions .related-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        .article-template .actions .related-btn:hover {
+            background-color: #1e7e34;
+        }
+        /* Editable fields */
+        .article-template input,
+        .article-template textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-bottom: 10px;
+            resize: vertical;
+        }
+        .article-template .category-select,
+        .article-template .gdrive-input {
+            width: auto;
+            min-width: 150px;
+        }
+        /* Non-editable elements */
+        .article-template .non-editable {
+            background: #f8f9fa;
+            color: #666;
+            padding: 6px 10px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .article-template .actions .save-btn {
+            background: none;
+            border: none;
+            color: #1a0dab;
+            padding: 0;
+            font-size: 14px;
+            cursor: default;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .article-template .actions .save-btn i {
+            color: #1a0dab;
+        }
+        .article-template .actions .save-btn:hover {
+            text-decoration: underline;
+        }
+        .article-template .actions .cite-btn {
+            background-color: #007bff;
+            color: white;
+        }
+        .article-template .actions .cite-btn:hover {
+            background-color: #0056b3;
+        }
+        .article-template .actions .related-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        .article-template .actions .related-btn:hover {
+            background-color: #1e7e34;
+        }
+        .article-template .actions .edit-btn {
+            background-color: #ffc107;
+            color: black;
+        }
+        .article-template .actions .edit-btn:hover {
+            background-color: #e0a800;
+        }
+        .article-template .actions .delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+        .article-template .actions .delete-btn:hover {
+            background-color: #c82333;
+        }
+        .upload-section .admn-U_A h3 {
             display: none;
         }
-        #welcome-modal h1 {
-            margin: 0 0 10px 0;
-            font-size: 2.2rem;
-            font-weight: 700;
-        }
-        #welcome-modal p {
-            margin: 0;
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-        /* Permissions badge */
-        .permissions-badge {
-            display: inline-block;
-            padding: 2px 6px;
+        .article-template .actions .upload-btn {
+            background-color: #0057b8;
+            color: white;
+            border: none;
+            padding: 8px 16px;
             border-radius: 4px;
-            font-size: 11px;
-            margin-right: 4px;
-            background: #e9ecef;
-            color: #495057;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            margin-left: auto;
         }
-        body.dark-mode .permissions-badge {
-            background: #444;
-            color: #e0e0e0;
-        }
-        /* Activity log table */
-        .activity-log-item {
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-        }
-        .activity-log-item:last-child {
-            border-bottom: none;
-        }
-        .activity-log-time {
-            font-size: 12px;
-            color: #666;
-        }
-        body.dark-mode .activity-log-time {
-            color: #ccc;
+        .article-template .actions .upload-btn:hover {
+            background-color: #003f8a;
         }
     </style>
 </head>
 <body>
-    <div id="welcome-modal">
-        <h1>Welcome Admin!</h1>
-        <p>Here's what's happening with your business today</p>
+    <div id="welcome-modal" class="welcome-modal">
+        <div class="welcome-modal-content">
+            <h1>Welcome Admin!</h1>
+            <p>Here's what's happening with your Website today</p>
+        </div>
     </div>
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
@@ -1479,11 +1756,11 @@
                     <span class="arrow">▼</span>
                 </a>
                 <ul class="submenu">
-                    <li><a href="#" onclick="scrollToUserSection('verified');"><i class="fas fa-check-circle"></i> Verified Users</a></li>
-                    <li><a href="#" onclick="scrollToUserSection('signing-up');"><i class="fas fa-clock"></i> Signing Up Users</a></li>
-                    <li><a href="#" onclick="scrollToUserSection('rejected');"><i class="fas fa-times-circle"></i> Rejected Users</a></li>
-                    <li><a href="#" onclick="scrollToUserSection('banned');"><i class="fas fa-ban"></i> Banned Users</a></li>
-                    <li><a href="#" onclick="scrollToUserSection('admins');"><i class="fas fa-user-shield"></i> Admin Accounts</a></li>
+                    <li><a href="#" onclick="scrollToUserSection('verified');"><i class="fas fa-check-circle"></i> Verified</a></li>
+                    <li><a href="#" onclick="scrollToUserSection('signing-up');"><i class="fas fa-clock"></i> Signups</a></li>
+                    <li><a href="#" onclick="scrollToUserSection('rejected');"><i class="fas fa-times-circle"></i> Rejected </a></li>
+                    <li><a href="#" onclick="scrollToUserSection('banned');"><i class="fas fa-ban"></i> Banned </a></li>
+                    <li><a href="#" onclick="scrollToUserSection('admins');"><i class="fas fa-user-shield"></i> Admin</a></li>
                 </ul>
             </li>
             <li class="uploads-dropdown" id="uploads-dropdown">
@@ -1492,12 +1769,24 @@
                     <span class="arrow">▼</span>
                 </a>
                 <ul class="submenu">
-                    <li><a href="#" onclick="navigateToUploads('admin');"><i class="fas fa-user-tie"></i> Uploaded by Admin</a></li>
-                    <li><a href="#" onclick="navigateToUploads('users');"><i class="fas fa-users"></i> Uploaded by Users</a></li>
+                    <li><a href="#" onclick="showUploadForm(); toggleUploadsDropdown(event);"><i class="fas fa-upload"></i> Upload</a></li>
+                    <li><a href="#" onclick="showUploaded('admin'); toggleUploadsDropdown(event);"><i class="fas fa-user-tie"></i> Uploaded by Admin</a></li>
+                    <li><a href="#" onclick="showUploaded('users'); toggleUploadsDropdown(event);"><i class="fas fa-users"></i> Uploaded by Users</a></li>
+                </ul>
+            </li>
+            <li class="reports-dropdown" id="reports-dropdown">
+                <a href="#" onclick="toggleReportsDropdown(event)">
+                    <i class="fas fa-clipboard-list"></i> <span class="text">Reports</span>
+                    <span class="arrow">▼</span>
+                </a>
+                <ul class="submenu">
+                    <li><a href="#" onclick="showSection('reports'); showReportsSection('requests');"><i class="fas fa-question-circle"></i> Requests</a></li>
+                    <li><a href="#" onclick="showSection('reports'); showReportsSection('suggestions');"><i class="fas fa-lightbulb"></i> Suggestions</a></li>
+                    <li><a href="#" onclick="showSection('reports'); showReportsSection('bugs');"><i class="fas fa-bug"></i> Bug Reports</a></li>
+                    <li><a href="#" onclick="showSection('reports'); showReportsSection('notifications');"><i class="fas fa-bell"></i> Notifications</a></li>
                 </ul>
             </li>
             <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> <span class="text">Settings</span></a></li>
-            <li><a href="#" data-section="reports"><i class="fas fa-clipboard-list"></i> <span class="text">Reports</span></a></li>
         </ul>
     </div>
     <div class="header">
@@ -1518,6 +1807,7 @@
                 </button>
                 <ul class="profile-menu">
                     <li><a href="#" onclick="handleProfileClick();"><i class="fas fa-user-cog"></i> Profile Settings</a></li>
+                    <li><a href="Homepage.html"><i class="fas fa-arrow-right"></i> Go to Website</a></li>
                     <li class="logout-item"><a href="#" onclick="handleLogoutClick();"><i class="fas fa-sign-out-alt"></i> Log out</a></li>
                 </ul>
             </div>
@@ -1527,11 +1817,11 @@
         <div id="dashboard" class="content-section active">
             <div class="dashboard">
                 <div class="card" onclick="navigateToUsers()">
-                    <h3>Verified Users</h3>
+                    <h3>Total Users</h3>
                     <p id="verified-users-count">0</p>
                 </div>
                 <div class="card" onclick="navigateToUsers()">
-                    <h3>Signing Up Users</h3>
+                    <h3>New Signups</h3>
                     <p id="signing-up-users-count">0</p>
                 </div>
                 <div class="card" onclick="navigateToUploads('all')">
@@ -1550,28 +1840,45 @@
             <div class="graphs-section">
                 <h2>User Statistics</h2>
                 <div class="graph-container">
-                    <div class="graph-item">
-                        <h4>Total Users - SHS & College</h4>
-                        <div class="chart-container">
-                            <canvas id="user-chart"></canvas>
+                    <div class="graph-item" id="usr-grph">
+                        <h4>TOTAL USERS</h4>
+                        <div class="chart-container" id="usr-chart">
+                            <canvas id="user-chart" style="width:1px; padding-bottom:50px;"></canvas>
                         </div>
                     </div>
-                    <div class="graph-item">
-                        <h4>Uploads</h4>
-                        <div class="chart-container">
+                    <div class="graph-item" id="sgn-grph">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <h4>Total of Signing Up Users</h4>
+                            <div class="filter-buttons">
+                                <button class="filter-btn active" onclick="renderSigningUpChart('day', this)">Day</button>
+                                <button class="filter-btn" onclick="renderSigningUpChart('week', this)">Week</button>
+                                <button class="filter-btn" onclick="renderSigningUpChart('month', this)">Month</button>
+                                <button class="filter-btn" onclick="renderSigningUpChart('year', this)">Year</button>
+                            </div>
+                        </div>
+                        <div class="chart-container" id="sgn-chart">
+                            <canvas id="signing-up-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="graph-item" id="upld-grph">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <h4>Total User Upload</h4>
+                            <button id="toggle-uploads-chart" onclick="toggleUploadsChartType()" style="background-color: #007bff; color: white; border: none; padding: 8px 10px; border-radius: 4px; cursor: pointer;">Pie</button>
+                        </div>
+                        <div class="chart-container" id="upld-chart">
                             <canvas id="uploads-chart"></canvas>
                         </div>
                     </div>
-                    <div class="graph-item">
-                        <h4>Avg Time</h4>
-                        <div class="chart-container">
+                    <div class="graph-item" id="avg-grph">
+                        <h4>Average Session Duration of User</h4>
+                        <div class="chart-container" id="avg-chart">
                             <canvas id="time-chart"></canvas>
                         </div>
                     </div>
-                    <div class="graph-item">
-                        <h4>Suggestions</h4>
-                        <div class="chart-container">
-                            <canvas id="suggestions-chart"></canvas>
+                    <div class="graph-item" id="sgst-grph">
+                        <h4>Suggestion of Users</h4>
+                        <div class="chart-container" id="sgst-chart">
+                            <canvas id="suggestions-chart" ></canvas>
                         </div>
                     </div>
                 </div>
@@ -1580,26 +1887,25 @@
         <div id="statistics" class="content-section">
             <div class="statistics-section">
                 <h2>Statistics Overview</h2>
-                <p>Detailed analytics and insights.</p>
-                <div class="empty-state">No statistics data available yet.</div>
+                <h3>SHS Users by Strand and Grade</h3>
+                <div class="chart-container">
+                    <canvas id="shsTreemap"></canvas>
+                </div>
             </div>
         </div>
         <div id="upload" class="content-section">
             <div class="upload-section">
                 <h2>Article Management</h2>
                 <div class="admn-U_A">
+                    <!-- Upload Form -->
                     <form id="article-upload-form" style="display: grid; gap: 15px; max-width: 600px;">
                         <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: center;">
                             <label for="article-title" style="font-weight: bold;">Title:</label>
                             <input type="text" id="article-title" required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
                         </div>
                         <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: center;">
-                            <label for="article-authors" style="font-weight: bold;">Authors:</label>
-                            <input type="text" id="article-authors" required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: center;">
-                            <label for="article-meta" style="font-weight: bold;">Meta:</label>
-                            <input type="text" id="article-meta" placeholder="e.g., Authors – Year – Institution" required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                            <label for="article-meta" style="font-weight: bold;">Meta (e.g., Authors – Year – Institution):</label>
+                            <input type="text" id="article-meta" placeholder="e.g., Caluya, C. I. L., Cejes, M. T. H. M. – 2024–2025" required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
                         </div>
                         <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: start;">
                             <label for="article-summary" style="font-weight: bold;">Summary:</label>
@@ -1614,7 +1920,7 @@
                         </div>
                         <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: center;">
                             <label for="article-strand" style="font-weight: bold;">Strand/Program:</label>
-                            <input type="text" id="article-strand" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                            <input type="text" id="article-strand" placeholder="e.g., STEM, BSIT, Grade 11" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
                         </div>
                         <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: center;">
                             <label for="article-level" style="font-weight: bold;">Level:</label>
@@ -1625,28 +1931,30 @@
                         </div>
                         <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: center;">
                             <label for="article-program" style="font-weight: bold;">Program:</label>
-                            <input type="text" id="article-program" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                            <input type="text" id="article-program" placeholder="e.g., BSCS, BSBA" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
                         </div>
                         <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: center;">
                             <label for="article-year" style="font-weight: bold;">Year:</label>
-                            <input type="number" id="article-year" required style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: center;">
-                            <label for="article-type" style="font-weight: bold;">Type:</label>
-                            <input type="text" id="article-type" value="research" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                            <input type="number" id="article-year" required min="2020" max="2030" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
                         </div>
                         <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: start;">
                             <label for="article-citation" style="font-weight: bold;">Citation:</label>
                             <textarea id="article-citation" rows="3" placeholder="Enter citation text" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; resize: vertical;"></textarea>
                         </div>
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: center;">
+                            <label for="article-gdrive-id" style="font-weight: bold;">Google Drive ID:</label>
+                            <input type="text" id="article-gdrive-id" placeholder="e.g., 1Gr3-XbFEkM4Y5hhT4jDABXus0htk3FBS" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
                         <div style="grid-column: span 2; text-align: center;">
                             <button type="submit" class="btn" style="background-color: #0057b8; color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px;">Upload Article</button>
                         </div>
                     </form>
+
                     <h3 style="color: #0057b8; margin: 40px 0 20px 0;">Uploaded Articles by Admin</h3>
                     <div id="admin-uploaded-articles" style="max-width: 800px;">
                         <p class="empty-state">No articles uploaded by admin yet.</p>
                     </div>
+
                     <h3 style="color: #0057b8; margin: 40px 0 20px 0;">Uploaded Articles by Users</h3>
                     <div id="user-uploaded-articles" style="max-width: 800px;">
                         <p class="empty-state">No articles uploaded by users yet.</p>
@@ -1656,89 +1964,442 @@
         </div>
         <div id="users" class="content-section">
             <div class="users-section">
-                <h2>Users Management</h2>
-                <p>Manage user accounts and registration requests.</p>
+                
                 <!-- Verified Users Section -->
                 <div id="verified-section" class="user-subsection" style="--border-color: #28a745; --header-color: #28a745;">
                     <h3 style="color: var(--header-color);">✅ Verified Users</h3>
                     <p style="margin-bottom: 20px;">Users who have been granted access by the admin.</p>
-                    <table id="verified-users-table">
-                        <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Verified</th><th>RAF Preview</th><th>Actions</th></tr></thead>
-                        <tbody id="verified-users-tbody"></tbody>
-                    </table>
+                    <!-- Filter by Category above table -->
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="margin: 0 0 10px 0; color: #007bff;">Filter by Category:</h4>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-primary" onclick="showUserCategory('shs')">SHS</button>
+                            <button class="btn btn-success" onclick="showUserCategory('college')">College</button>
+                            <button class="btn btn-warning" onclick="showUserCategory('teacher')">Teacher</button>
+                        </div>
+                    </div>
+                    <!-- SHS Specification -->
+                    <div id="shs-spec" style="display: none; margin-top: 20px;">
+                        <h4>Grade:</h4>
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <button class="btn btn-info" onclick="showGrade('11')">Grade 11</button>
+                            <button class="btn btn-info" onclick="showGrade('12')">Grade 12</button>
+                        </div>
+                        <div id="grade-selection" style="display: none;">
+                            <h5 id="grade-title"></h5>
+                            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                <button class="btn btn-secondary" onclick="showStrand('abm')">ABM</button>
+                                <button class="btn btn-secondary" onclick="showStrand('cularts')">CulArts</button>
+                                <button class="btn btn-secondary" onclick="showStrand('itmawd')">ITMAWD</button>
+                                <button class="btn btn-secondary" onclick="showStrand('stem')">STEM</button>
+                            </div>
+                        </div>
+                        <div id="strand-table" style="display: none; margin-top: 20px; overflow-x: auto;">
+                            <h6 id="strand-title"></h6>
+                            <table id="strand-users-table">
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Verified</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <tbody id="strand-users-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- College Specification -->
+                    <div id="college-spec" style="display: none; margin-top: 20px;">
+                        <h4>Degree:</h4>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-success" onclick="showDegree('bsba')">BSBA</button>
+                            <button class="btn btn-success" onclick="showDegree('bscs')">BSCS</button>
+                            <button class="btn btn-success" onclick="showDegree('bsit')">BSIT</button>
+                        </div>
+                        <div id="degree-table" style="display: none; margin-top: 20px; overflow-x: auto;">
+                            <h5 id="degree-title"></h5>
+                            <table id="degree-users-table">
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Verified</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <tbody id="degree-users-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- Teacher Specification -->
+                    <div id="teacher-spec" style="display: none; margin-top: 20px;">
+                        <h4>Department:</h4>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-danger" onclick="showDepartment('shs')">SHS</button>
+                            <button class="btn btn-danger" onclick="showDepartment('college')">College</button>
+                        </div>
+                        <div id="department-table" style="display: none; margin-top: 20px; overflow-x: auto;">
+                            <h5 id="department-title"></h5>
+                            <table id="department-users-table">
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Verified</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <tbody id="department-users-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table id="verified-users-table">
+                            <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Verified</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                            <tbody id="verified-users-tbody"></tbody>
+                        </table>
+                    </div>
                 </div>
                 <!-- Signing Up Users Section -->
                 <div id="signing-up-section" class="user-subsection" style="--border-color: #ffc107; --header-color: #ffc107;">
                     <h3 style="color: var(--header-color);">⏳ Signing Up Users</h3>
                     <p style="margin-bottom: 20px;">Users trying to sign up and awaiting admin approval.</p>
-                    <table id="signing-up-users-table">
-                        <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Signed Up</th><th>RAF Preview</th><th>Actions</th></tr></thead>
-                        <tbody id="signing-up-users-tbody"></tbody>
-                    </table>
+                    <!-- Filter by Category above table -->
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="margin: 0 0 10px 0; color: #ffc107;">Filter by Category:</h4>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-primary" onclick="showUserCategoryForStatus('signing-up', 'shs')">SHS</button>
+                            <button class="btn btn-success" onclick="showUserCategoryForStatus('signing-up', 'college')">College</button>
+                            <button class="btn btn-warning" onclick="showUserCategoryForStatus('signing-up', 'teacher')">Teacher</button>
+                        </div>
+                    </div>
+                    <!-- SHS Specification for Signing Up -->
+                    <div id="signing-up-shs-spec" style="display: none; margin-top: 20px;">
+                        <h4>Grade:</h4>
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <button class="btn btn-info" onclick="showGradeForStatus('signing-up', '11')">Grade 11</button>
+                            <button class="btn btn-info" onclick="showGradeForStatus('signing-up', '12')">Grade 12</button>
+                        </div>
+                        <div id="signing-up-grade-selection" style="display: none;">
+                            <h5 id="signing-up-grade-title"></h5>
+                            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                <button class="btn btn-secondary" onclick="showStrandForStatus('signing-up', 'abm')">ABM</button>
+                                <button class="btn btn-secondary" onclick="showStrandForStatus('signing-up', 'cularts')">CulArts</button>
+                                <button class="btn btn-secondary" onclick="showStrandForStatus('signing-up', 'itmawd')">ITMAWD</button>
+                                <button class="btn btn-secondary" onclick="showStrandForStatus('signing-up', 'stem')">STEM</button>
+                            </div>
+                        </div>
+                        <div id="signing-up-strand-table" style="display: none; margin-top: 20px;">
+                            <h6 id="signing-up-strand-title"></h6>
+                            <table id="signing-up-strand-users-table">
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Signed Up</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <tbody id="signing-up-strand-users-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- College Specification for Signing Up -->
+                    <div id="signing-up-college-spec" style="display: none; margin-top: 20px;">
+                        <h4>Degree:</h4>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-success" onclick="showDegreeForStatus('signing-up', 'bsba')">BSBA</button>
+                            <button class="btn btn-success" onclick="showDegreeForStatus('signing-up', 'bscs')">BSCS</button>
+                            <button class="btn btn-success" onclick="showDegreeForStatus('signing-up', 'bsit')">BSIT</button>
+                        </div>
+                        <div id="signing-up-degree-table" style="display: none; margin-top: 20px;">
+                            <h5 id="signing-up-degree-title"></h5>
+                            <table id="signing-up-degree-users-table">
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Signed Up</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <tbody id="signing-up-degree-users-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- Teacher Specification for Signing Up -->
+                    <div id="signing-up-teacher-spec" style="display: none; margin-top: 20px;">
+                        <h4>Department:</h4>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-danger" onclick="showDepartmentForStatus('signing-up', 'shs')">SHS</button>
+                            <button class="btn btn-danger" onclick="showDepartmentForStatus('signing-up', 'college')">College</button>
+                        </div>
+                        <div id="signing-up-department-table" style="display: none; margin-top: 20px;">
+                            <h5 id="signing-up-department-title"></h5>
+                            <table id="signing-up-department-users-table">
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Signed Up</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <tbody id="signing-up-department-users-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table id="signing-up-users-table">
+                            <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Signed Up</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                            <tbody id="signing-up-users-tbody"></tbody>
+                        </table>
+                    </div>
                 </div>
                 <!-- Rejected Users Section -->
                 <div id="rejected-section" class="user-subsection" style="--border-color: #6c757d; --header-color: #6c757d;">
                     <h3 style="color: var(--header-color);">❌ Rejected Users</h3>
                     <p style="margin-bottom: 20px;">Users whose sign-up requests were rejected by the admin.</p>
-                    <table id="rejected-users-table">
-                        <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Rejected</th><th>RAF Preview</th><th>Actions</th></tr></thead>
-                        <tbody id="rejected-users-tbody"></tbody>
-                    </table>
+                    <!-- Filter by Category above table -->
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="margin: 0 0 10px 0; color: #6c757d;">Filter by Category:</h4>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-primary" onclick="showUserCategoryForStatus('rejected', 'shs')">SHS</button>
+                            <button class="btn btn-success" onclick="showUserCategoryForStatus('rejected', 'college')">College</button>
+                            <button class="btn btn-warning" onclick="showUserCategoryForStatus('rejected', 'teacher')">Teacher</button>
+                        </div>
+                    </div>
+                    <!-- SHS Specification for Rejected -->
+                    <div id="rejected-shs-spec" style="display: none; margin-top: 20px;">
+                        <h4>Grade:</h4>
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <button class="btn btn-info" onclick="showGradeForStatus('rejected', '11')">Grade 11</button>
+                            <button class="btn btn-info" onclick="showGradeForStatus('rejected', '12')">Grade 12</button>
+                        </div>
+                        <div id="rejected-grade-selection" style="display: none;">
+                            <h5 id="rejected-grade-title"></h5>
+                            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                <button class="btn btn-secondary" onclick="showStrandForStatus('rejected', 'abm')">ABM</button>
+                                <button class="btn btn-secondary" onclick="showStrandForStatus('rejected', 'cularts')">CulArts</button>
+                                <button class="btn btn-secondary" onclick="showStrandForStatus('rejected', 'itmawd')">ITMAWD</button>
+                                <button class="btn btn-secondary" onclick="showStrandForStatus('rejected', 'stem')">STEM</button>
+                            </div>
+                        </div>
+                        <div id="rejected-strand-table" style="display: none; margin-top: 20px;">
+                            <h6 id="rejected-strand-title"></h6>
+                            <table id="rejected-strand-users-table">
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Rejected</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <tbody id="rejected-strand-users-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- College Specification for Rejected -->
+                    <div id="rejected-college-spec" style="display: none; margin-top: 20px;">
+                        <h4>Degree:</h4>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-success" onclick="showDegreeForStatus('rejected', 'bsba')">BSBA</button>
+                            <button class="btn btn-success" onclick="showDegreeForStatus('rejected', 'bscs')">BSCS</button>
+                            <button class="btn btn-success" onclick="showDegreeForStatus('rejected', 'bsit')">BSIT</button>
+                        </div>
+                        <div id="rejected-degree-table" style="display: none; margin-top: 20px;">
+                            <h5 id="rejected-degree-title"></h5>
+                            <table id="rejected-degree-users-table">
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Rejected</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <tbody id="rejected-degree-users-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- Teacher Specification for Rejected -->
+                    <div id="rejected-teacher-spec" style="display: none; margin-top: 20px;">
+                        <h4>Department:</h4>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-danger" onclick="showDepartmentForStatus('rejected', 'shs')">SHS</button>
+                            <button class="btn btn-danger" onclick="showDepartmentForStatus('rejected', 'college')">College</button>
+                        </div>
+                        <div id="rejected-department-table" style="display: none; margin-top: 20px;">
+                            <h5 id="rejected-department-title"></h5>
+                            <table id="rejected-department-users-table">
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Rejected</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <tbody id="rejected-department-users-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table id="rejected-users-table">
+                            <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Rejected</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                            <tbody id="rejected-users-tbody"></tbody>
+                        </table>
+                    </div>
                 </div>
                 <!-- Banned Users Section -->
                 <div id="banned-section" class="user-subsection" style="--border-color: #dc3545; --header-color: #dc3545;">
                     <h3 style="color: var(--header-color);">🚫 Banned Users</h3>
                     <p style="margin-bottom: 20px;">Users who have been banned by the admin.</p>
-                    <table id="banned-users-table">
-                        <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Banned</th><th>RAF Preview</th><th>Actions</th></tr></thead>
-                        <tbody id="banned-users-tbody"></tbody>
-                    </table>
+                    <!-- Filter by Category above table -->
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="margin: 0 0 10px 0; color: #dc3545;">Filter by Category:</h4>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-primary" onclick="showUserCategoryForStatus('banned', 'shs')">SHS</button>
+                            <button class="btn btn-success" onclick="showUserCategoryForStatus('banned', 'college')">College</button>
+                            <button class="btn btn-warning" onclick="showUserCategoryForStatus('banned', 'teacher')">Teacher</button>
+                        </div>
+                    </div>
+                    <!-- SHS Specification for Banned -->
+                    <div id="banned-shs-spec" style="display: none; margin-top: 20px;">
+                        <h4>Grade:</h4>
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <button class="btn btn-info" onclick="showGradeForStatus('banned', '11')">Grade 11</button>
+                            <button class="btn btn-info" onclick="showGradeForStatus('banned', '12')">Grade 12</button>
+                        </div>
+                        <div id="banned-grade-selection" style="display: none;">
+                            <h5 id="banned-grade-title"></h5>
+                            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                <button class="btn btn-secondary" onclick="showStrandForStatus('banned', 'abm')">ABM</button>
+                                <button class="btn btn-secondary" onclick="showStrandForStatus('banned', 'cularts')">CulArts</button>
+                                <button class="btn btn-secondary" onclick="showStrandForStatus('banned', 'itmawd')">ITMAWD</button>
+                                <button class="btn btn-secondary" onclick="showStrandForStatus('banned', 'stem')">STEM</button>
+                            </div>
+                        </div>
+                        <div id="banned-strand-table" style="display: none; margin-top: 20px;">
+                            <h6 id="banned-strand-title"></h6>
+                            <table id="banned-strand-users-table">
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Banned</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <tbody id="banned-strand-users-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- College Specification for Banned -->
+                    <div id="banned-college-spec" style="display: none; margin-top: 20px;">
+                        <h4>Degree:</h4>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-success" onclick="showDegreeForStatus('banned', 'bsba')">BSBA</button>
+                            <button class="btn btn-success" onclick="showDegreeForStatus('banned', 'bscs')">BSCS</button>
+                            <button class="btn btn-success" onclick="showDegreeForStatus('banned', 'bsit')">BSIT</button>
+                        </div>
+                        <div id="banned-degree-table" style="display: none; margin-top: 20px;">
+                            <h5 id="banned-degree-title"></h5>
+                            <table id="banned-degree-users-table">
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Banned</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <tbody id="banned-degree-users-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- Teacher Specification for Banned -->
+                    <div id="banned-teacher-spec" style="display: none; margin-top: 20px;">
+                        <h4>Department:</h4>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-danger" onclick="showDepartmentForStatus('banned', 'shs')">SHS</button>
+                            <button class="btn btn-danger" onclick="showDepartmentForStatus('banned', 'college')">College</button>
+                        </div>
+                        <div id="banned-department-table" style="display: none; margin-top: 20px;">
+                            <h5 id="banned-department-title"></h5>
+                            <table id="banned-department-users-table">
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Banned</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <tbody id="banned-department-users-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table id="banned-users-table">
+                            <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Banned</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                            <tbody id="banned-users-tbody"></tbody>
+                        </table>
+                    </div>
                 </div>
                 <!-- Admin Accounts Section -->
                 <div id="admins-section" class="user-subsection" style="--border-color: #6f42c1; --header-color: #6f42c1;">
                     <h3 style="color: var(--header-color);">🛡️ Admin Accounts</h3>
                     <p style="margin-bottom: 20px;">Co-administrators who can manage the system.</p>
                     <button class="btn btn-primary" onclick="window.location.href='coadmin.html'">+ Create New Admin</button>
-                    <table id="admins-table" style="margin-top: 15px;">
-                        <thead>
-                            <tr>
-                                <th>Admin ID</th>
-                                <th>Full Name</th>
-                                <th>Email</th>
-                                <th>Permissions</th>
-                                <th>Date Created</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admins-tbody"></tbody>
-                    </table>
+                    <!-- Filter by Category above table -->
+                    <div style="margin-bottom: 20px; margin-top: 20px;">
+                        <h4 style="margin: 0 0 10px 0; color: #6f42c1;">Filter by Category:</h4>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-primary" onclick="showUserCategoryForStatus('admins', 'shs')">SHS</button>
+                            <button class="btn btn-success" onclick="showUserCategoryForStatus('admins', 'college')">College</button>
+                            <button class="btn btn-warning" onclick="showUserCategoryForStatus('admins', 'teacher')">Teacher</button>
+                        </div>
+                    </div>
+                    <div style="overflow-x: auto; margin-top: 15px;">
+                        <table id="admins-table">
+                            <thead>
+                                <tr>
+                                    <th>Admin ID</th>
+                                    <th>Full Name</th>
+                                    <th>Email</th>
+                                    <th>Permissions</th>
+                                    <th>Date Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admins-tbody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
         <div id="settings" class="content-section">
             <div class="settings-section">
-                <h2>Settings</h2>
-                <form id="settings-form">
-                    <label for="site-title">Site Title:</label>
-                    <input type="text" id="site-title" name="site-title" value="STI Archives"><br><br>
-                    <label for="admin-email">Admin Email:</label>
-                    <input type="email" id="admin-email" name="admin-email" value="admin@sti.archives.clmb"><br><br>
-                    <button class="btn" type="submit">Save Settings</button>
-                </form>
+                <div style="display: flex;">
+                    <div class="settings-sidebar" style="width: 200px; padding: 20px; background-color: #f8f9fa; border-right: 1px solid #ddd;">
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 10px 0; cursor: pointer; color: #007bff;" onclick="showSettingsSection('general')">General</li>
+                            <li style="padding: 10px 0; cursor: pointer;" onclick="showSettingsSection('account')">Account</li>
+                            <li onclick="showSettingsSection('terms-conditions')" style="cursor: pointer; padding-top: 10px; padding-bottom: 10px;">Terms & Conditions</li>
+                            <li onclick="showSettingsSection('privacy-policy')" style="cursor: pointer; padding-top: 10px;">Privacy Policy</li>
+                        </ul>
+                    </div>
+                    <div class="settings-content" style="flex: 1; padding: 20px; min-height: calc(100vh - 200px);">
+                        <div id="general-settings" class="settings-subsection active">
+                            <h2>General Settings</h2>
+                            <form id="settings-form">
+                                <label for="site-title">Site Title:</label>
+                                <input type="text" id="site-title" name="site-title" value="STI Archives"><br><br>
+                                <label for="site-logo">Logo URL:</label>
+                                <input type="url" id="site-logo" name="site-logo" placeholder="https://example.com/logo.png"><br><br>
+                                <label for="site-favicon">Favicon URL:</label>
+                                <input type="url" id="site-favicon" name="site-favicon" placeholder="https://example.com/favicon.ico"><br><br>
+                                <button class="btn" type="submit">Save Settings</button>
+                            </form>
+                        </div>
+                        <div id="account-settings" class="settings-subsection">
+                            <h2>Account Settings</h2>
+                            <form id="account-form">
+                                <label for="admin-username">Username:</label>
+                                <input type="text" id="admin-username" name="admin-username" value="admin"><br><br>
+                                <label for="admin-gmail">Gmail:</label>
+                                <input type="email" id="admin-gmail" name="admin-gmail" value="admin@sti.archives.clmb"><br><br>
+                                <label for="admin-password">Password:</label>
+                                <div style="position: relative;">
+                                    <input type="text" id="admin-password" name="admin-password" value="" style="padding-right: 40px;">
+                                    <i class="fas fa-eye" onclick="openPasswordChangeModal()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
+                                </div><br><br>
+                                <button class="btn" type="submit">Save Account</button>
+                            </form>
+                        </div>
+                        <div id="terms-conditions-settings" class="settings-subsection">
+                            <h2>Terms and Conditions</h2>
+                            <div class="editable-content" id="terms-content">
+                                <div class="view-mode">
+                                    <div class="content-text" id="terms-text" style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 20px; background: #fff; border-radius: 8px; color: #333;"></div>
+                                    <button onclick="editContent('terms')" style="margin-top: 10px; background: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Edit</button>
+                                </div>
+                                <div class="edit-mode" style="display: none;">
+                                    <textarea id="terms-textarea" rows="20" style="width: 100%; padding: 12px; border: 1px solid #bfc9d9; border-radius: 8px; font-size: 16px; outline: none;"></textarea>
+                                    <button onclick="saveContent('terms')" style="margin-top: 10px; background: #28a745; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Save</button>
+                                    <button onclick="cancelEdit('terms')" style="margin-left: 10px; background: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="privacy-policy-settings" class="settings-subsection">
+                            <h2>Privacy Policy</h2>
+                            <div class="editable-content" id="privacy-content">
+                                <div class="view-mode">
+                                    <div class="content-text" id="privacy-text" style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 20px; background: #fff; border-radius: 8px; color: #333;"></div>
+                                    <button onclick="editContent('privacy')" style="margin-top: 10px; background: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Edit</button>
+                                </div>
+                                <div class="edit-mode" style="display: none;">
+                                    <textarea id="privacy-textarea" rows="20" style="width: 100%; padding: 12px; border: 1px solid #bfc9d9; border-radius: 8px; font-size: 16px; outline: none;"></textarea>
+                                    <button onclick="saveContent('privacy')" style="margin-top: 10px; background: #28a745; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Save</button>
+                                    <button onclick="cancelEdit('privacy')" style="margin-left: 10px; background: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div id="reports" class="content-section">
             <div class="reports-section">
-                <h2>Reports</h2>
-                <p>View system activity and co-admin actions.</p>
-                <h3 style="margin-top: 30px;">Co-Admin Activity Logs</h3>
-                <div id="activity-logs-container">
-                    <div id="activity-logs-list"></div>
-                    <div id="no-activity" class="empty-state" style="display: none;">No activity logs yet.</div>
+                
+                <div id="reports-requests" class="reports-subsection active">
+                    <h3>Requests</h3>
+                    <div id="requests-list"></div>
+                </div>
+                <div id="reports-suggestions" class="reports-subsection">
+                    <h3>Suggestions</h3>
+                    <div id="suggestions-list"></div>
+                </div>
+                <div id="reports-bugs" class="reports-subsection">
+                    <h3>Bug Reports</h3>
+                    <div id="bugs-list"></div>
+                </div>
+                <div id="reports-notifications" class="reports-subsection">
+                    <h3>Notifications</h3>
+                    <h4>New Users</h4>
+                    <div id="new-users-notifications"></div>
+                    <h4>New Signups</h4>
+                    <div id="new-signups-notifications"></div>
+                    <h4>Co-Admin Uploads</h4>
+                    <div id="co-admin-uploads-notifications"></div>
+                    <h4>User Suggestions</h4>
+                    <div id="user-suggestions-notifications"></div>
+                    <h4>Sub-Admin Bug Reports</h4>
+                    <div id="sub-admin-bugs-notifications"></div>
                 </div>
             </div>
         </div>
     </div>
+
     <!-- RAF Preview Modal -->
     <div id="raf-preview-modal" class="modal">
         <div class="modal-content">
@@ -1757,16 +2418,55 @@
             <div class="notification-placeholder">No new notifications.</div>
         </div>
         <div class="notification-footer">
-            <button class="view-all-btn">View All</button>
+            <button class="view-all-btn" onclick="showSection('reports'); toggleNotificationModal();">View All</button>
         </div>
     </div>
+
+    <!-- Send Update Modal -->
+    <div id="send-update-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeSendUpdateModal()">&times;</span>
+            <h3>Send Update to User</h3>
+            <form id="send-update-form">
+                <label for="update-email">To:</label>
+                <input type="email" id="update-email" readonly required>
+                <label for="update-subject">Subject:</label>
+                <input type="text" id="update-subject" required>
+                <label for="update-message">Message:</label>
+                <textarea id="update-message" rows="5" required></textarea>
+                <button type="submit" class="btn">Send Update</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Password Change Modal -->
+    <div id="password-change-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closePasswordChangeModal()">&times;</span>
+            <h3>Change Password</h3>
+            <p>Your password was changed 1 month ago.</p>
+            <label for="verification-code">Enter code sent to your Gmail:</label>
+            <input type="text" id="verification-code" required>
+            <button id="get-code-btn" onclick="getVerificationCode()">Get Code</button>
+            <p id="timer">60</p>
+            <button onclick="verifyCode()">Verify</button>
+        </div>
+    </div>
+
+
     <script>
-        // Utility: Get users from localStorage
+        // === UTILS ===
         function getUsers() {
             return JSON.parse(localStorage.getItem('users')) || [];
         }
         function saveUsers(users) {
             localStorage.setItem('users', JSON.stringify(users));
+        }
+        function getArticles() {
+            return JSON.parse(localStorage.getItem('articles')) || [];
+        }
+        function saveArticles(articles) {
+            localStorage.setItem('articles', JSON.stringify(articles));
         }
         function getActivityLogs() {
             return JSON.parse(localStorage.getItem('activityLogs')) || [];
@@ -1780,431 +2480,764 @@
             if (role === 'admin') return 'Admin';
             return 'Teacher';
         }
-        // === USER ACTIONS ===
-        function banUser(id) {
-            if (!confirm('Ban this user permanently?')) return;
-            const users = getUsers();
-            const user = users.find(u => u.id === id);
-            if (user) {
-                user.banned = true;
-                user.banned_at = new Date().toISOString();
-                user.verified = false;
-                user.rejected = false;
-                saveUsers(users);
-                populateUsersTable();
-                alert('User banned.');
-            }
+
+        let uploadsChartType = 'doughnut';
+
+        function toggleUploadsChartType() {
+            uploadsChartType = uploadsChartType === 'pie' ? 'doughnut' : 'pie';
+            document.getElementById('toggle-uploads-chart').innerText = uploadsChartType === 'pie' ? 'Doughnut' : 'Pie';
+            renderUploadsChart();
         }
-        function unbanUser(id) {
-            if (!confirm('Unban this user?')) return;
-            const users = getUsers();
-            const user = users.find(u => u.id === id);
-            if (user) {
-                user.banned = false;
-                delete user.banned_at;
-                saveUsers(users);
-                populateUsersTable();
-                alert('User unbanned.');
-            }
+
+
+  // === CREATE ARTICLE TEMPLATE (VIEW/EDIT TOGGLE) ===
+  function createArticleTemplate(articleData = {}) {
+    const wrapper = document.createElement('div');
+    wrapper.style.marginBottom = '20px';
+
+    const template = document.createElement('div');
+    template.className = `article ${articleData.category === 'capstone' ? 'capstone' : ''}`;
+    template.setAttribute('data-category', articleData.category);
+
+    const actionButtons = document.createElement('div');
+    actionButtons.style.display = 'flex';
+    actionButtons.style.justifyContent = 'flex-start';
+    actionButtons.style.gap = '10px';
+    actionButtons.style.marginTop = '10px';
+
+    wrapper.appendChild(template);
+    wrapper.appendChild(actionButtons);
+
+    function setViewMode() {
+      template.classList.remove('editing');
+      template.innerHTML = `
+          <h3><a href="#" style="text-decoration: none; color: inherit;">${articleData.title}</a></h3>
+          <div class="meta">${articleData.meta}</div>
+          <div class="summary">${articleData.summary}</div>
+          <div class="actions">
+              <span>★ Save</span>
+              <span onclick="openCitationModal(this)">Cite</span>
+              <span onclick="alert('Related clicked')">Related articles</span>
+              <div class="source-tag" style="float: right; margin-left: auto;">[STI College Calamba Library]</div>
+          </div>
+      `;
+      actionButtons.innerHTML = '';
+      const editBtn = document.createElement('button');
+      editBtn.className = 'edit-btn';
+      editBtn.style.backgroundColor = 'gray';
+      editBtn.style.color = 'white';
+      editBtn.style.border = 'none';
+      editBtn.style.padding = '5px 10px';
+      editBtn.style.borderRadius = '4px';
+      editBtn.style.cursor = 'pointer';
+      editBtn.textContent = 'Edit';
+      editBtn.addEventListener('click', setEditMode);
+      actionButtons.appendChild(editBtn);
+    }
+
+    function setEditMode() {
+      template.classList.add('editing');
+      template.innerHTML = `
+          <div>
+              <input type="text" class="article-title" value="${articleData.title}" placeholder="Article Title" style="border: none; background: transparent; color: #0057b8; font-size: 18px; font-weight: bold; width: 100%; outline: none;">
+          </div>
+          <div class="meta">
+              <input type="text" class="article-authors" value="${articleData.authors}" placeholder="Authors" style="border: none; background: transparent; color: #555; font-size: 14px; width: auto; outline: none;">
+              <span> – </span>
+              <input type="text" class="article-meta" value="${articleData.meta}" placeholder="Meta (e.g., Authors – Year – Institution)" style="border: none; background: transparent; color: #555; font-size: 14px; width: auto; outline: none;">
+          </div>
+          <div class="summary">
+              <textarea class="article-summary" placeholder="Summary" style="border: none; background: transparent; color: #333; font-size: 14px; line-height: 1.5; width: 100%; resize: vertical; outline: none;">${articleData.summary}</textarea>
+          </div>
+          <div class="actions">
+              <span onclick="alert('Cite clicked')">Cite</span>
+              <span onclick="alert('Related clicked')">Related articles</span>
+              <div class="source-tag" style="float: right; margin-left: auto;">[STI College Calamba Library]</div>
+          </div>
+          <div class="actions-row">
+              <label>Category:</label>
+              <select class="category-select">
+                  <option value="research" ${articleData.category === 'research' ? 'selected' : ''}>Research</option>
+                  <option value="capstone" ${articleData.category === 'capstone' ? 'selected' : ''}>Capstone</option>
+              </select>
+              <div class="research-options" style="display: ${articleData.category === 'research' ? 'inline' : 'none'};">
+                  <label>Grade:</label>
+                  <select class="grade-select">
+                      <option value="Grade 11" ${articleData.program === 'Grade 11' ? 'selected' : ''}>Grade 11</option>
+                      <option value="Grade 12" ${articleData.program === 'Grade 12' ? 'selected' : ''}>Grade 12</option>
+                  </select>
+                  <label>Strand:</label>
+                  <select class="strand-select">
+                      <option value="ABM" ${articleData.strand === 'ABM' ? 'selected' : ''}>ABM</option>
+                      <option value="CulArts" ${articleData.strand === 'CulArts' ? 'selected' : ''}>CulArts</option>
+                      <option value="ITMAWD" ${articleData.strand === 'ITMAWD' ? 'selected' : ''}>ITMAWD</option>
+                      <option value="STEM" ${articleData.strand === 'STEM' ? 'selected' : ''}>STEM</option>
+                  </select>
+              </div>
+              <div class="capstone-options" style="display: ${articleData.category === 'capstone' ? 'inline' : 'none'};">
+                  <label>Program:</label>
+                  <select class="program-select">
+                      <option value="BSBA" ${articleData.strand === 'BSBA' ? 'selected' : ''}>BSBA</option>
+                      <option value="BSCS" ${articleData.strand === 'BSCS' ? 'selected' : ''}>BSCS</option>
+                      <option value="BSIT" ${articleData.strand === 'BSIT' ? 'selected' : ''}>BSIT</option>
+                  </select>
+              </div>
+              <label>GDrive ID:</label>
+              <input type="text" class="gdrive-input" value="${articleData.gdriveId || ''}" placeholder="Google Drive File ID">
+          </div>
+      `;
+
+      // Add event listeners for category
+      const categorySelect = template.querySelector('.category-select');
+      categorySelect.addEventListener('change', function() {
+        const researchOpts = template.querySelector('.research-options');
+        const capstoneOpts = template.querySelector('.capstone-options');
+        if (this.value === 'research') {
+          researchOpts.style.display = 'inline';
+          capstoneOpts.style.display = 'none';
+          template.classList.remove('capstone');
+        } else {
+          researchOpts.style.display = 'none';
+          capstoneOpts.style.display = 'inline';
+          template.classList.add('capstone');
         }
-        function approveUser(id) {
-            if (!confirm('Approve this user?')) return;
-            const users = getUsers();
-            const user = users.find(u => u.id === id);
-            if (user) {
-                user.verified = true;
-                user.approved_at = new Date().toISOString();
-                user.rejected = false;
-                user.banned = false;
-                saveUsers(users);
-                populateUsersTable();
-                alert('User approved!');
-            }
+      });
+
+      // Create buttons in actionButtons
+      actionButtons.innerHTML = '';
+      const editBtn = document.createElement('button');
+      editBtn.className = 'edit-btn';
+      editBtn.style.backgroundColor = 'gray';
+      editBtn.style.color = 'white';
+      editBtn.style.border = 'none';
+      editBtn.style.padding = '5px 10px';
+      editBtn.style.borderRadius = '4px';
+      editBtn.style.cursor = 'pointer';
+      editBtn.textContent = 'Edit';
+
+      const cancelBtn = document.createElement('button');
+      cancelBtn.className = 'cancel-btn';
+      cancelBtn.style.backgroundColor = '#6c757d';
+      cancelBtn.style.color = 'white';
+      cancelBtn.style.border = 'none';
+      cancelBtn.style.padding = '5px 10px';
+      cancelBtn.style.borderRadius = '4px';
+      cancelBtn.style.cursor = 'pointer';
+      cancelBtn.textContent = 'Cancel';
+      cancelBtn.addEventListener('click', setViewMode);
+
+      const saveBtn = document.createElement('button');
+      saveBtn.className = 'save-btn';
+      saveBtn.style.backgroundColor = '#28a745';
+      saveBtn.style.color = 'white';
+      saveBtn.style.border = 'none';
+      saveBtn.style.padding = '5px 10px';
+      saveBtn.style.borderRadius = '4px';
+      saveBtn.style.cursor = 'pointer';
+      saveBtn.textContent = 'Save';
+      saveBtn.addEventListener('click', function() {
+        articleData.title = template.querySelector('.article-title').value;
+        articleData.authors = template.querySelector('.article-authors').value;
+        articleData.meta = template.querySelector('.article-meta').value;
+        articleData.summary = template.querySelector('.article-summary').value;
+        articleData.category = template.querySelector('.category-select').value;
+        if (articleData.category === 'research') {
+          articleData.program = template.querySelector('.grade-select').value;
+          articleData.strand = template.querySelector('.strand-select').value;
+        } else {
+          articleData.program = '';
+          articleData.strand = template.querySelector('.program-select').value;
         }
-        function rejectUser(id) {
-            if (!confirm('Reject this user?')) return;
-            const users = getUsers();
-            const user = users.find(u => u.id === id);
-            if (user) {
-                user.rejected = true;
-                user.rejected_at = new Date().toISOString();
-                user.verified = false;
-                user.banned = false;
-                saveUsers(users);
-                populateUsersTable();
-                alert('User rejected.');
+        articleData.gdriveId = template.querySelector('.gdrive-input').value;
+        setViewMode();
+        alert('Article updated!');
+      });
+
+      actionButtons.appendChild(editBtn);
+      actionButtons.appendChild(cancelBtn);
+      actionButtons.appendChild(saveBtn);
+    }
+
+    setViewMode(); // Start in view mode
+    return wrapper;
+  }
+
+
+        // === UPLOAD FORM HANDLER ===
+        document.getElementById('article-upload-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = {
+                title: document.getElementById('article-title').value,
+                meta: document.getElementById('article-meta').value,
+                summary: document.getElementById('article-summary').value,
+                category: document.getElementById('article-category').value,
+                strand: document.getElementById('article-strand').value,
+                level: document.getElementById('article-level').value,
+                program: document.getElementById('article-program').value,
+                year: document.getElementById('article-year').value,
+                citation: document.getElementById('article-citation').value,
+                gdriveId: document.getElementById('article-gdrive-id').value
+            };
+
+            const articles = getArticles();
+            articles.push(formData);
+            saveArticles(articles);
+
+            const newArticle = createArticleTemplate(formData);
+            const container = document.getElementById('admin-uploaded-articles');
+            if (container.querySelector('.empty-state')) {
+                container.innerHTML = '';
             }
-        }
-        function revokeUser(id) {
-            if (!confirm('Revoke access for this user?')) return;
-            const users = getUsers();
-            const user = users.find(u => u.id === id);
-            if (user) {
-                user.verified = false;
-                saveUsers(users);
-                populateUsersTable();
-                alert('Access revoked.');
+            container.appendChild(newArticle);
+
+            // Reset form
+            this.reset();
+            document.getElementById('article-category').value = 'research';
+            document.getElementById('article-level').value = 'shs';
+        });
+
+        // === INIT ===
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show welcome modal
+            const welcomeModal = document.getElementById('welcome-modal');
+            const welcomeModalContent = document.querySelector('.welcome-modal-content');
+
+            function closeWelcomeModal() {
+                welcomeModal.classList.remove('show');
             }
-        }
-        function deleteAdmin(id) {
-            if (!confirm('Delete this admin account? This cannot be undone.')) return;
-            const users = getUsers();
-            const index = users.findIndex(u => u.id === id);
-            if (index !== -1) {
-                users.splice(index, 1);
-                saveUsers(users);
-                populateUsersTable();
-                alert('Admin deleted.');
-            }
-        }
-        function editAdmin(id) {
-            window.location.href = `coadmin.html?id=${id}`;
-        }
-        // === PERMISSIONS ===
-        function formatPermissions(permissions) {
-            const perms = [];
-            if (permissions.view) perms.push('View');
-            if (permissions.edit) perms.push('Edit');
-            if (permissions.delete) perms.push('Delete');
-            if (permissions.manage_users) perms.push('Manage Users');
-            if (permissions.manage_uploads) perms.push('Manage Uploads');
-            return perms.length ? perms.join(', ') : 'None';
-        }
-        // === POPULATE TABLES ===
-        function populateUsersTable() {
-            const verifiedTbody = document.getElementById('verified-users-tbody');
-            const signingUpTbody = document.getElementById('signing-up-users-tbody');
-            const rejectedTbody = document.getElementById('rejected-users-tbody');
-            const bannedTbody = document.getElementById('banned-users-tbody');
-            const adminsTbody = document.getElementById('admins-tbody');
-            verifiedTbody.innerHTML = '';
-            signingUpTbody.innerHTML = '';
-            rejectedTbody.innerHTML = '';
-            bannedTbody.innerHTML = '';
-            adminsTbody.innerHTML = '';
-            const users = getUsers();
-            const verifiedUsers = users.filter(u => u.verified && !u.banned && !u.rejected && u.role !== 'admin');
-            const signingUpUsers = users.filter(u => !u.verified && !u.banned && !u.rejected && u.role !== 'admin');
-            const rejectedUsers = users.filter(u => u.rejected && !u.banned && u.role !== 'admin');
-            const bannedUsers = users.filter(u => u.banned && u.role !== 'admin');
-            const adminUsers = users.filter(u => u.role === 'admin');
-            // Verified users
-            if (verifiedUsers.length === 0) {
-                verifiedTbody.innerHTML = `<tr><td colspan="8" class="empty-state">No verified users.</td></tr>`;
-            } else {
-                verifiedUsers.forEach(user => {
-                    const tr = document.createElement('tr');
-                    const date = new Date(user.approved_at || user.created_at);
-                    const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-                    tr.innerHTML = `
-                        <td>${user.user_id}</td>
-                        <td>${user.name}</td>
-                        <td>${user.email}</td>
-                        <td><span class="role-badge ${user.role}">${formatRole(user.role)}</span></td>
-                        <td>${user.section}</td>
-                        <td>${formattedDate}</td>
-                        <td>${user.raf_path ? `<button class="btn btn-sm btn-info" onclick="previewRaf('${user.raf_path}')">View RAF</button>` : 'N/A'}</td>
-                        <td>
-                            <button class="btn btn-sm btn-warning" onclick="revokeUser('${user.id}')">🚫 Revoke</button>
-                            <button class="btn btn-sm btn-danger" onclick="banUser('${user.id}')">⛔ Ban</button>
-                        </td>
-                    `;
-                    verifiedTbody.appendChild(tr);
-                });
-            }
-            // Signing up users
-            if (signingUpUsers.length === 0) {
-                signingUpTbody.innerHTML = `<tr><td colspan="8" class="empty-state">No pending sign-ups.</td></tr>`;
-            } else {
-                signingUpUsers.forEach(user => {
-                    const tr = document.createElement('tr');
-                    const date = new Date(user.created_at);
-                    const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-                    tr.innerHTML = `
-                        <td>${user.user_id}</td>
-                        <td>${user.name}</td>
-                        <td>${user.email}</td>
-                        <td><span class="role-badge ${user.role}">${formatRole(user.role)}</span></td>
-                        <td>${user.section}</td>
-                        <td>${formattedDate}</td>
-                        <td>${user.raf_path ? `<button class="btn btn-sm btn-info" onclick="previewRaf('${user.raf_path}')">View RAF</button>` : 'N/A'}</td>
-                        <td>
-                            <button class="btn btn-sm btn-success" onclick="approveUser('${user.id}')">✅ Approve</button>
-                            <button class="btn btn-sm btn-secondary" onclick="rejectUser('${user.id}')">❌ Reject</button>
-                            <button class="btn btn-sm btn-danger" onclick="banUser('${user.id}')">⛔ Ban</button>
-                        </td>
-                    `;
-                    signingUpTbody.appendChild(tr);
-                });
-            }
-            // Rejected users
-            if (rejectedUsers.length === 0) {
-                rejectedTbody.innerHTML = `<tr><td colspan="8" class="empty-state">No rejected users.</td></tr>`;
-            } else {
-                rejectedUsers.forEach(user => {
-                    const tr = document.createElement('tr');
-                    const date = new Date(user.rejected_at || user.created_at);
-                    const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-                    tr.innerHTML = `
-                        <td>${user.user_id}</td>
-                        <td>${user.name}</td>
-                        <td>${user.email}</td>
-                        <td><span class="role-badge ${user.role}">${formatRole(user.role)}</span></td>
-                        <td>${user.section}</td>
-                        <td>${formattedDate}</td>
-                        <td>${user.raf_path ? `<button class="btn btn-sm btn-info" onclick="previewRaf('${user.raf_path}')">View RAF</button>` : 'N/A'}</td>
-                        <td>
-                            <button class="btn btn-sm btn-success" onclick="approveUser('${user.id}')">✅ Approve</button>
-                            <button class="btn btn-sm btn-danger" onclick="banUser('${user.id}')">⛔ Ban</button>
-                        </td>
-                    `;
-                    rejectedTbody.appendChild(tr);
-                });
-            }
-            // Banned users
-            if (bannedUsers.length === 0) {
-                bannedTbody.innerHTML = `<tr><td colspan="8" class="empty-state">No banned users.</td></tr>`;
-            } else {
-                bannedUsers.forEach(user => {
-                    const tr = document.createElement('tr');
-                    const date = new Date(user.banned_at || user.created_at);
-                    const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-                    tr.innerHTML = `
-                        <td>${user.user_id}</td>
-                        <td>${user.name}</td>
-                        <td>${user.email}</td>
-                        <td><span class="role-badge ${user.role}">${formatRole(user.role)}</span></td>
-                        <td>${user.section}</td>
-                        <td>${formattedDate}</td>
-                        <td>${user.raf_path ? `<button class="btn btn-sm btn-info" onclick="previewRaf('${user.raf_path}')">View RAF</button>` : 'N/A'}</td>
-                        <td>
-                            <button class="btn btn-sm btn-success" onclick="unbanUser('${user.id}')">✅ Unban</button>
-                        </td>
-                    `;
-                    bannedTbody.appendChild(tr);
-                });
-            }
-            // Admin users
-            if (adminUsers.length === 0) {
-                adminsTbody.innerHTML = `<tr><td colspan="6" class="empty-state">No admin accounts.</td></tr>`;
-            } else {
-                adminUsers.forEach(user => {
-                    const tr = document.createElement('tr');
-                    const date = new Date(user.created_at);
-                    const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-                    tr.innerHTML = `
-                        <td>${user.user_id || 'N/A'}</td>
-                        <td>${user.name}</td>
-                        <td>${user.email}</td>
-                        <td>
-                            <div style="max-width: 200px; word-wrap: break-word;">
-                                ${formatPermissions(user.permissions || {})}
-                            </div>
-                        </td>
-                        <td>${formattedDate}</td>
-                        <td>
-                            <button class="btn btn-sm btn-info" onclick="editAdmin('${user.id}')">✏️ Edit</button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteAdmin('${user.id}')">🗑️ Delete</button>
-                        </td>
-                    `;
-                    adminsTbody.appendChild(tr);
-                });
-            }
-            // Update dashboard counts
-            document.getElementById('verified-users-count').textContent = verifiedUsers.length;
-            document.getElementById('signing-up-users-count').textContent = signingUpUsers.length;
-            // Update notification badge
-            const notificationBadge = document.querySelector('.notification-badge');
-            const pendingCount = signingUpUsers.length;
-            if (pendingCount > 0) {
-                notificationBadge.textContent = pendingCount;
-                notificationBadge.style.display = 'flex';
-                generateNotifications(signingUpUsers);
-            } else {
-                notificationBadge.style.display = 'none';
-                document.getElementById('notification-list').innerHTML = '<div class="notification-placeholder">No new notifications.</div>';
-            }
-        }
-        // === ACTIVITY LOGS ===
-        function renderActivityLogs() {
-            const logsContainer = document.getElementById('activity-logs-list');
-            const noActivity = document.getElementById('no-activity');
-            const logs = getActivityLogs().reverse();
-            if (logs.length === 0) {
-                logsContainer.innerHTML = '';
-                noActivity.style.display = 'block';
-                return;
-            }
-            noActivity.style.display = 'none';
-            let html = '';
-            logs.forEach(log => {
-                const date = new Date(log.timestamp);
-                html += `
-                    <div class="activity-log-item">
-                        <strong>${log.adminName}</strong> 
-                        <span style="color: ${log.action === 'delete' ? '#dc3545' : log.action === 'edit' ? '#ffc107' : '#28a745'};">
-                            ${log.action}
-                        </span> 
-                        ${log.targetType} 
-                        <em>"${log.targetName}"</em>
-                        <div class="activity-log-time">${date.toLocaleString()}</div>
-                    </div>
-                `;
+
+            welcomeModal.classList.add('show');
+            setTimeout(closeWelcomeModal, 4000); // 4 seconds
+
+            // Close modal when clicking outside
+            welcomeModal.addEventListener('click', function(e) {
+                if (e.target === welcomeModal) {
+                    closeWelcomeModal();
+                }
             });
-            logsContainer.innerHTML = html;
+
+            // Dark mode
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+                document.querySelector('.dark-mode-toggle i').className = 'fas fa-sun';
+                document.querySelector('.dark-mode-toggle i').style.color = '#FFD700';
+            }
+
+            // Load settings
+            const savedSettings = JSON.parse(localStorage.getItem('adminSettings')) || {};
+            document.getElementById('site-title').value = savedSettings.siteTitle || 'STI Archives';
+            document.getElementById('site-logo').value = savedSettings.siteLogo || '';
+            document.getElementById('site-favicon').value = savedSettings.siteFavicon || '';
+
+            // Load account settings
+            const accountSettings = JSON.parse(localStorage.getItem('accountSettings')) || {};
+            document.getElementById('admin-username').value = accountSettings.username || 'admin';
+            document.getElementById('admin-gmail').value = accountSettings.gmail || 'admin@sti.archives.clmb';
+            document.getElementById('admin-password').value = accountSettings.password || '';
+
+            // Load terms and privacy
+            const defaultTerms = `<h3>Terms and Conditions</h3>
+<p>1. Acceptance of Terms<br>By accessing and using STI Archives, you agree to comply with these Terms and Conditions. If you do not agree, please discontinue use of the service.</p>
+<p>2. User Accounts<br>Users must provide accurate information (such as full name and Registration Assessment Form). You are responsible for maintaining the confidentiality of your account and activities under it.</p>
+<p>3. Content Usage<br>All research papers, capstone projects, and other content in STI Archives are protected under copyright and academic integrity standards. Unauthorized downloading, copying, or distribution without permission is strictly prohibited and may result in penalties.</p>
+<p>4. Prohibited Activities<br>Uploading inappropriate, offensive, or non-academic content (e.g., unrelated images or PDFs).<br>Using another person's work without proper authorization.<br>Attempting to bypass security measures or misuse the website.<br>Violations may result in suspension of access for up to 1 month or permanent banning for repeated offenses.</p>
+<p>5. Privacy<br>Your personal information, including full name and RAF, is collected for verification and record purposes. For details, please review our Privacy Policy.</p>
+<p>6. Enforcement and Penalties<br>Users who take research files without authorization will face disciplinary actions, which may include temporary suspension, account restriction, or referral to STI College administration for further action.</p>
+<p>7. Termination<br>STI Archives reserves the right to suspend or terminate any account immediately, without prior notice, for violation of these terms.</p>
+<p>8. Disclaimer<br>STI Archives is provided on an "as is" basis. We make no warranties regarding uninterrupted access, completeness of content, or fitness for a particular purpose.</p>`;
+            const defaultPrivacy = `<h3>Privacy Policy</h3>
+<p>1. Information We Collect<br>We collect the information you provide directly to us, such as when you create an account, upload academic work, or contact us for assistance. This may include your full name and Registration Assessment Form (RAF) for verification purposes.</p>
+<p>2. How We Use Your Information<br>The information we collect is used to verify user identity, manage and improve our services, process submissions, and communicate with you regarding your account and activities within STI Archives.</p>
+<p>3. Information Sharing<br>We do not sell, trade, or share your personal information with outside parties without your consent, except when required by school administration or applicable law.</p>
+<p>4. Your Rights<br>You have the right to request access, correction, or deletion of your personal information at any time. Please contact STI Archives support for such requests.</p>
+<p>5. Changes to This Policy<br>We may update this Privacy Policy from time to time. Any changes will be posted on this page, and continued use of the website means acceptance of the updated policy.</p>
+<p>6. Contact Us<br>If you have any questions or concerns about this Privacy Policy, please reach out to us through the STI Archives support system.</p>`;
+            document.getElementById('terms-text').innerHTML = localStorage.getItem('termsContent') || defaultTerms;
+            document.getElementById('privacy-text').innerHTML = localStorage.getItem('privacyContent') || defaultPrivacy;
+
+            // Load reports
+            const requests = [
+                { action: 'Request: Accept approval for new user interface design', time: '2023-10-01 10:00 AM' },
+                { action: 'Request: Grant permission to upload research articles', time: '2023-10-02 02:15 PM' },
+                { action: 'Request: Accept approval and permission for site logo update', time: '2023-10-03 09:00 AM' }
+            ];
+            const suggestions = [
+                { action: 'Suggestion by admin: Implement dark mode', time: '2023-10-01 11:30 AM' },
+                { action: 'Suggestion by user John Doe: Add search filters', time: '2023-10-02 04:45 PM' }
+            ];
+            const bugs = [
+                { action: 'Bug report: Login page not loading on mobile', time: '2023-10-04 01:00 PM' },
+                { action: 'Bug report: Search function returns incorrect results', time: '2023-10-05 03:30 PM' }
+            ];
+
+            function populateList(listId, items) {
+                const container = document.getElementById(listId);
+                items.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.style.padding = '10px';
+                    itemDiv.style.borderBottom = '1px solid #ddd';
+                    itemDiv.innerHTML = `<strong>${item.action}</strong><br><small>${item.time}</small>`;
+                    container.appendChild(itemDiv);
+                });
+            }
+
+            populateList('requests-list', requests);
+            populateList('suggestions-list', suggestions);
+            populateList('bugs-list', bugs);
+
+            // Load notifications
+            const notifications = [
+                { type: 'new-user', typeText: 'New User', content: 'John Doe has registered as a new user.', time: '2 hours ago' },
+                { type: 'new-user', typeText: 'New Signing Up', content: 'Jane Smith is signing up for an account.', time: '1 hour ago' },
+                { type: 'upload', typeText: 'Co-Admin Upload', content: 'Co-Admin uploaded a new research article.', time: '30 minutes ago' },
+                { type: 'suggestion', typeText: 'User Suggestion', content: 'User suggested adding a bookmark feature.', time: '45 minutes ago' },
+                { type: 'bug', typeText: 'Sub-Admin Bug Report', content: 'Sub-Admin reported a bug in the login system.', time: '20 minutes ago' }
+            ];
+            const notificationList = document.getElementById('notification-list');
+            notifications.forEach(notif => {
+                const notifDiv = document.createElement('div');
+                notifDiv.className = 'notification-item';
+                notifDiv.innerHTML = `
+                    <div class="notification-type ${notif.type}">${notif.typeText}</div>
+                    <div class="notification-content">${notif.content}</div>
+                    <div class="notification-time">${notif.time}</div>
+                `;
+                notificationList.appendChild(notifDiv);
+            });
+            document.querySelector('.notification-placeholder').style.display = 'none';
+            document.querySelector('.notification-badge').textContent = notifications.length;
+
+            // Populate notification lists in reports
+            const categories = {
+                'new-users-notifications': notifications.filter(n => n.type === 'new-user' && n.typeText === 'New User'),
+                'new-signups-notifications': notifications.filter(n => n.type === 'new-user' && n.typeText === 'New Signing Up'),
+                'co-admin-uploads-notifications': notifications.filter(n => n.type === 'upload'),
+                'user-suggestions-notifications': notifications.filter(n => n.type === 'suggestion' && n.typeText === 'User Suggestion'),
+                'sub-admin-bugs-notifications': notifications.filter(n => n.type === 'bug')
+            };
+
+            Object.keys(categories).forEach(id => {
+                const container = document.getElementById(id);
+                categories[id].forEach(notif => {
+                    const notifDiv = document.createElement('div');
+                    notifDiv.style.padding = '5px';
+                    notifDiv.style.borderBottom = '1px solid #eee';
+                    notifDiv.innerHTML = `<strong>${notif.content}</strong><br><small>${notif.time}</small>`;
+                    container.appendChild(notifDiv);
+                });
+            });
+
+            // Load existing articles from library
+            const allArticles = JSON.parse(localStorage.getItem('allArticles')) || [];
+            allArticles.forEach(article => {
+                const newArticle = createArticleTemplate(article);
+                const container = document.getElementById('admin-uploaded-articles');
+                if (container.querySelector('.empty-state')) {
+                    container.innerHTML = '';
+                }
+                container.appendChild(newArticle);
+            });
+
+            // Sidebar navigation
+            document.querySelectorAll('.sidebar a[data-section]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.getAttribute('data-section');
+                    showSection(section);
+                });
+            });
+
+            // Buttons
+            document.getElementById('toggle-btn').addEventListener('click', toggleSidebar);
+            document.querySelector('.dark-mode-toggle').addEventListener('click', toggleDarkMode);
+
+            // Account form
+            document.getElementById('account-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const accountSettings = {
+                    username: document.getElementById('admin-username').value,
+                    gmail: document.getElementById('admin-gmail').value,
+                    password: document.getElementById('admin-password').value
+                };
+                localStorage.setItem('accountSettings', JSON.stringify(accountSettings));
+                alert('Account settings saved!');
+            });
+
+            // Settings form
+            document.getElementById('settings-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const settings = {
+                    siteTitle: document.getElementById('site-title').value,
+                    siteLogo: document.getElementById('site-logo').value,
+                    siteFavicon: document.getElementById('site-favicon').value
+                };
+                localStorage.setItem('adminSettings', JSON.stringify(settings));
+                alert('Settings saved!');
+            });
+
+
+            // Initialize
+            showSection('dashboard');
+            loadUsers();
+            renderUserChart();
+            renderUploadsChart();
+            renderSigningUpChart('day');
+            renderTimeChart();
+            renderSuggestionsChart();
+        });
+
+        // === SEND UPDATE MODAL FUNCTIONS ===
+        function openSendUpdateModal(email, name) {
+            document.getElementById('update-email').value = email;
+            document.getElementById('update-subject').value = `Update for ${name}`;
+            document.getElementById('update-message').value = `Dear ${name},\n\n[Enter reason, news, or update here]\n\nBest regards,\nSTI Archives Admin`;
+            document.getElementById('send-update-modal').style.display = 'block';
         }
-        function generateNotifications(users) {
-            const list = document.getElementById('notification-list');
-            list.innerHTML = '';
+        function closeSendUpdateModal() {
+            document.getElementById('send-update-modal').style.display = 'none';
+        }
+        document.getElementById('send-update-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('update-email').value;
+            const subject = document.getElementById('update-subject').value;
+            const message = document.getElementById('update-message').value;
+            // TODO: Implement actual email sending
+            alert(`Update sent to ${email}:\nSubject: ${subject}\nMessage: ${message}`);
+            closeSendUpdateModal();
+        });
+
+        // === LOAD USERS FUNCTION ===
+        function loadUsers() {
+            const users = getUsers();
+            // Clear all tbodys
+            document.querySelectorAll('#users tbody').forEach(tbody => tbody.innerHTML = '');
             users.forEach(user => {
-                const date = new Date(user.created_at);
-                const item = document.createElement('div');
-                item.className = 'notification-item';
-                item.innerHTML = `
-                    <div class="notification-type new-user">New User</div>
-                    <div class="notification-content">${user.name} (${formatRole(user.role)}) is requesting access.</div>
-                    <div class="notification-time">${date.toLocaleString()}</div>
-                `;
-                list.appendChild(item);
+                const date = user.verified_at || user.created_at || 'N/A';
+                const row = `<tr>
+                    <td>${user.user_id || user.id}</td>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${formatRole(user.role)}</td>
+                    <td>${user.section || '-'}</td>
+                    <td>${date}</td>
+                    <td><button class="btn btn-sm" onclick="previewRaf('${user.raf_path || ''}')">Preview</button></td>
+                    <td><button class="btn btn-info btn-sm" onclick="openSendUpdateModal('${user.email}', '${user.name}')">Send Update</button></td>
+                    <td><button class="btn btn-danger btn-sm">Actions</button></td>
+                </tr>`;
+                // categorized
+                let tbodyId = '';
+                if (user.role === 'senior_high') {
+                    const grade = user.section === 'Grade 11' ? 'gr11' : 'gr12';
+                    const strand = user.strand ? user.strand.toLowerCase().replace(' ', '') : 'abm';
+                    tbodyId = grade + '-' + strand + '-tbody';
+                } else if (user.role === 'college') {
+                    const program = user.section ? user.section.toLowerCase() : 'bsba';
+                    tbodyId = program + '-tbody';
+                } else if (user.role === 'teacher') {
+                    const dept = user.section === 'Department SHS' ? 'shs' : 'college';
+                    tbodyId = 'teacher-' + dept + '-tbody';
+                }
+                if (tbodyId) {
+                    const tbody = document.getElementById(tbodyId);
+                    if (tbody) {
+                        tbody.innerHTML += row;
+                    }
+                }
+                // status
+                if (user.role === 'admin') {
+                    const adminRow = `<tr>
+                        <td>${user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>Full Access</td>
+                        <td>${user.created_at}</td>
+                        <td><button class="btn btn-danger btn-sm">Remove</button></td>
+                    </tr>`;
+                    document.getElementById('admins-tbody').innerHTML += adminRow;
+                } else if (user.verified) {
+                    document.getElementById('verified-users-tbody').innerHTML += row;
+                } else if (user.rejected) {
+                    document.getElementById('rejected-users-tbody').innerHTML += row;
+                } else if (user.banned) {
+                    document.getElementById('banned-users-tbody').innerHTML += row;
+                } else {
+                    document.getElementById('signing-up-users-tbody').innerHTML += row;
+                }
             });
         }
-        // === RAF PREVIEW ===
-        function previewRaf(path) {
-            const modal = document.getElementById('raf-preview-modal');
-            const content = document.getElementById('raf-preview-content');
-            if (path.endsWith('.pdf')) {
-                content.innerHTML = `<iframe src="${path}" width="100%" height="600px"></iframe>`;
-            } else if (path.match(/\.(doc|docx)$/)) {
-                content.innerHTML = `<p>Document preview not available. <a href="${path}" target="_blank" download>Download RAF</a></p>`;
-            } else {
-                content.innerHTML = `<p>Preview not available.</p>`;
+
+        function renderUserChart() {
+            const users = getUsers();
+            const roleCounts = {
+                admin: 10,
+                teacher: 5,
+                shs: 20,
+                college: 15
+            };
+            // Example data
+            // users.forEach(user => {
+            //     if (user.verified) {
+            //         const role = user.role;
+            //         if (role === 'admin') roleCounts.admin++;
+            //         else if (role === 'teacher') roleCounts.teacher++;
+            //         else if (role === 'senior_high') roleCounts.shs++;
+            //         else if (role === 'college') roleCounts.college++;
+            //     }
+            // });
+            const barColors = [
+                '#6f42c1',
+                '#dc3545',
+                '#007bff',
+                '#28a745'
+            ];
+            const labels = ['ADMIN', 'TEACHER', 'SHS', 'COLLEGE'];
+            const ctx = document.getElementById('user-chart').getContext('2d');
+            if (window.userChart) {
+                window.userChart.destroy();
             }
-            modal.style.display = 'flex';
-        }
-        function closeRafModal() {
-            document.getElementById('raf-preview-modal').style.display = 'none';
-        }
-        // === CHARTS ===
-        function renderCharts() {
-            const users = getUsers().filter(u => u.verified && !u.banned && !u.rejected && u.role !== 'admin');
-            const shsCount = users.filter(u => u.role === 'senior_high').length;
-            const collegeCount = users.filter(u => u.role === 'college').length;
-            const userChartEl = document.getElementById('user-chart');
-            if (chartInstances['user']) {
-                chartInstances['user'].destroy();
-            }
-            chartInstances['user'] = new Chart(userChartEl, {
+            window.userChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['SHS', 'College'],
+                    labels: labels,
                     datasets: [{
-                        label: 'Verified Users',
-                        data: [shsCount, collegeCount],
-                        backgroundColor: ['#2196F3', '#4CAF50']
+                        data: [roleCounts.admin, roleCounts.teacher, roleCounts.shs, roleCounts.college],
+                        backgroundColor: barColors,
+                        borderWidth: 1
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                generateLabels: (chart) => {
+                                    return chart.data.labels.map((label, index) => ({
+                                        text: label,
+                                        fillStyle: barColors[index],
+                                        strokeStyle: barColors[index],
+                                        lineWidth: 1,
+                                        hidden: false,
+                                        index: index
+                                    }));
+                                }
+                            }
+                        }
+                    },
                     scales: {
+                        x: {
+                            ticks: {
+                                color: '#000000'
+                            }
+                        },
                         y: {
                             beginAtZero: true,
-                            ticks: { precision: 0 }
+                            max: 500,
+                            ticks: {
+                                color: '#000000'
+                            }
                         }
                     }
                 }
             });
-            document.getElementById('revenue-count').textContent = uploadsData.length;
-            document.getElementById('messages-count').textContent = suggestionsData.length;
         }
-        // === DROPDOWNS ===
-        function toggleUsersDropdown(e) {
-            e.preventDefault();
-            const dropdown = document.getElementById('users-dropdown');
-            dropdown.classList.toggle('open');
-        }
-        function toggleUploadsDropdown(e) {
-            e.preventDefault();
-            const dropdown = document.getElementById('uploads-dropdown');
-            dropdown.classList.toggle('open');
-        }
-        function toggleProfileDropdown() {
-            const dropdown = document.getElementById('profile-dropdown');
-            dropdown.classList.toggle('open');
-        }
-        // ✅ TOGGLE NOTIFICATION MODAL
-        function toggleNotificationModal() {
-            const modal = document.getElementById('notification-modal');
-            if (modal.style.display === 'block') {
-                modal.style.display = 'none';
-            } else {
-                modal.style.display = 'block';
+
+        function renderUploadsChart() {
+            const barColors = [
+                '#6f42c1',
+                '#dc3545',
+                '#007bff',
+                '#28a745'
+            ];
+            const labels = ['ADMIN', 'TEACHER', 'SHS', 'COLLEGE'];
+            const data = [1, 1, 1, 1]; // Demo data
+            const ctx = document.getElementById('uploads-chart').getContext('2d');
+            if (window.uploadsChart) {
+                window.uploadsChart.destroy();
             }
+            window.uploadsChart = new Chart(ctx, {
+                type: uploadsChartType,
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: barColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true
+                        }
+                    }
+                }
+            });
         }
-        // === NAVIGATION ===
-        function scrollToUserSection(type) {
-            showSection('users');
-            const targetId = type === 'verified' ? 'verified-section' :
-                             type === 'signing-up' ? 'signing-up-section' :
-                             type === 'rejected' ? 'rejected-section' :
-                             type === 'admins' ? 'admins-section' :
-                             'banned-section';
-            const target = document.getElementById(targetId);
-            if (target) {
-                const offsetTop = target.offsetTop - 80;
-                window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+
+        function renderSigningUpChart(period, button) {
+            let labels, data;
+            if (period === 'day') {
+                labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                data = [12, 15, 8, 20, 18, 10, 14];
+            } else if (period === 'week') {
+                labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+                data = [50, 60, 45, 70];
+            } else if (period === 'month') {
+                labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                data = [100, 120, 90, 110, 130, 95, 105, 115, 125, 135, 140, 150];
+            } else if (period === 'year') {
+                labels = ['2020', '2021', '2022', '2023', '2024'];
+                data = [500, 600, 700, 800, 900];
             }
-        }
-        function showSection(sectionId) {
-            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
-            document.getElementById('page-title').textContent = 
-                sectionId === 'dashboard' ? 'Dashboard' :
-                sectionId === 'statistics' ? 'Statistics' :
-                sectionId === 'upload' ? 'Upload' :
-                sectionId === 'users' ? 'Users Management' :
-                sectionId === 'settings' ? 'Settings' :
-                'Reports';
-            if (sectionId === 'users') {
-                populateUsersTable();
-            } else if (sectionId === 'dashboard') {
-                renderCharts();
-            } else if (sectionId === 'reports') {
-                renderActivityLogs();
+            const ctx = document.getElementById('signing-up-chart').getContext('2d');
+            if (window.signingUpChart) {
+                window.signingUpChart.destroy();
             }
-            window.scrollTo(0, 0);
+            window.signingUpChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        borderColor: '#007bff',
+                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#000000'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: 500,
+                            ticks: {
+                                color: '#000000'
+                            }
+                        }
+                    }
+                }
+            });
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            if (button) button.classList.add('active');
         }
-        function navigateToUsers() {
-            showSection('users');
+
+        function renderTimeChart() {
+            const barColors = [
+                '#6f42c1',
+                '#dc3545',
+                '#007bff',
+                '#28a745'
+            ];
+            const labels = ['ADMIN', 'TEACHER', 'SHS', 'COLLEGE'];
+            const ctx = document.getElementById('time-chart').getContext('2d');
+            if (window.timeChart) {
+                window.timeChart.destroy();
+            }
+            window.timeChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: [120, 90, 60, 80], // Sample average session durations
+                        backgroundColor: barColors,
+                        borderWidth: 1,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    cutout: '70%',
+                    plugins: {
+                        legend: { display: true }
+                    }
+                }
+            });
         }
-        function navigateToUploads(type = 'all') {
-            showSection('upload');
+
+        function renderSuggestionsChart() {
+            const barColors = [
+                '#6f42c1',
+                '#dc3545',
+                '#007bff',
+                '#28a745'
+            ];
+            const ctx = document.getElementById('suggestions-chart').getContext('2d');
+            if (window.suggestionsChart) {
+                window.suggestionsChart.destroy();
+            }
+            window.suggestionsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['RESEARCH', 'CAPSTONE', 'IMPROVEMENTS'],
+                    datasets: [{
+                        label: 'ADMIN',
+                        data: [20, 15, 10],
+                        backgroundColor: barColors[0]
+                    }, {
+                        label: 'TEACHER',
+                        data: [5, 8, 3],
+                        backgroundColor: barColors[1]
+                    }, {
+                        label: 'SHS',
+                        data: [10, 12, 5],
+                        backgroundColor: barColors[2]
+                    }, {
+                        label: 'COLLEGE',
+                        data: [8, 6, 7],
+                        backgroundColor: barColors[3]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            stacked: true,
+                            ticks: { color: '#000000' }
+                        },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            ticks: { color: '#000000' }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: true }
+                    }
+                }
+            });
         }
-        function navigateToReports() {
-            showSection('reports');
-        }
-        // === SETTINGS ===
-        document.getElementById('settings-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const siteTitle = document.getElementById('site-title').value;
-            const adminEmail = document.getElementById('admin-email').value;
-            localStorage.setItem('adminSettings', JSON.stringify({ siteTitle, adminEmail }));
-            alert('Settings saved!');
-        });
-        // === OTHER UTILS ===
+
+        // === STUB FUNCTIONS (to prevent errors) ===
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('collapsed');
-            const mainContent = document.querySelector('.main-content');
+            const mainContent = document.getElementById('main-content');
             const header = document.querySelector('.header');
+            const body = document.body;
             if (sidebar.classList.contains('collapsed')) {
-                mainContent.style.marginLeft = '20px';
+                mainContent.style.marginLeft = '0';
                 header.style.left = '0';
                 header.style.width = '100%';
+                body.classList.add('sidebar-collapsed');
             } else {
                 mainContent.style.marginLeft = '';
                 header.style.left = '';
                 header.style.width = '';
+                body.classList.remove('sidebar-collapsed');
             }
         }
         function toggleDarkMode() {
@@ -2220,64 +3253,499 @@
                 localStorage.setItem('darkMode', 'disabled');
             }
         }
-        function logout() {
-            localStorage.removeItem('currentUser');
-            window.location.href = 'index.html';
-        }
-        function handleProfileClick() {
-            toggleProfileDropdown();
-            alert('Profile settings');
-        }
-        function handleLogoutClick() {
-            toggleProfileDropdown();
-            logout();
-        }
-        function showWelcomeModal() {
-            const modal = document.getElementById('welcome-modal');
-            modal.style.display = 'block';
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 4000);
-        }
-        // === INIT ===
-        document.addEventListener('DOMContentLoaded', function() {
-            // Dark mode
-            if (localStorage.getItem('darkMode') === 'enabled') {
-                document.body.classList.add('dark-mode');
-                document.querySelector('.dark-mode-toggle i').className = 'fas fa-sun';
-                document.querySelector('.dark-mode-toggle i').style.color = '#FFD700';
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            document.getElementById('page-title').textContent =
+                sectionId === 'dashboard' ? 'Dashboard' :
+                sectionId === 'statistics' ? 'Statistics' :
+                sectionId === 'upload' ? 'Upload' :
+                sectionId === 'users' ? 'Users Management' :
+                sectionId === 'settings' ? 'Settings' :
+                'Reports';
+            if (sectionId === 'statistics') {
+                renderSHSTreemap();
             }
-            // Load settings
-            const savedSettings = JSON.parse(localStorage.getItem('adminSettings')) || {};
-            document.getElementById('site-title').value = savedSettings.siteTitle || 'STI Archives';
-            document.getElementById('admin-email').value = savedSettings.adminEmail || 'admin@sti.archives.clmb';
-            // Sidebar navigation
-            document.querySelectorAll('.sidebar a[data-section]').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const section = this.getAttribute('data-section');
-                    showSection(section);
-                });
+        }
+        function toggleProfileDropdown() {
+            const dropdown = document.getElementById('profile-dropdown');
+            const isOpen = dropdown.classList.contains('open');
+            dropdown.classList.toggle('open');
+            if (!isOpen) {
+                // Add listener to close on outside click
+                setTimeout(() => {
+                    document.addEventListener('click', closeProfileDropdownOnOutsideClick);
+                }, 1);
+            }
+        }
+        function closeProfileDropdownOnOutsideClick(e) {
+            const dropdown = document.getElementById('profile-dropdown');
+            const btn = document.querySelector('.profile-btn');
+            if (!dropdown.contains(e.target) && !btn.contains(e.target)) {
+                dropdown.classList.remove('open');
+                document.removeEventListener('click', closeProfileDropdownOnOutsideClick);
+            }
+        }
+        function toggleNotificationModal() {
+            const modal = document.getElementById('notification-modal');
+            modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+        }
+        function showUploadForm() {
+            showSection('upload');
+            document.getElementById('article-upload-form').style.display = 'block';
+            document.querySelectorAll('.upload-section .admn-U_A h3').forEach(h3 => h3.style.display = 'none');
+            document.getElementById('admin-uploaded-articles').style.display = 'none';
+            document.getElementById('user-uploaded-articles').style.display = 'none';
+        }
+        function showUploaded(type) {
+            showSection('upload');
+            document.getElementById('article-upload-form').style.display = 'none';
+            document.querySelectorAll('.upload-section .admn-U_A h3').forEach(h3 => h3.style.display = 'none');
+            if (type === 'admin') {
+                document.querySelector('.upload-section .admn-U_A h3').style.display = 'block';
+                document.getElementById('admin-uploaded-articles').style.display = 'block';
+                document.getElementById('user-uploaded-articles').style.display = 'none';
+            } else {
+                document.querySelectorAll('.upload-section .admn-U_A h3')[1].style.display = 'block';
+                document.getElementById('admin-uploaded-articles').style.display = 'none';
+                document.getElementById('user-uploaded-articles').style.display = 'block';
+            }
+        }
+        function showUserCategory(type) {
+            // Hide all spec sections
+            document.getElementById('shs-spec').style.display = 'none';
+            document.getElementById('college-spec').style.display = 'none';
+            document.getElementById('teacher-spec').style.display = 'none';
+            // Show selected spec section
+            document.getElementById(type + '-spec').style.display = 'block';
+        }
+        function showUserCategoryForStatus(status, type) {
+            // Hide all spec sections for this status
+            document.getElementById(status + '-shs-spec').style.display = 'none';
+            document.getElementById(status + '-college-spec').style.display = 'none';
+            document.getElementById(status + '-teacher-spec').style.display = 'none';
+            // Show selected spec section
+            document.getElementById(status + '-' + type + '-spec').style.display = 'block';
+        }
+        function showGradeForStatus(status, grade) {
+            document.getElementById(status + '-grade-selection').style.display = 'block';
+            document.getElementById(status + '-grade-title').textContent = 'Grade ' + grade;
+            document.getElementById(status + '-grade-selection').dataset.grade = grade;
+        }
+        function showStrandForStatus(status, strand) {
+            const grade = document.getElementById(status + '-grade-selection').dataset.grade;
+            document.getElementById(status + '-strand-table').style.display = 'block';
+            document.getElementById(status + '-strand-title').textContent = 'Grade ' + grade + ' - ' + strand.toUpperCase();
+            loadStrandUsersForStatus(status, grade, strand);
+        }
+        function showDegreeForStatus(status, degree) {
+            document.getElementById(status + '-degree-table').style.display = 'block';
+            document.getElementById(status + '-degree-title').textContent = degree.toUpperCase();
+            loadDegreeUsersForStatus(status, degree);
+        }
+        function showDepartmentForStatus(status, dept) {
+            document.getElementById(status + '-department-table').style.display = 'block';
+            document.getElementById(status + '-department-title').textContent = 'Department ' + dept.toUpperCase();
+            loadDepartmentUsersForStatus(status, dept);
+        }
+        function loadStrandUsersForStatus(status, grade, strand) {
+            const users = getUsers();
+            const tbody = document.getElementById(status + '-strand-users-tbody');
+            tbody.innerHTML = '';
+            const statusFilter = status === 'signing-up' ? !user.verified && !user.rejected && !user.banned :
+                                status === 'rejected' ? user.rejected :
+                                status === 'banned' ? user.banned : false;
+            users.forEach(user => {
+                if (user.role === 'senior_high' && user.section === 'Grade ' + grade && user.strand === strand && statusFilter) {
+                    const date = user.verified_at || user.created_at || 'N/A';
+                    const dateHeader = status === 'signing-up' ? 'Date Signed Up' : status === 'rejected' ? 'Date Rejected' : 'Date Banned';
+                    const row = `<tr>
+                        <td>${user.user_id || user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>${formatRole(user.role)}</td>
+                        <td>${user.section || '-'}</td>
+                        <td>${date}</td>
+                        <td><button class="btn btn-sm" onclick="previewRaf('${user.raf_path || ''}')">Preview</button></td>
+                        <td><button class="btn btn-info btn-sm" onclick="openSendUpdateModal('${user.email}', '${user.name}')">Send Update</button></td>
+                        <td><button class="btn btn-danger btn-sm">Actions</button></td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                }
             });
-            // Close dropdowns on outside click (except notification modal)
-            document.addEventListener('click', function(e) {
-                const usersDropdown = document.getElementById('users-dropdown');
-                const uploadsDropdown = document.getElementById('uploads-dropdown');
-                const profileDropdown = document.getElementById('profile-dropdown');
-                if (!usersDropdown.contains(e.target)) usersDropdown.classList.remove('open');
-                if (!uploadsDropdown.contains(e.target)) uploadsDropdown.classList.remove('open');
-                if (!profileDropdown.contains(e.target)) profileDropdown.classList.remove('open');
-                // Do NOT auto-close notification modal on outside click
+        }
+        function loadDegreeUsersForStatus(status, degree) {
+            const users = getUsers();
+            const tbody = document.getElementById(status + '-degree-users-tbody');
+            tbody.innerHTML = '';
+            const statusFilter = status === 'signing-up' ? !user.verified && !user.rejected && !user.banned :
+                                status === 'rejected' ? user.rejected :
+                                status === 'banned' ? user.banned : false;
+            users.forEach(user => {
+                if (user.role === 'college' && user.section === degree.toUpperCase() && statusFilter) {
+                    const date = user.verified_at || user.created_at || 'N/A';
+                    const row = `<tr>
+                        <td>${user.user_id || user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>${formatRole(user.role)}</td>
+                        <td>${user.section || '-'}</td>
+                        <td>${date}</td>
+                        <td><button class="btn btn-sm" onclick="previewRaf('${user.raf_path || ''}')">Preview</button></td>
+                        <td><button class="btn btn-info btn-sm" onclick="openSendUpdateModal('${user.email}', '${user.name}')">Send Update</button></td>
+                        <td><button class="btn btn-danger btn-sm">Actions</button></td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                }
             });
-            // Buttons
-            document.getElementById('toggle-btn').addEventListener('click', toggleSidebar);
-            document.querySelector('.dark-mode-toggle').addEventListener('click', toggleDarkMode);
-            // Initialize
-            showSection('dashboard');
-            renderCharts();
-            populateUsersTable();
-            showWelcomeModal();
-        });
+        }
+        function loadDepartmentUsersForStatus(status, dept) {
+            const users = getUsers();
+            const tbody = document.getElementById(status + '-department-users-tbody');
+            tbody.innerHTML = '';
+            const statusFilter = status === 'signing-up' ? !user.verified && !user.rejected && !user.banned :
+                                status === 'rejected' ? user.rejected :
+                                status === 'banned' ? user.banned : false;
+            users.forEach(user => {
+                if (user.role === 'teacher' && user.section === 'Department ' + dept.toUpperCase() && statusFilter) {
+                    const date = user.verified_at || user.created_at || 'N/A';
+                    const row = `<tr>
+                        <td>${user.user_id || user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>${formatRole(user.role)}</td>
+                        <td>${user.section || '-'}</td>
+                        <td>${date}</td>
+                        <td><button class="btn btn-sm" onclick="previewRaf('${user.raf_path || ''}')">Preview</button></td>
+                        <td><button class="btn btn-info btn-sm" onclick="openSendUpdateModal('${user.email}', '${user.name}')">Send Update</button></td>
+                        <td><button class="btn btn-danger btn-sm">Actions</button></td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                }
+            });
+        }
+        function showGrade(grade) {
+            document.getElementById('grade-selection').style.display = 'block';
+            document.getElementById('grade-title').textContent = 'Grade ' + grade;
+            document.getElementById('grade-selection').dataset.grade = grade;
+        }
+        function showStrand(strand) {
+            const grade = document.getElementById('grade-selection').dataset.grade;
+            document.getElementById('strand-table').style.display = 'block';
+            document.getElementById('strand-title').textContent = 'Grade ' + grade + ' - ' + strand.toUpperCase();
+            loadStrandUsers(grade, strand);
+        }
+        function showDegree(degree) {
+            document.getElementById('degree-table').style.display = 'block';
+            document.getElementById('degree-title').textContent = degree.toUpperCase();
+            loadDegreeUsers(degree);
+        }
+        function showDepartment(dept) {
+            document.getElementById('department-table').style.display = 'block';
+            document.getElementById('department-title').textContent = 'Department ' + dept.toUpperCase();
+            loadDepartmentUsers(dept);
+        }
+        function loadStrandUsers(grade, strand) {
+            const users = getUsers();
+            const tbody = document.getElementById('strand-users-tbody');
+            tbody.innerHTML = '';
+            users.forEach(user => {
+                if (user.role === 'senior_high' && user.section === 'Grade ' + grade && user.strand === strand) {
+                    const date = user.verified_at || user.created_at || 'N/A';
+                    const row = `<tr>
+                        <td>${user.user_id || user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>${formatRole(user.role)}</td>
+                        <td>${user.section || '-'}</td>
+                        <td>${date}</td>
+                        <td><button class="btn btn-sm" onclick="previewRaf('${user.raf_path || ''}')">Preview</button></td>
+                        <td><button class="btn btn-info btn-sm" onclick="openSendUpdateModal('${user.email}', '${user.name}')">Send Update</button></td>
+                        <td><button class="btn btn-danger btn-sm">Actions</button></td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                }
+            });
+        }
+        function loadDegreeUsers(degree) {
+            const users = getUsers();
+            const tbody = document.getElementById('degree-users-tbody');
+            tbody.innerHTML = '';
+            users.forEach(user => {
+                if (user.role === 'college' && user.section === degree.toUpperCase()) {
+                    const date = user.verified_at || user.created_at || 'N/A';
+                    const row = `<tr>
+                        <td>${user.user_id || user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>${formatRole(user.role)}</td>
+                        <td>${user.section || '-'}</td>
+                        <td>${date}</td>
+                        <td><button class="btn btn-sm" onclick="previewRaf('${user.raf_path || ''}')">Preview</button></td>
+                        <td><button class="btn btn-info btn-sm" onclick="openSendUpdateModal('${user.email}', '${user.name}')">Send Update</button></td>
+                        <td><button class="btn btn-danger btn-sm">Actions</button></td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                }
+            });
+        }
+        function loadDepartmentUsers(dept) {
+            const users = getUsers();
+            const tbody = document.getElementById('department-users-tbody');
+            tbody.innerHTML = '';
+            users.forEach(user => {
+                if (user.role === 'teacher' && user.section === 'Department ' + dept.toUpperCase()) {
+                    const date = user.verified_at || user.created_at || 'N/A';
+                    const row = `<tr>
+                        <td>${user.user_id || user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>${formatRole(user.role)}</td>
+                        <td>${user.section || '-'}</td>
+                        <td>${date}</td>
+                        <td><button class="btn btn-sm" onclick="previewRaf('${user.raf_path || ''}')">Preview</button></td>
+                        <td><button class="btn btn-info btn-sm" onclick="openSendUpdateModal('${user.email}', '${user.name}')">Send Update</button></td>
+                        <td><button class="btn btn-danger btn-sm">Actions</button></td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                }
+            });
+        }
+        function navigateToUploads(type) { showSection('upload'); }
+        function navigateToUsers() { showSection('users'); }
+        function navigateToReports() { showSection('reports'); }
+        function scrollToUserSection(type) {
+            showSection('users');
+            document.querySelectorAll('.user-subsection').forEach(sub => sub.style.display = 'none');
+            document.getElementById(type + '-section').style.display = 'block';
+        }
+        function handleProfileClick() { alert('Profile settings'); }
+        function handleLogoutClick() { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; }
+        function closeRafModal() { document.getElementById('raf-preview-modal').style.display = 'none'; }
+        function toggleUsersDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const users = document.getElementById('users-dropdown');
+            const uploads = document.getElementById('uploads-dropdown');
+            const reports = document.getElementById('reports-dropdown');
+            const terms = document.getElementById('terms-dropdown');
+            if (uploads) uploads.classList.remove('open');
+            if (reports) reports.classList.remove('open');
+            if (terms) terms.classList.remove('open');
+            if (users) users.classList.toggle('open');
+        }
+        function toggleUploadsDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const users = document.getElementById('users-dropdown');
+            const uploads = document.getElementById('uploads-dropdown');
+            const reports = document.getElementById('reports-dropdown');
+            const terms = document.getElementById('terms-dropdown');
+            if (users) users.classList.remove('open');
+            if (uploads) uploads.classList.toggle('open');
+            if (reports) reports.classList.remove('open');
+            if (terms) terms.classList.remove('open');
+        }
+        function toggleReportsDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const users = document.getElementById('users-dropdown');
+            const uploads = document.getElementById('uploads-dropdown');
+            const reports = document.getElementById('reports-dropdown');
+            const terms = document.getElementById('terms-dropdown');
+            if (users) users.classList.remove('open');
+            if (uploads) uploads.classList.remove('open');
+            if (reports) reports.classList.toggle('open');
+            if (terms) terms.classList.remove('open');
+        }
+        function toggleTermsDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const users = document.getElementById('users-dropdown');
+            const uploads = document.getElementById('uploads-dropdown');
+            const reports = document.getElementById('reports-dropdown');
+            const terms = document.getElementById('terms-dropdown');
+            if (users) users.classList.remove('open');
+            if (uploads) uploads.classList.remove('open');
+            if (reports) reports.classList.remove('open');
+            if (terms) terms.classList.toggle('open');
+        }
+        function showReportsSection(type) {
+            document.querySelectorAll('.reports-subsection').forEach(s => s.classList.remove('active'));
+            document.getElementById('reports-' + type).classList.add('active');
+        }
+        function openPasswordChangeModal() { document.getElementById('password-change-modal').style.display = 'block'; }
+        function closePasswordChangeModal() { document.getElementById('password-change-modal').style.display = 'none'; }
+        function getVerificationCode() {
+            document.getElementById('get-code-btn').disabled = true;
+            let time = 60;
+            const timerEl = document.getElementById('timer');
+            const interval = setInterval(() => {
+                timerEl.textContent = time;
+                time--;
+                if (time < 0) {
+                    clearInterval(interval);
+                    document.getElementById('get-code-btn').disabled = false;
+                    timerEl.textContent = 'Code sent!';
+                }
+            }, 1000);
+        }
+        function verifyCode() {
+            const code = document.getElementById('verification-code').value;
+            if (code === '123456') { // Demo code
+                alert('Password changed successfully!');
+                closePasswordChangeModal();
+            } else {
+                alert('Invalid code!');
+            }
+        }
+        function showSettingsSection(section) {
+            document.querySelectorAll('.settings-subsection').forEach(sub => sub.classList.remove('active'));
+            document.getElementById(section + '-settings').classList.add('active');
+            document.querySelectorAll('.settings-sidebar li').forEach(li => li.style.color = 'black');
+            event.target.style.color = '#007bff';
+        }
+        function editContent(type) {
+            const viewMode = document.querySelector(`#${type}-content .view-mode`);
+            const editMode = document.querySelector(`#${type}-content .edit-mode`);
+            const textDiv = document.getElementById(`${type}-text`);
+            const textarea = document.getElementById(`${type}-textarea`);
+            textarea.value = textDiv.innerHTML.replace(/<br>/g, '\n').replace(/<\/?[^>]+(>|$)/g, '');
+            viewMode.style.display = 'none';
+            editMode.style.display = 'block';
+        }
+        function saveContent(type) {
+            const viewMode = document.querySelector(`#${type}-content .view-mode`);
+            const editMode = document.querySelector(`#${type}-content .edit-mode`);
+            const textDiv = document.getElementById(`${type}-text`);
+            const textarea = document.getElementById(`${type}-textarea`);
+            const content = textarea.value.replace(/\n/g, '<br>');
+            textDiv.innerHTML = content;
+            localStorage.setItem(`${type}Content`, content);
+            viewMode.style.display = 'block';
+            editMode.style.display = 'none';
+            alert(`${type === 'terms' ? 'Terms and Conditions' : 'Privacy Policy'} saved successfully!`);
+        }
+        function cancelEdit(type) {
+            const viewMode = document.querySelector(`#${type}-content .view-mode`);
+            const editMode = document.querySelector(`#${type}-content .edit-mode`);
+            viewMode.style.display = 'block';
+            editMode.style.display = 'none';
+        }
+
+        // Citation modal functions
+        function openCitationModal(el) {
+            const modal = document.getElementById('citationModal');
+            modal.classList.add('show');
+            // Generate citation based on article data
+            const article = el.closest('.article');
+            const title = article.querySelector('h3').textContent;
+            const authors = article.querySelector('.meta').textContent.split(' – ')[0];
+            const year = new Date().getFullYear();
+            // Default to APA
+            switchCitationTab('APA');
+        }
+
+        function closeCitationModal() {
+            const modal = document.getElementById('citationModal');
+            modal.classList.remove('show');
+        }
+
+        function switchCitationTab(format) {
+            document.querySelectorAll('.citation-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            const content = document.getElementById('citationContent');
+            // Placeholder citations
+            const citations = {
+                APA: `${authors} (${year}). ${title}. STI College Calamba.`,
+                MLA: `${authors}. "${title}." STI College Calamba, ${year}.`,
+                Chicago: `${authors}. "${title}." STI College Calamba, ${year}.`,
+                IEEE: `[1] ${authors}, "${title}," STI College Calamba, ${year}.`,
+                Harvard: `${authors} (${year}) ${title}. STI College Calamba.`
+            };
+            content.textContent = citations[format] || 'Citation format not available.';
+        }
+
+        function copyCitation() {
+            const content = document.getElementById('citationContent').textContent;
+            navigator.clipboard.writeText(content).then(() => {
+                const btn = document.querySelector('.citation-copy-btn');
+                btn.textContent = 'Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = 'Copy Citation';
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // SHS Treemap
+        function renderSHSTreemap() {
+            const ctx = document.getElementById('shsTreemap').getContext('2d');
+            if (window.shsTreemap) {
+                window.shsTreemap.destroy();
+            }
+            window.shsTreemap = new Chart(ctx, {
+                type: 'treemap',
+                data: {
+                    datasets: [{
+                        data: [
+                            { value: 400, name: 'Grade 11', children: [
+                                { value: 100, name: 'ABM' },
+                                { value: 80, name: 'CulArts' },
+                                { value: 120, name: 'ITMAWD' },
+                                { value: 100, name: 'STEM' }
+                            ]},
+                            { value: 350, name: 'Grade 12', children: [
+                                { value: 90, name: 'ABM' },
+                                { value: 70, name: 'CulArts' },
+                                { value: 110, name: 'ITMAWD' },
+                                { value: 80, name: 'STEM' }
+                            ]}
+                        ],
+                        backgroundColor: (ctx) => {
+                            const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF'];
+                            return colors[ctx.dataIndex % colors.length];
+                        },
+                        labels: {
+                            display: true,
+                            color: 'white',
+                            font: { size: 12 }
+                        }
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'SHS Users Distribution by Strand and Grade'
+                        }
+                    }
+                }
+            });
+        }
     </script>
+
+    <!-- Citation Modal -->
+    <div id="citationModal" class="citation-modal">
+      <div class="citation-modal-content">
+        <div class="citation-modal-header">
+          <h2>Citation Formats</h2>
+          <button class="citation-close" onclick="closeCitationModal()">&times;</button>
+        </div>
+        <div class="citation-format-tabs">
+          <button class="citation-tab active" onclick="switchCitationTab('APA')">APA</button>
+          <button class="citation-tab" onclick="switchCitationTab('MLA')">MLA</button>
+          <button class="citation-tab" onclick="switchCitationTab('Chicago')">Chicago</button>
+          <button class="citation-tab" onclick="switchCitationTab('IEEE')">IEEE</button>
+          <button class="citation-tab" onclick="switchCitationTab('Harvard')">Harvard</button>
+        </div>
+        <div class="citation-content" id="citationContent">
+          APA citation format will appear here.
+        </div>
+        <button class="citation-copy-btn" onclick="copyCitation()">Copy Citation</button>
+      </div>
+    </div>
 </body>
 </html>

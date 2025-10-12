@@ -1,5 +1,5 @@
- <!--library.html-->
- <!DOCTYPE html>
+<!--library.html-->
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -7,7 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
   <title>Document</title>
   <style>
    body {
@@ -18,34 +17,27 @@
      flex-direction: column;
      min-height: 100vh;
    }
-
    .content-wrapper {
      display: flex;
      flex-direction: row;
-     flex: 1; /* Takes up remaining space */
+     flex: 1;
    }
-
    .library-footer {
-     margin-top: auto; /* Pushes footer to bottom */
-     margin-bottom: auto; /* Centers vertically with auto margins */
+     margin-top: auto;
+     margin-bottom: auto;
    }
-
-   /* Sidebar and main content side by side */
-   .sidebar-down {
+   .sidebarlft {
      width: 240px;
      background: #fff;
      border-right: 1px solid #ddd;
      padding: 20px;
      flex-shrink: 0;
    }
-
    .main {
      flex: 1;
      padding: 20px 40px;
      background: #f8f9fa;
    }
-
-   /* Footer styling */
    .library-footer {
      background: #002244;
      border-top: 1px solid #ddd;
@@ -55,151 +47,122 @@
      font-size: 14px;
      height: 200px;
    }
-
    .dark-mode .library-footer {
      background: #181f2a;
      border-top-color: #374151;
      color: #ffd700;
    }
-
    .search-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: .25rem;
-  
-  background-color: #fff;
-  height:28px;
-  width:300px;
-  
-}
-.search-wrapper label {
-  font-size: 1.2rem;
-  font-weight: 600;
-  padding-top:10%;
-}
-
-input {
-  font-size: 1rem;
-}
-
-.user-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: .25rem;
-  margin-top: 1rem;
-  margin-left: 10%;
-  margin-right: 10%;
-}
-
-.card {
-  border: 1px solid black;
-  background-color: white;
-  padding: .5rem;
-}
-
-.card > .header {
-  margin-bottom: .25rem;
-}
-
-.card > .body {
-  font-size: .8rem;
-  color: #777;
-}
-
-.hide {
-  display: none;
-}
-
-
-.STI-logo {
-    display: flex;
-    align-items: center;
-    
-}
-.STI-logo span {
-    font-size: 24px;
-    color: #0057b8;
-}
-.sidebar-down h3 {
-  margin-bottom: 15px;
-  font-size: 1rem;
-  color: #333;
-}
-
-.sidebar-down ul {
-  list-style: none;
-  margin-bottom: 20px;
-}
-
-.sidebar-down li {
-  margin-bottom: 10px;
-  cursor: pointer;
-  color: #444;
-}
-
-.sidebar-down li:hover {
-  text-decoration: underline;
-}
-
-.filter-option {
-  cursor: pointer;
-  padding: 5px 0;
-  transition: color 0.3s ease;
-}
-
-.filter-option.active {
-  color: #0057b8;
-  font-weight: bold;
-}
-
-.dark-mode .filter-option.active {
-  color: #0057b8;
-}
-
-.filter-option:hover {
-  color: #0057b8;
-}
-
-.sidebar-down input[type="checkbox"] {
-  margin-right: 6px;
-}
-
-.create-alert {
-margin-top: 20px;
-font-size: 0.9rem;
-color: #132a3f;
-cursor: pointer;
-}
-
-.dark-mode .create-alert {
-  color: white;
-}
-
+     display: flex;
+     flex-direction: column;
+     gap: .25rem;
+     background-color: #fff;
+     height:28px;
+     width:300px;
+   }
+   .search-wrapper label {
+     font-size: 1.2rem;
+     font-weight: 600;
+     padding-top:10%;
+   }
+   input {
+     font-size: 1rem;
+   }
+   .user-cards {
+     display: grid;
+     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+     gap: .25rem;
+     margin-top: 1rem;
+     margin-left: 10%;
+     margin-right: 10%;
+   }
+   .card {
+     border: 1px solid black;
+     background-color: white;
+     padding: .5rem;
+   }
+   .card > .header {
+     margin-bottom: .25rem;
+   }
+   .card > .body {
+     font-size: .8rem;
+     color: #777;
+   }
+   .hide {
+     display: none;
+   }
+   .STI-logo {
+       display: flex;
+       align-items: center;
+   }
+   .STI-logo span {
+       font-size: 24px;
+       color: #0057b8;
+   }
+   .sidebar-down h3 {
+     margin-bottom: 15px;
+     font-size: 1rem;
+     color: #333;
+   }
+   .sidebarlft ul {
+     list-style: none;
+     margin-bottom: 20px;
+   }
+   .sidebarlft li {
+     margin-bottom: 10px;
+     cursor: pointer;
+     color: #444;
+   }
+   .sidebarlft li:hover {
+     text-decoration: underline;
+   }
+   .filter-option {
+     cursor: pointer;
+     padding: 5px 0;
+     transition: color 0.3s ease;
+   }
+   .filter-option.active {
+     color: #0057b8;
+     font-weight: bold;
+   }
+   .dark-mode .filter-option.active {
+     color: #0057b8;
+   }
+   .filter-option:hover {
+     color: #0057b8;
+   }
+   .sidebarlft input[type="checkbox"] {
+     margin-right: 6px;
+   }
+   .create-alert {
+     margin-top: 20px;
+     font-size: 0.9rem;
+     color: #132a3f;
+     cursor: pointer;
+   }
+   .dark-mode .create-alert {
+     color: white;
+   }
     .topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
     }
-
     .topbar h2 {
        font-size: 1.2rem;
        color: #333;
      }
-
      .topbar .links {
        display: flex;
        gap: 20px;
        font-size: 0.9rem;
        color: #555;
      }
-
-     /* Dropdown styles */
      .dropdown {
        position: relative;
        display: inline-block;
      }
-
      .dropdown-toggle {
        background: #0057b8;
        color: #fff;
@@ -211,15 +174,72 @@ cursor: pointer;
        text-decoration: none;
        display: inline-block;
      }
-
      .dropdown-toggle:hover {
        background: #003f8a;
      }
-
-     .dropdown-menu {
+     .dropdown-menu1 {
        position: absolute;
        top: 100%;
        left: 0;
+       background: #fff;
+       border-radius: 6px;
+       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+       padding: 4px 0;
+       min-width: 150px;
+       display: none;
+       z-index: 10;
+       border: 1px solid #ddd;
+     }
+     .dropdown:hover .dropdown-menu1 {
+       display: block;
+     }
+     .dropdown-menu2 {
+       position: absolute;
+       top: 100%;
+       left: 0;
+       background: #fff;
+       border-radius: 6px;
+       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+       padding: 4px 0;
+       min-width: 150px;
+       display: none;
+       z-index: 10;
+       border: 1px solid #ddd;
+     }
+     .dropdown:hover .dropdown-menu2 {
+       display: block;
+     }
+     .dropdown-menu1 div {
+       
+       font-size: 14px;
+       color: #333;
+       cursor: pointer;
+       transition: background 0.2s;
+     }
+     
+     .dropdown-menu2 div {
+       padding: 6px 16px;
+       font-size: 14px;
+       color: #333;
+       cursor: pointer;
+       transition: background 0.2s;
+     }
+     
+     .sub-dropdown {
+       position: relative;
+     }
+     .sub-dropdown-toggle {
+       padding: 6px 16px;
+       font-size: 14px;
+       color: #333;
+       cursor: pointer;
+       transition: background 0.2s;
+     }
+     
+     .sub-dropdown-menu {
+       position: absolute;
+       top: 0;
+       left: 100%;
        background: #fff;
        border-radius: 6px;
        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -229,48 +249,80 @@ cursor: pointer;
        z-index: 10;
        border: 1px solid #ddd;
      }
-
-     .dropdown:hover .dropdown-menu {
+     .sub-dropdown:hover .sub-dropdown-menu {
        display: block;
      }
-
-     .dropdown-menu div {
-       padding: 8px 16px;
+     .sub-dropdown-menu div {
+       padding: 6px 16px;
        font-size: 14px;
        color: #333;
        cursor: pointer;
        transition: background 0.2s;
      }
-
-     .dropdown-menu div:hover {
-       background: #f0f0f0;
-       color: #0057b8;
+     .sub-dropdown-menu div[data-strand="ABM"]:hover {
+       background: #ffebee;
+       color: #ff5722;
      }
-
-     /* Dark mode dropdown styles */
+     .sub-dropdown-menu div[data-strand="CulArts"]:hover {
+       background: #f3e5f5;
+       color: #9c27b0;
+     }
+     .sub-dropdown-menu div[data-strand="ITMAWD"]:hover {
+       background: #e8f5e8;
+       color: #4caf50;
+     }
+     .sub-dropdown-menu div[data-strand="STEM"]:hover {
+       background: #e3f2fd;
+       color: #2196f3;
+     }
      .dark-mode .dropdown-menu {
        background: #232f41;
        border: 1px solid #374151;
        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
      }
-
      .dark-mode .dropdown-menu div {
        color: #e2e8f0;
      }
-
      .dark-mode .dropdown-menu div:hover {
        background: #374151;
        color: #ffd700;
      }
-
-    
-
+     .dark-mode .sub-dropdown-toggle {
+       color: #e2e8f0;
+     }
+     .dark-mode .sub-dropdown-toggle:hover {
+       background: #374151;
+       color: #ffd700;
+     }
+     .dark-mode .sub-dropdown-menu {
+       background: #232f41;
+       border: 1px solid #374151;
+       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+     }
+     .dark-mode .sub-dropdown-menu div {
+       color: #e2e8f0;
+     }
+     .dark-mode .sub-dropdown-menu div[data-strand="ABM"]:hover {
+       background: #ffebee;
+       color: #ff5722;
+     }
+     .dark-mode .sub-dropdown-menu div[data-strand="CulArts"]:hover {
+       background: #f3e5f5;
+       color: #9c27b0;
+     }
+     .dark-mode .sub-dropdown-menu div[data-strand="ITMAWD"]:hover {
+       background: #e8f5e8;
+       color: #4caf50;
+     }
+     .dark-mode .sub-dropdown-menu div[data-strand="STEM"]:hover {
+       background: #e3f2fd;
+       color: #2196f3;
+     }
     .result-count {
       font-size: 0.9rem;
       color: #888;
       margin-bottom: 20px;
     }
-
     .article {
       background: white;
       padding: 20px;
@@ -280,31 +332,26 @@ cursor: pointer;
       cursor: pointer;
       transition: transform 0.2s, box-shadow 0.2s;
     }
-
     .article:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 12px #0002;
     }
-
     .article h3 {
       color: #0057b8;
       font-size: 1rem;
       margin-bottom: 6px;
       cursor: pointer;
     }
-
     .article .meta {
       font-size: 0.85rem;
       color: #555;
       margin-bottom: 10px;
     }
-
     .article .summary {
       font-size: 0.9rem;
       color: #333;
       margin-bottom: 10px;
     }
-
     .article .actions {
       font-size: 0.85rem;
       color: #1a0dab;
@@ -315,24 +362,19 @@ cursor: pointer;
     .dark-mode .article .actions {
       color: #00a6ff;
     }
-
     .article .actions span:hover  {
       text-decoration: underline;
       color: #00a6ff !important;
     }
-    
-
     .article .actions span:first-child {
       color: #1a0dab;
     }
     .dark-mode .actions span:first-child {
       color: #00a6ff;
     }
-    /* Make Cite span look like other spans but clickable */
     .article .actions span:nth-child(2) {
       color: #1a0dab !important;
       cursor: pointer !important;
-      
       transition: all 0.3s ease !important;
       text-decoration: none !important;
       background: none !important;
@@ -344,84 +386,54 @@ cursor: pointer;
     }
     .article .actions span:nth-child(2):hover {
       color: #00a6ff !important;
-      
-      
-      
     }
     .dark-mode .article .actions span:nth-child(2) {
       color: #00a6ff !important;
     }
-
-    
-
-    /* Related Articles link styling - match other action spans */
-    
-
-    
-    
-
-
     .source-tag {
       font-size: 0.8rem;
       color: #007bff;
       float: right;
     }
-
-    /* Dark mode styles */
     .dark-mode .content-wrapper {
       background: #181f2a;
     }
-
-    .dark-mode .sidebar-down {
+    .dark-mode .sidebarlft {
       background: #232f41;
       color: #e2e8f0;
     }
-
-    .dark-mode .sidebar-down h3 {
+    .dark-mode .sidebarlft h3 {
       color: #ffd700;
     }
-
-    .dark-mode .sidebar-down li {
+    .dark-mode .sidebarlft li {
       color: #e2e8f0;
     }
-
     .dark-mode .main {
       background: #181f2a;
       color: #e2e8f0;
     }
-
     .dark-mode .article {
       background: #232f41;
       color: #e2e8f0;
-      
     }
-
     .dark-mode .article h3 {
       color: #ffd700;
     }
-
     .dark-mode .article .meta {
       color: #b0b7c3;
     }
-
     .dark-mode .article .summary {
       color: #e2e8f0;
     }
-
-    
-
     .dark-mode .result-count {
       color: #b0b7c3;
     }
-
     .dark-mode .upload-date {
       color: #b0b7c3;
     }
-
-    /* Search and Filter Bar Styles */
     .search-filter-bar {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
       background: none;
       padding: 10px 15px;
@@ -432,78 +444,45 @@ cursor: pointer;
       max-width: 600px;
       transition: all 0.3s ease;
     }
-
-    /* Shrink effect for search-filter-bar */
     .search-filter-bar.shrink {
       padding: 6px 10px;
       max-width: 450px;
       gap: 10px;
     }
-
     .search-filter-bar.shrink .search-input {
       font-size: 13px;
       padding: 8px 12px;
     }
-
     .search-filter-bar.shrink .search-btn {
       font-size: 13px;
       padding: 8px 12px;
     }
-
-    .search-filter-bar.shrink .filter-select {
-      font-size: 13px;
-      padding: 6px 10px;
-    }
-
-    /* In nav-center context */
-    .nav-icons-center .search-filter-bar {
-      margin: 0;
-      background: none;
-      box-shadow: none;
-    }
-
     .search-container {
       display: flex;
       flex: 1;
-      max-width: 400px;
+      width:500px;
+      max-width: 600px;
       position: relative;
     }
-
     .search-input {
       flex: 1;
-      padding: 10px 15px;
+      padding: 10px 25px;
       border: 1px solid #ddd;
-      border-radius: 25px 0 0 25px;
+      border-radius: 25px;
       font-size: 14px;
       outline: none;
       transition: border-color 0.3s;
+      background: transparent;
     }
-
     .search-input:focus {
       border-color: #0057b8;
     }
-
-    .search-btn {
-      background: #0057b8;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 0 25px 25px 0;
-      cursor: pointer;
-      font-size: 14px;
-      transition: background 0.3s;
-    }
-
-    .search-btn:hover {
-      background: #003f8a;
-    }
-
+    
     .filter-container {
       display: flex;
       gap: 10px;
       align-items: center;
     }
-
     .filter-select {
       padding: 8px 12px;
       border: 1px solid #ddd;
@@ -514,49 +493,36 @@ cursor: pointer;
       min-width: 150px;
       transition: border-color 0.3s;
     }
-
     .filter-select:focus {
       border-color: #0057b8;
       outline: none;
     }
-
     .filter-select:disabled {
       background: #f5f5f5;
       cursor: not-allowed;
       opacity: 0.6;
     }
-
-    /* Dark mode styles for search bar */
-    .dark-mode .search-filter-bar {
-      background: #232f41;
-    }
-
+    
     .dark-mode .search-input {
       background: #374151;
       color: #e2e8f0;
       border-color: #4b5563;
     }
-
     .dark-mode .search-input:focus {
       border-color: #ffd700;
     }
-
     .dark-mode .filter-select {
       background: #374151;
       color: #e2e8f0;
       border-color: #4b5563;
     }
-
     .dark-mode .filter-select:focus {
       border-color: #ffd700;
     }
-
     .dark-mode .filter-select option {
       background: #374151;
       color: #e2e8f0;
     }
-
-    /* Search Suggestions */
     .search-suggestions {
       position: absolute;
       top: 100%;
@@ -572,48 +538,38 @@ cursor: pointer;
       display: none;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-
     .search-suggestions.show {
       display: block;
     }
-
     .suggestion-item {
       padding: 10px 15px;
       cursor: pointer;
       border-bottom: 1px solid #f0f0f0;
       transition: background-color 0.2s;
     }
-
     .suggestion-item:hover,
     .suggestion-item.active {
       background-color: #f8f9fa;
     }
-
     .suggestion-item:last-child {
       border-bottom: none;
     }
-
     .dark-mode .search-suggestions {
       background: #232f41;
       border-color: #4b5563;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
-
     .dark-mode .suggestion-item {
       color: #e2e8f0;
       border-bottom-color: #374151;
     }
-
     .dark-mode .suggestion-item:hover,
     .dark-mode .suggestion-item.active {
       background-color: #374151;
     }
-
-    /* Section styles */
     .section {
       margin-bottom: 20px;
     }
-
     .section h2 {
       color: #0057b8;
       font-size: 1.5rem;
@@ -621,13 +577,10 @@ cursor: pointer;
       border-bottom: 2px solid #0057b8;
       padding-bottom: 10px;
     }
-
     .dark-mode .section h2 {
       color: #ffd700;
       border-bottom-color: #ffd700;
     }
-
-    /* Search highlight styling */
     mark {
       background-color: #ffd700;
       color: #000;
@@ -635,22 +588,16 @@ cursor: pointer;
       border-radius: 2px;
       font-weight: bold;
     }
-
     .dark-mode mark {
       background-color: #ffd700;
       color: #000;
     }
-
-    /* Article color identifiers */
     .article[data-category="research"] {
       border-left: 4px solid #ffd700 !important;
     }
-
     .article[data-category="capstone"] {
       border-left: 4px solid #0057b8 !important;
     }
-
-    /* Section Organization Styles */
     .section-title {
       color: #0057b8;
       font-size: 2rem;
@@ -659,16 +606,13 @@ cursor: pointer;
       padding-bottom: 15px;
       font-weight: 600;
     }
-
     .dark-mode .section-title {
       color: #ffd700;
       border-bottom-color: #ffd700;
     }
-
     .subsection {
       margin-bottom: 40px;
     }
-
     .subsection-title {
       color: #333;
       font-size: 1.4rem;
@@ -679,42 +623,31 @@ cursor: pointer;
       border-radius: 0 8px 8px 0;
       font-weight: 500;
     }
-
     .dark-mode .subsection-title {
       color: #e2e8f0;
       background: #232f41;
       border-left-color: #ffd700;
     }
-
-    /* Hide empty subsections */
     .subsection:empty,
     .subsection:has(div:empty) {
       display: none;
     }
-
-    /* Specific strand colors */
     .subsection-title[data-strand="ABM"] {
       border-left-color: #ff5722;
     }
-
     .subsection-title[data-strand="CulArts"] {
       border-left-color: #9c27b0;
     }
-
     .subsection-title[data-strand="ITMAWD"] {
       border-left-color: #4caf50;
     }
-
     .subsection-title[data-strand="STEM"] {
       border-left-color: #2196f3;
     }
-
     .subsection-title[data-strand="Grade 11"],
     .subsection-title[data-strand="Grade 12"] {
       border-left-color: #ff9800;
     }
-
-    /* Filter button styles */
     .filter-btn {
       border: 2px solid;
       font-weight: 600;
@@ -725,70 +658,46 @@ cursor: pointer;
       font-size: 16px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-
+    .filter-btn {
+      background: #0057b8;
+      color: white;
+      border-color: #0057b8;
+    }
+    .filter-btn:hover {
+      background: #003f8a;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0,87,184,0.3);
+    }
     .research-btn {
       background: #e7b624 !important;
       color: white !important;
       border-color: #f4c430 !important;
     }
-
     .research-btn:hover {
       background: #b19540 !important;
       transform: translateY(-1px);
       box-shadow: 0 4px 8px rgba(244,196,48,0.3);
     }
-
     .capstone-btn {
       background: #0057b8 !important;
       color: white !important;
       border-color: #0057b8 !important;
     }
-
     .capstone-btn:hover {
       background: #003f8a !important;
       transform: translateY(-1px);
       box-shadow: 0 4px 8px rgba(0,87,184,0.3);
     }
-
-    .show-all-btn {
-      background: #28a745 !important;
-      color: white !important;
-      border-color: #28a745 !important;
-    }
-
-    .show-all-btn:hover {
-      background: #218838 !important;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 8px rgba(40,167,69,0.3);
-    }
-
     .filter-btn.active {
       opacity: 0.7;
       transform: scale(0.95);
     }
-
-    /* Library header styles */
-    .library-header {
-      margin-bottom: 20px;
-      padding-bottom: 15px;
-    }
-
-    .library-title {
-      color: #0057b8;
-      font-size: 1.8rem;
-      margin: 0 20px 0 0;
-      display: inline-block;
-      vertical-align: middle;
-    }
-
     .button-container {
       display: inline-flex;
       gap: 20px;
       flex-wrap: wrap;
       vertical-align: middle;
     }
-
-    /* Sidebar styles from Homepage */
     .user-info {
       display: flex;
       align-items: center;
@@ -824,8 +733,6 @@ cursor: pointer;
     .dark-mode .sidebar-content ul li a {
       color: #ffd700;
     }
-
-    /* Citation Modal Styles - Centered on Screen */
     .citation-modal {
       display: none;
       position: fixed;
@@ -838,12 +745,10 @@ cursor: pointer;
       justify-content: center;
       align-items: center;
     }
-
     .citation-modal.show {
       display: flex !important;
       animation: modalFadeIn 0.3s ease-out;
     }
-
     @keyframes modalFadeIn {
       from {
         opacity: 0;
@@ -854,7 +759,6 @@ cursor: pointer;
         transform: translateY(0);
       }
     }
-
     .citation-modal-content {
       background-color: white;
       padding: 20px;
@@ -869,7 +773,6 @@ cursor: pointer;
       width: 600px;
       max-width: 90vw;
     }
-
     @keyframes modalContentFadeIn {
       from {
         opacity: 0;
@@ -880,7 +783,6 @@ cursor: pointer;
         transform: translateY(0);
       }
     }
-
     .citation-modal-header {
       display: flex;
       justify-content: space-between;
@@ -890,14 +792,12 @@ cursor: pointer;
       border-bottom: 1px solid #eee;
       position: relative;
     }
-
     .citation-modal-header h2 {
       margin: 0;
       color: #333;
       font-size: 1.2rem;
       font-weight: 600;
     }
-
     .citation-close {
       background: none;
       border: none;
@@ -913,12 +813,10 @@ cursor: pointer;
       justify-content: center;
       transition: background-color 0.3s;
     }
-
     .citation-close:hover {
       background-color: #f0f0f0;
       color: #333;
     }
-
     .citation-format-tabs {
       display: flex;
       gap: 10px;
@@ -926,7 +824,6 @@ cursor: pointer;
       border-bottom: 1px solid #ddd;
       overflow-x: auto;
     }
-
     .citation-tab {
       background: none;
       border: none;
@@ -938,18 +835,15 @@ cursor: pointer;
       transition: all 0.3s;
       white-space: nowrap;
     }
-
     .citation-tab.active {
       color: #007bff;
       border-bottom-color: #007bff;
       background-color: #f8f9fa;
     }
-
     .citation-tab:hover {
       color: #007bff;
       background-color: #f8f9fa;
     }
-
     .citation-content {
        font-family: 'Courier New', monospace;
        font-size: 14px;
@@ -961,7 +855,6 @@ cursor: pointer;
        white-space: normal;
        word-wrap: break-word;
     }
-
     .citation-copy-btn {
       background-color: #007bff;
       color: white;
@@ -973,79 +866,60 @@ cursor: pointer;
       margin-top: 15px;
       transition: background-color 0.3s;
     }
-
     .citation-copy-btn:hover {
       background-color: #0056b3;
     }
-
     .citation-copy-btn.copied {
       background-color: #28a745;
     }
-
-
-
-    /* Dark mode styles for citation modal */
     .dark-mode .citation-modal-content {
       background-color: #2d2d2d;
       color: #ffffff;
     }
-
     .dark-mode .citation-modal-header {
       border-bottom-color: #444;
     }
-
     .dark-mode .citation-modal-header h2 {
       color: #ffffff;
     }
-
     .dark-mode .citation-close {
       color: #ccc;
     }
-
     .dark-mode .citation-close:hover {
       background-color: #3d3d3d;
       color: #ffffff;
     }
-
     .dark-mode .citation-format-tabs {
       border-bottom-color: #444;
     }
-
     .dark-mode .citation-tab {
       color: #ccc;
     }
-
     .dark-mode .citation-tab.active {
       color: #ffd700;
       border-bottom-color: #ffd700;
       background-color: #3d3d3d;
     }
-
     .dark-mode .citation-tab:hover {
       color: #ffd700;
       background-color: #3d3d3d;
     }
-
     .dark-mode .citation-content {
       background-color: #3d3d3d;
       color: #ffffff;
     }
-
-    /* Responsive breakpoints for citation modal */
     @media (max-width: 1200px) {
       .citation-modal-content {
         width: 700px;
         max-width: 85vw;
       }
     }
-
     @media (max-width: 992px) {
       .citation-modal-content {
         width: 650px;
         max-width: 90vw;
       }
     }
-
     @media (max-width: 768px) {
       .citation-modal-content {
         width: 95%;
@@ -1055,27 +929,22 @@ cursor: pointer;
         max-height: 80vh;
         overflow-y: auto;
       }
-
       .citation-format-tabs {
         flex-wrap: wrap;
         gap: 5px;
       }
-
       .citation-content {
         font-size: 12px;
         padding: 12px;
       }
-
       .citation-modal-header h2 {
         font-size: 1rem;
       }
-
       .citation-copy-btn {
         width: 100%;
         margin-top: 10px;
       }
     }
-
     @media (max-width: 576px) {
       .citation-modal-content {
         width: 98%;
@@ -1084,37 +953,30 @@ cursor: pointer;
         margin: 5px;
         max-height: 85vh;
       }
-
       .citation-modal-header {
         padding-bottom: 8px;
         margin-bottom: 12px;
       }
-
       .citation-modal-header h2 {
         font-size: 0.9rem;
       }
-
       .citation-format-tabs {
         margin-bottom: 15px;
       }
-
       .citation-tab {
         padding: 8px 12px;
         font-size: 13px;
       }
-
       .citation-content {
         font-size: 11px;
         padding: 10px;
         font-family: 'Courier New', monospace;
       }
-
       .citation-copy-btn {
         padding: 6px 12px;
         font-size: 13px;
       }
     }
-
     @media (max-width: 480px) {
       .citation-modal-content {
         width: 100%;
@@ -1123,209 +985,341 @@ cursor: pointer;
         margin: 2px;
         border-radius: 6px;
       }
-
       .citation-modal-header h2 {
         font-size: 0.85rem;
       }
-
       .citation-close {
         width: 22px;
         height: 22px;
         font-size: 16px;
       }
-
       .citation-format-tabs {
         gap: 3px;
       }
-
       .citation-tab {
         padding: 6px 8px;
         font-size: 12px;
       }
-
       .citation-content {
         font-size: 10px;
         padding: 8px;
         line-height: 1.4;
       }
     }
-
+    .filter-dropdown-menu {
+      min-width: 300px;
+      max-width: 400px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      background: white;
+      z-index: 1000;
+    }
+    .dark-mode .filter-dropdown-menu {
+      background: #232f41;
+      border-color: #374151;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .filter-section {
+      margin-bottom: 20px;
+    }
+    .filter-section h3 {
+      margin: 0 0 10px 0;
+      color: #0057b8;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .dark-mode .filter-section h3 {
+      color: #ffd700;
+    }
+    .filter-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .filter-option-radio {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+    .filter-option-radio:hover {
+      background-color: #f8f9fa;
+    }
+    .dark-mode .filter-option-radio:hover {
+      background-color: #374151;
+    }
+    .filter-option-radio input[type="radio"] {
+      margin: 0;
+    }
+    .filter-option-radio label {
+      cursor: pointer;
+      margin: 0;
+      font-weight: normal;
+    }
+    .filter-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+    .filter-btn-modal {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+    .filter-apply {
+      background-color: #0057b8;
+      color: white;
+    }
+    .filter-apply:hover {
+      background-color: #003f8a;
+    }
+    .filter-clear {
+      background-color: #6c757d;
+      color: white;
+    }
+    .filter-clear:hover {
+      background-color: #545b62;
+    }
+    .strand-section,
+    .program-section {
+      display: none;
+    }
+    .level-shs .strand-section {
+      display: block;
+    }
+    .level-college .program-section {
+      display: block;
+    }
+    /* NEW: Center nav-icons-center */
+    .nav-icons-center {
+      display: flex;
+      justify-items: start;
+      align-items: center;
+      
+      margin-left:31px;
+    }
+    .nav-icons-center .dropdown {
+      margin: 0;
+    }
+    /* Ensure main navbar uses flex and centers content */
+    .main-navbar {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 0 20px;
+      position: relative;
+    }
+    .navbar-right {
+      position: absolute;
+      right: 20px;
+    }
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 20px 0;
+      padding: 10px;
+    }
+    .pagination button {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      background: white;
+      color: #0057b8;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+    .pagination button:hover {
+      background: #f0f0f0;
+    }
+    .pagination button.active {
+      background: #0057b8;
+      color: white;
+    }
+    .pagination button:disabled {
+      background: #f5f5f5;
+      color: #ccc;
+      cursor: not-allowed;
+    }
+    .dark-mode .pagination button {
+      background: #374151;
+      color: #e2e8f0;
+      border-color: #4b5563;
+    }
+    .dark-mode .pagination button:hover:not(:disabled) {
+      background: #4b5563;
+    }
+    .dark-mode .pagination button.active {
+      background: #ffd700;
+      color: #000;
+    }
+    .dark-mode .pagination button:disabled {
+      background: #2d2d2d;
+      color: #666;
+    }
   </style>
 </head>
 <body>
-  <nav class="main-navbar"  id="main-navbar">
-        <div class="STI-logo">
-            <a href="Homepage.html"><img src="STI Logo.png" alt="STI Logo" class="sti-logo"></a>
-            <a href="Homepage.html"><span>ARCHIVES</span></a>
+  <nav class="main-navbar" id="main-navbar">
+    <div class="STI-logo">
+      <a href="Homepage.html"><img src="STI Logo.png" alt="STI Logo" class="sti-logo"></a>
+      <a href="Homepage.html"><span>ARCHIVES</span></a>
+    </div>
+    <div class="nav-icons-center">
+      <!-- Search bar -->
+      <div class="search-filter-bar">
+        <div class="search-container">
+          <input type="text" id="articleSearch" placeholder="Search works, authors, or topics... " class="search-input">
+          <div class="search-suggestions" id="searchSuggestions"></div>
         </div>
-        <div style="flex:1"></div>
-
-        <div class="nav-icons-center">
-            <!-- Search and Filter Bar moved here -->
-            <div class="search-filter-bar">
-              <div class="search-container">
-                <input type="text" id="articleSearch" placeholder="Search articles..." class="search-input">
-                <button class="search-btn">🔍</button>
-                <div class="search-suggestions" id="searchSuggestions"></div>
-              </div>
-
-              <div class="filter-container">
-                <select id="levelFilter" class="filter-select">
-                  <option value="">All Levels</option>
-                  <option value="shs">Senior High School</option>
-                  <option value="college">College</option>
-                </select>
-
-                <select id="subFilter" class="filter-select" disabled>
-                  <option value="">Select Course / Program</option>
-                  <option value="STEM" style="display: none;">STEM</option>
-                  <option value="ABM" style="display: none;">ABM</option>
-                  <option value="ITMAWD" style="display: none;">ITMAWD</option>
-                  <option value="CulArts" style="display: none;">CulArts</option>
-                  <option value="BSBA" style="display: none;">BSBA</option>
-                  <option value="BSCS" style="display: none;">BSCS</option>
-                  <option value="BSIT" style="display: none;">BSIT</option>
-                </select>
-              </div>
+      </div>
+      <!-- Research Dropdown -->
+      <div class="dropdown">
+        <div class="dropdown-toggle research-btn" onclick="window.location.href='library.html?category=research'">
+          Research
+        </div>
+        <div class="dropdown-menu1">
+          <div class="sub-dropdown">
+            <div class="sub-dropdown-toggle" onclick="window.location.href='library.html?category=research&strand=Grade 11'">Grade 11</div>
+            <div class="sub-dropdown-menu">
+              <div data-strand="ABM" onclick="window.location.href='library.html?category=research&strand=ABM'">ABM</div>
+              <div data-strand="CulArts" onclick="window.location.href='library.html?category=research&strand=CulArts'">CulArts</div>
+              <div data-strand="ITMAWD" onclick="window.location.href='library.html?category=research&strand=ITMAWD'">ITMAWD</div>
+              <div data-strand="STEM" onclick="window.location.href='library.html?category=research&strand=STEM'">STEM</div>
             </div>
           </div>
-          
-
-        <div class="navbar-right user-nav-fixed">
-            <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
-                <i class="fa fa-moon"></i>
-            </button>
-            <i class="fa fa-user-circle" id="userIcon" style="cursor:pointer;"></i>
-        </div>
-  </nav>
-
-  <!-- Sidebar -->
-    <div id="sidebar" class="sidebar">
-        <div class="sidebar-content">
-            <div class="user-info">
-                <a href="pfp.html"><i class="fa fa-user-circle" id="user-Icon"></i></a>
-                <div class="user-name">
-                    <a href="pfp.html"><h3>UserName</h3></a>
-                </div>
-                <div class="account-switcher" >
-                    <i class="fas fa-exchange-alt" title="Account Switcher"></i>
-                </div>
+          <div class="sub-dropdown">
+            <div class="sub-dropdown-toggle" onclick="window.location.href='library.html?category=research&strand=Grade 12'">Grade 12</div>
+            <div class="sub-dropdown-menu">
+              <div data-strand="ABM" onclick="window.location.href='library.html?category=research&strand=ABM'">ABM</div>
+              <div data-strand="CulArts" onclick="window.location.href='library.html?category=research&strand=CulArts'">CulArts</div>
+              <div data-strand="ITMAWD" onclick="window.location.href='library.html?category=research&strand=ITMAWD'">ITMAWD</div>
+              <div data-strand="STEM" onclick="window.location.href='library.html?category=research&strand=STEM'">STEM</div>
             </div>
-            
-            <ul><hr>
-                <li><a href="#"><i class="fa-solid fa-upload"></i> <span class="text">My Uploads</span></a></li>
-                <li style="margin-top: 10px;"><a href="myspace.html"><i class="fa-solid fa-feather-pointed"></i> <span class="text">My Space</span></a></li>
-                <li style="margin-top: 10px;"><a href="#"><i class="fa-solid fa-question-circle"></i> <span class="text">Help</span></a></li>
-                <hr>
-                <li style="margin-top: 10px;"><a href="index.html"><i class="fa-solid fa-sign-out-alt"></i> <span class="text">Sign out</span></a></li>
-            </ul>
+          </div>
         </div>
+      </div>
+      <!-- Capstone Dropdown -->
+      <div class="dropdown">
+        <button class="dropdown-toggle capstone-btn" onclick="window.location.href='library.html?category=capstone'">
+          Capstone
+        </button>
+        <div class="dropdown-menu2">
+          <div onclick="window.location.href='library.html?category=capstone&strand=BSBA'">BSBA</div>
+          <div onclick="window.location.href='library.html?category=capstone&strand=BSCS'">BSCS</div>
+          <div onclick="window.location.href='library.html?category=capstone&strand=BSIT'">BSIT</div>
+        </div>
+      </div>
     </div>
+    <div class="navbar-right user-nav-fixed">
+      <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
+        <i class="fa fa-moon"></i>
+      </button>
+      <i class="fa fa-user-circle" id="userIcon" style="cursor:pointer;"></i>
+    </div>
+  </nav>
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-content">
+      <div class="user-info">
+        <a href="pfp.html"><i class="fa fa-user-circle" id="user-Icon"></i></a>
+        <div class="user-name">
+          <a href="pfp.html"><h3>UserName</h3></a>
+        </div>
+      </div>
+      <ul>
+        <hr>
+        <li><a href="library.html"><i class="fas fa-book"></i> Library</a></li>
+        <li><a href="pfp.html"><i class="fa-solid fa-upload"></i> <span class="text">My Uploads</span></a></li>
+        <li><a href="myspace.html"><i class="fa-solid fa-feather-pointed"></i> <span class="text">My Space</span></a></li>
+        <hr>
+        <li><a href="index.html"><i class="fas fa-exchange-alt"></i> <span class="text">Switch Acc</span></a></li>
+        <li><a href="index.html"><i class="fa-solid fa-sign-out-alt"></i> <span class="text">Sign out</span></a></li>
+      </ul>
+    </div>
+  </div>
   <div class="content-wrapper">
     <!-- Sidebar -->
-    <div class="sidebar-down">
-    <h3>Articles</h3>
-    <ul class="filter-list" data-filter-group="year">
-      <li class="filter-option active" data-filter="any">Any time</li>
-      <li class="filter-option" data-filter="2025">Since 2025</li>
-      <li class="filter-option" data-filter="2024">Since 2024</li>
-      <li class="filter-option" data-filter="2021">Since 2021</li>
-      <li class="filter-option" data-filter="custom">Custom range...</li>
-    </ul>
-
-    <h3>Sort</h3>
-    <ul class="filter-list" data-filter-group="sort">
-      <li class="filter-option active" data-filter="az">Sort A-Z</li>
-      <li class="filter-option" data-filter="date">Sort by date</li>
-      <li class="filter-option" data-filter="relevance">Sort by relevance</li>
-    </ul>
-
-    <h3>Type</h3>
-    <ul class="filter-list" data-filter-group="type">
-      <li class="filter-option active" data-filter="any">Any type</li>
-      <li class="filter-option" data-filter="review">Review articles</li>
-    </ul>
-
-    <label><input type="checkbox" /> Include patents</label><br />
-    <label><input type="checkbox" /> Include citations</label>
-
-    <div class="create-alert">+ Create alert</div>
+    <div class="sidebarlft">
+      <h3>Library</h3>
+      <ul class="filter-list" data-filter-group="year">
+        <li class="filter-option active" data-filter="any">Any time</li>
+        <li class="filter-option" data-filter="2025">Since 2025</li>
+        <li class="filter-option" data-filter="2024">Since 2024</li>
+        <li class="filter-option" data-filter="2021">Since 2021</li>
+        <li class="filter-option" data-filter="custom">Custom range...</li>
+      </ul>
+      <div class="custom-range" id="customRange" style="display: none; margin-top: 10px;">
+        <input type="number" id="startYear" value="2024" style="width: 60px; padding: 5px; border: 1px solid #ddd; border-radius: 4px;" />
+        <span style="margin: 0 5px;">-</span>
+        <input type="number" id="endYear" value="2025" style="width: 60px; padding: 5px; border: 1px solid #ddd; border-radius: 4px;" />
+        <br />
+        <button id="applyCustomRange" style="margin-top: 5px; padding: 5px 10px; background: #0057b8; color: white; border: none; border-radius: 4px; cursor: pointer;">Search</button>
+      </div>
+      <h3>Sort</h3>
+      <ul class="filter-list" data-filter-group="sort">
+        <li class="filter-option active" data-filter="az">Sort A-Z</li>
+        <li class="filter-option" data-filter="date">Sort by date</li>
+        <li class="filter-option" data-filter="relevance">Sort by relevance</li>
+      </ul>
+      <h3>Type</h3>
+      <ul class="filter-list" data-filter-group="type">
+        <li class="filter-option active" data-filter="any">Any type</li>
+        <li class="filter-option" data-filter="review">Review articles</li>
+      </ul>
+      <label><input type="checkbox" /> Include patents</label><br />
+      <label><input type="checkbox" /> Include citations</label>
+      <div class="create-alert">+ Create alert</div>
     </div>
-
     <!-- Main Content -->
     <div class="main">
-
-
-
-        
-
-         <div class="library-header">
-             <h2 class="library-title">Library</h2>
-             <div class="button-container">
-                 <button class="filter-btn research-btn" onclick="showResearch()">Research</button>
-                 <button class="filter-btn capstone-btn" onclick="showCapstone()">Capstone</button>
-                 <button class="filter-btn show-all-btn" onclick="showAll()">Show All</button>
-             </div>
-         </div>
-
-        <!-- Hidden research section for dynamic content -->
-        <div class="research-section" id="research-section" style="display: none;">
-          <h2 class="section-title">Research Papers</h2>
-
-          <!-- Grade Level Subsections -->
-          <div class="subsection">
-            <h3 class="subsection-title">Grade 11</h3>
-            <div class="grade-11-articles" id="grade-11-articles">
-              <!-- Grade 11 articles will be loaded here -->
-            </div>
-          </div>
-
-          <div class="subsection">
-            <h3 class="subsection-title">Grade 12</h3>
-            <div class="grade-12-articles" id="grade-12-articles">
-              <!-- Grade 12 articles will be loaded here -->
-            </div>
-          </div>
-
-          <!-- Strand Subsections -->
-          <div class="subsection">
-            <h3 class="subsection-title">ABM</h3>
-            <div class="abm-articles" id="abm-articles">
-              <!-- ABM articles will be loaded here -->
-            </div>
-          </div>
-
-          <div class="subsection">
-            <h3 class="subsection-title">CulArts</h3>
-            <div class="cularts-articles" id="cularts-articles">
-              <!-- CulArts articles will be loaded here -->
-            </div>
-          </div>
-
-          <div class="subsection">
-            <h3 class="subsection-title">ITMAWD</h3>
-            <div class="itmawd-articles" id="itmawd-articles">
-              <!-- ITMAWD articles will be loaded here -->
-            </div>
-          </div>
-
-          <div class="subsection">
-            <h3 class="subsection-title">STEM</h3>
-            <div class="stem-articles" id="stem-articles">
-              <!-- STEM articles will be loaded here -->
-            </div>
-          </div>
+      <!-- Hidden research section for dynamic content -->
+      <div class="research-section" id="research-section" style="display: none;">
+        <h2 class="section-title">Research Papers</h2>
+        <div class="subsection">
+          <h3 class="subsection-title">Grade 11</h3>
+          <div class="grade-11-articles" id="grade-11-articles"></div>
         </div>
-
-        <!-- Hidden capstone section for dynamic content -->
-        <div class="capstone-section" id="capstone-section" style="display: none;">
-          <h2 class="section-title">Capstone Projects</h2>
-          <div class="capstone-articles" id="capstone-articles">
-            <!-- Capstone articles will be loaded here -->
-          </div>
+        <div class="subsection">
+          <h3 class="subsection-title">Grade 12</h3>
+          <div class="grade-12-articles" id="grade-12-articles"></div>
         </div>
+        <div class="subsection">
+          <h3 class="subsection-title">ABM</h3>
+          <div class="abm-articles" id="abm-articles"></div>
+        </div>
+        <div class="subsection">
+          <h3 class="subsection-title">CulArts</h3>
+          <div class="cularts-articles" id="cularts-articles"></div>
+        </div>
+        <div class="subsection">
+          <h3 class="subsection-title">ITMAWD</h3>
+          <div class="itmawd-articles" id="itmawd-articles"></div>
+        </div>
+        <div class="subsection">
+          <h3 class="subsection-title">STEM</h3>
+          <div class="stem-articles" id="stem-articles"></div>
+        </div>
+      </div>
+      <!-- Hidden capstone section for dynamic content -->
+      <div class="capstone-section" id="capstone-section" style="display: none;">
+        <h2 class="section-title">Capstone Projects</h2>
+        <div class="capstone-articles" id="capstone-articles"></div>
+      </div>
     </div>
-    </div>
+  </div>
+  <!-- Pagination -->
+  <div class="pagination" id="pagination"></div>
   <!-- Footer -->
   <footer class="library-footer">
     <div class="footer-content">
@@ -1333,1676 +1327,313 @@ cursor: pointer;
       <span>Made for STI College | ITMAWD 21</span>
     </div>
   </footer>
-
   <script src="script.js"></script>
   <script>
-   // Function to get relative time
-   function getRelativeTime(uploadDate) {
-     const now = new Date();
-     const upload = new Date(uploadDate);
-     const diffMs = now - upload;
-     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-     if (diffDays === 0) return 'today';
-     if (diffDays === 1) return '1 day ago';
-     if (diffDays < 30) return `${diffDays} days ago`;
-     const diffMonths = Math.floor(diffDays / 30);
-     if (diffMonths === 1) return '1 month ago';
-     if (diffMonths < 12) return `${diffMonths} months ago`;
-     const diffYears = Math.floor(diffDays / 365);
-     return `${diffYears} year${diffYears > 1 ? 's' : ''} ago`;
-   }
-
-   // Sort articles alphabetically by default
-   function sortArticlesAlphabetically() {
-     const allContainer = document.querySelector('.all-articles-container');
-     if (allContainer) {
-       const articles = Array.from(allContainer.querySelectorAll('.article[style*="block"]'));
-       articles.sort((a, b) => {
-         const titleA = a.querySelector('h3').textContent.toLowerCase();
-         const titleB = b.querySelector('h3').textContent.toLowerCase();
-         return titleA.localeCompare(titleB);
-       });
-       // Hide upload date and re-append in sorted order
-       articles.forEach(article => {
-         const uploadDateDiv = article.querySelector('.upload-date');
-         if (uploadDateDiv) uploadDateDiv.style.display = 'none';
-         allContainer.appendChild(article);
-       });
-     } else {
-       // Sort articles within each subsection
-       const subsections = [
-         'grade-11-articles',
-         'grade-12-articles',
-         'abm-articles',
-         'cularts-articles',
-         'itmawd-articles',
-         'stem-articles',
-         'capstone-articles'
-       ];
-
-       subsections.forEach(subsectionId => {
-         const subsection = document.getElementById(subsectionId);
-         if (subsection) {
-           const articles = Array.from(subsection.querySelectorAll('.article'));
-           if (articles.length > 0) {
-             articles.sort((a, b) => {
-               const titleA = a.querySelector('h3').textContent.toLowerCase();
-               const titleB = b.querySelector('h3').textContent.toLowerCase();
-               return titleA.localeCompare(titleB);
-             });
-
-             // Clear and re-append sorted articles
-             subsection.innerHTML = '';
-             articles.forEach(article => {
-               subsection.appendChild(article);
-             });
-           }
-         }
-       });
-     }
-   }
-
-   // Filter articles based on category and strand from URL
-   const urlParams = new URLSearchParams(window.location.search);
-   const category = urlParams.get('category');
-   const strand = urlParams.get('strand');
-
-   // Functions to show sections
-   function showResearchSection() {
-     // Keep library header visible
-     const libraryHeader = document.querySelector('.library-header');
-     if (libraryHeader) libraryHeader.style.display = 'block';
-
-     // Hide articles section
-     const articlesSection = document.querySelector('#articles-section');
-     if (articlesSection) articlesSection.style.display = 'none';
-
-     // Hide capstone section
-     const capstoneSection = document.querySelector('.capstone-section');
-     if (capstoneSection) capstoneSection.style.display = 'none';
-
-     // Show research section
-     const researchSection = document.querySelector('.research-section');
-     if (researchSection) {
-       researchSection.style.display = 'block';
-
-       // Show all research articles with color identifiers
-       const researchArticles = researchSection.querySelectorAll('.article');
-       researchArticles.forEach(article => {
-         article.style.display = 'block';
-         article.style.borderLeft = '4px solid #ffd700';
-       });
-
-       // Add strand attributes to subsection titles for styling
-       const grade11Title = document.querySelector('.subsection-title');
-       if (grade11Title && grade11Title.textContent === 'Grade 11') {
-         grade11Title.setAttribute('data-strand', 'Grade 11');
-       }
-       const grade12Title = document.querySelectorAll('.subsection-title')[1];
-       if (grade12Title && grade12Title.textContent === 'Grade 12') {
-         grade12Title.setAttribute('data-strand', 'Grade 12');
-       }
-       const abmTitle = document.querySelectorAll('.subsection-title')[2];
-       if (abmTitle && abmTitle.textContent === 'ABM') {
-         abmTitle.setAttribute('data-strand', 'ABM');
-       }
-       const culartsTitle = document.querySelectorAll('.subsection-title')[3];
-       if (culartsTitle && culartsTitle.textContent === 'CulArts') {
-         culartsTitle.setAttribute('data-strand', 'CulArts');
-       }
-       const itmawdTitle = document.querySelectorAll('.subsection-title')[4];
-       if (itmawdTitle && itmawdTitle.textContent === 'ITMAWD') {
-         itmawdTitle.setAttribute('data-strand', 'ITMAWD');
-       }
-       const stemTitle = document.querySelectorAll('.subsection-title')[5];
-       if (stemTitle && stemTitle.textContent === 'STEM') {
-         stemTitle.setAttribute('data-strand', 'STEM');
-       }
-
-       // Sort articles alphabetically within each subsection
-       sortArticlesAlphabetically();
-     }
-   }
-
-   function showCapstoneSection() {
-     // Keep library header visible
-     const libraryHeader = document.querySelector('.library-header');
-     if (libraryHeader) libraryHeader.style.display = 'block';
-
-     // Hide research section
-     const researchSection = document.querySelector('.research-section');
-     if (researchSection) researchSection.style.display = 'none';
-
-     // Hide all articles that are not in capstone section
-     const allArticles = document.querySelectorAll('.article');
-     allArticles.forEach(article => {
-       if (!article.closest('.capstone-section')) {
-         article.style.display = 'none';
-       }
-     });
-
-     // Show capstone section
-     const capstoneSection = document.querySelector('.capstone-section');
-     if (capstoneSection) {
-       capstoneSection.style.display = 'block';
-
-       // Remove any existing messages
-       const existingMessages = capstoneSection.querySelectorAll('p');
-       existingMessages.forEach(msg => {
-         if (msg.textContent.includes('No articles for Capstone Project')) {
-           msg.remove();
-         }
-       });
-
-       // Show all capstone articles with color identifiers
-       const capstoneArticles = capstoneSection.querySelectorAll('.article');
-       capstoneArticles.forEach(article => {
-         article.style.display = 'block';
-         // Add color border based on category
-         if (article.getAttribute('data-category') === 'research') {
-           article.style.borderLeft = '4px solid #ffd700';
-         } else if (article.getAttribute('data-category') === 'capstone') {
-           article.style.borderLeft = '4px solid #0057b8';
-         }
-       });
-     }
-   }
-
-
-   // Move articles to their respective sections
-   function organizeArticles() {
-     const researchSection = document.querySelector('.research-section');
-     const capstoneSection = document.querySelector('.capstone-section');
-     const articles = document.querySelectorAll('.article');
-
-     articles.forEach(article => {
-       if (article.closest('#articles-section')) {
-         if (article.getAttribute('data-category') === 'research') {
-           researchSection.appendChild(article);
-         } else if (article.getAttribute('data-category') === 'capstone') {
-           capstoneSection.appendChild(article);
-         }
-       }
-     });
-   }
-
-   // Filter articles by category
-   function filterArticles(category) {
-     const allArticles = document.querySelectorAll('.article');
-
-     allArticles.forEach(article => {
-       if (category === 'all') {
-         article.style.display = 'block';
-       } else if (article.getAttribute('data-category') === category) {
-         article.style.display = 'block';
-       } else {
-         article.style.display = 'none';
-       }
-     });
-
-     // Sort visible articles alphabetically
-     if (category !== 'all') {
-       sortArticlesAlphabetically();
-     } else {
-       sortArticlesAlphabetically();
-     }
-   }
-
-   // Handle category-specific display
-   if (category === 'research') {
-     // Filter articles
-     const articles = document.querySelectorAll('.article');
-     articles.forEach(article => {
-       let showArticle = true;
-
-       if (article.getAttribute('data-category') !== 'research') {
-         showArticle = false;
-       }
-
-       if (strand && article.getAttribute('data-strand') !== strand) {
-         showArticle = false;
-       }
-
-       if (!showArticle) {
-         article.style.display = 'none';
-       }
-     });
-   } else if (category === 'capstone') {
-     // Move capstone-section to the top of main
-     const mainContainer = document.querySelector('.main');
-     const capstoneSection = document.querySelector('.capstone-section');
-     if (capstoneSection) {
-       mainContainer.insertBefore(capstoneSection, mainContainer.firstChild);
-       capstoneSection.style.display = 'block';
-
-       // Show all capstone articles
-       const capstoneArticles = capstoneSection.querySelectorAll('.article');
-       capstoneArticles.forEach(article => {
-         article.style.display = 'block';
-       });
-     }
-
-     // Hide all articles that are not in capstone section
-     const articles = document.querySelectorAll('.article');
-     articles.forEach(article => {
-       if (!article.closest('.capstone-section')) {
-         article.style.display = 'none';
-       }
-     });
-   } else if (category || strand) {
-     const articles = document.querySelectorAll('.article');
-     articles.forEach(article => {
-       let showArticle = true;
-
-       if (category && article.getAttribute('data-category') !== category) {
-         showArticle = false;
-       }
-
-       if (strand && article.getAttribute('data-strand') !== strand) {
-         showArticle = false;
-       }
-
-       if (!showArticle) {
-         article.style.display = 'none';
-       }
-     });
-   } else {
-     // No URL filters, show all articles by default mixed A-Z
-     const researchSection = document.querySelector('.research-section');
-     const capstoneSection = document.querySelector('.capstone-section');
-
-     // Hide sections
-     if (researchSection) {
-       researchSection.style.display = 'none';
-     }
-     if (capstoneSection) {
-       capstoneSection.style.display = 'none';
-     }
-
-     // Create a container for all articles
-     const main = document.querySelector('.main');
-     const header = document.querySelector('.library-header');
-     const allArticlesContainer = document.createElement('div');
-     allArticlesContainer.className = 'all-articles-container';
-     main.insertBefore(allArticlesContainer, header.nextSibling);
-
-     // Get all articles and sort them mixed A-Z
-     const allArticles = Array.from(document.querySelectorAll('.article'));
-     allArticles.sort((a, b) => {
-       const titleA = a.querySelector('h3').textContent.toLowerCase();
-       const titleB = b.querySelector('h3').textContent.toLowerCase();
-       return titleA.localeCompare(titleB);
-     });
-
-     // Append sorted articles to container
-     allArticles.forEach(article => {
-       article.style.display = 'block';
-       // Add color border based on category
-       if (article.getAttribute('data-category') === 'research') {
-         article.style.borderLeft = '4px solid #f4c430';
-       } else if (article.getAttribute('data-category') === 'capstone') {
-         article.style.borderLeft = '4px solid #0057b8';
-       }
-       allArticlesContainer.appendChild(article);
-     });
-   }
-
-   // Add upload-date div and data to all articles
-   document.querySelectorAll('.article').forEach(article => {
-     const year = article.dataset.year;
-     let uploadDate = '2024-09-22'; // default
-     if (year === '2025') uploadDate = '2025-09-22';
-     article.dataset.uploadDate = uploadDate;
-     if (!article.querySelector('.upload-date')) {
-       const uploadDateDiv = document.createElement('div');
-       uploadDateDiv.className = 'upload-date';
-       uploadDateDiv.style.display = 'none';
-       uploadDateDiv.style.fontSize = '0.85rem';
-       uploadDateDiv.style.color = '#555';
-       uploadDateDiv.style.marginBottom = '10px';
-       article.insertBefore(uploadDateDiv, article.querySelector('.summary'));
-     }
-   });
-
-   // Search and Filter Functionality
-   const searchInput = document.getElementById('articleSearch');
-   const levelFilter = document.getElementById('levelFilter');
-   const subFilter = document.getElementById('subFilter');
-
-   // Level filter change handler
-   levelFilter.addEventListener('change', function() {
-     const selectedLevel = this.value;
-
-     // Reset subFilter when level changes
-     subFilter.value = '';
-
-     // Enable/disable subFilter based on level selection
-     if (selectedLevel) {
-       subFilter.disabled = false;
-       // Update subFilter options based on level
-       updateSubFilterOptions(selectedLevel);
-     } else {
-       subFilter.disabled = true;
-     }
-
-     applyFilters(true);
-   });
-
-   // Function to update subFilter options based on selected level
-   function updateSubFilterOptions(level) {
-     const subFilterOptions = subFilter.querySelectorAll('option');
-     subFilterOptions.forEach(option => {
-       if (option.value === '') return; // Keep "Select..." option
-       option.style.display = 'none';
-     });
-
-     // Get unique programs for the selected level
-     const articles = document.querySelectorAll('.article');
-     const programs = new Set();
-
-     articles.forEach(article => {
-       const articleLevel = article.getAttribute('data-level');
-       let normalizedLevel = articleLevel;
-       if (articleLevel === 'Senior High School') {
-         normalizedLevel = 'shs';
-       }
-
-       if (normalizedLevel === level) {
-         const program = article.getAttribute('data-program');
-         if (program) {
-           programs.add(program);
-         }
-       }
-     });
-
-     // Show options for available programs
-     programs.forEach(program => {
-       const option = subFilter.querySelector(`option[value="${program}"]`);
-       if (option) {
-         option.style.display = 'block';
-       }
-     });
-   }
-
-   // Search input handler - show suggestions and filter with highlighting
-   searchInput.addEventListener('input', function() {
-     showSearchSuggestions();
-     applyFilters(true); // Enable highlighting
-   });
-
-   // Search input keydown handler
-   searchInput.addEventListener('keydown', function(e) {
-     if (e.key === 'Enter') {
-       e.preventDefault();
-       applyFilters(false); // Disable highlighting
-       hideSearchSuggestions();
-     } else if (e.key === 'Escape') {
-       hideSearchSuggestions();
-     }
-   });
-
-   // Search button handler
-   document.querySelector('.search-btn').addEventListener('click', function() {
-     applyFilters(false); // Disable highlighting
-     hideSearchSuggestions();
-   });
-
-   // Hide suggestions when clicking outside
-   document.addEventListener('click', function(e) {
-     if (!e.target.closest('.search-container')) {
-       hideSearchSuggestions();
-     }
-   });
-
-   // Sub-filter change handler
-   subFilter.addEventListener('change', function() {
-     applyFilters(true);
-   });
-
-   // Highlight text function
-   function highlightText(text, searchTerm) {
-     if (!searchTerm) return text;
-     const regex = new RegExp(`(${searchTerm})`, 'gi');
-     return text.replace(regex, '<mark>$1</mark>');
-   }
-
-
-   // Search suggestions functions
-   function showSearchSuggestions() {
-     const searchTerm = searchInput.value.toLowerCase().trim();
-     const suggestionsDiv = document.getElementById('searchSuggestions');
-
-     if (searchTerm.length < 2) {
-       hideSearchSuggestions();
-       return;
-     }
-
-     // Get all unique terms from articles
-     const allTerms = new Set();
-     const articles = document.querySelectorAll('.article');
-
-     articles.forEach(article => {
-       const title = article.querySelector('h3').textContent.toLowerCase();
-       const meta = article.querySelector('.meta').textContent.toLowerCase();
-       const summary = article.querySelector('.summary').textContent.toLowerCase();
-
-       // Split into words and add matching terms
-       const titleWords = title.split(/\s+/);
-       const metaWords = meta.split(/\s+/);
-       const summaryWords = summary.split(/\s+/);
-
-       [...titleWords, ...metaWords, ...summaryWords].forEach(word => {
-         if (word.includes(searchTerm) && word.length > 2) {
-           allTerms.add(word);
-         }
-       });
-     });
-
-     // Convert to array and sort
-     const suggestions = Array.from(allTerms).sort().slice(0, 8); // Limit to 8 suggestions
-
-     if (suggestions.length > 0) {
-       suggestionsDiv.innerHTML = '';
-       suggestions.forEach(suggestion => {
-         const div = document.createElement('div');
-         div.className = 'suggestion-item';
-         div.textContent = suggestion;
-         div.addEventListener('click', function() {
-           searchInput.value = this.textContent;
-           hideSearchSuggestions();
-           // applyFilters will be called by the input event
-         });
-         suggestionsDiv.appendChild(div);
-       });
-       suggestionsDiv.classList.add('show');
-     } else {
-       hideSearchSuggestions();
-     }
-   }
-
-   function hideSearchSuggestions() {
-     const suggestionsDiv = document.getElementById('searchSuggestions');
-     suggestionsDiv.classList.remove('show');
-   }
-
-   // Initialize all articles in localStorage if not present
-   function initializeArticles() {
-       if (!localStorage.getItem('allArticles')) {
-           const existingArticles = [
-               { title: 'Exploring Public Awareness And Safety Measures For Microplastic Consumption In Fish', authors: 'Caluya, C. I. L., Cejes, M. T. H. M., Habacon, K. L. R., Oliva, J. R. E., & Villegas, J. D.', meta: 'Caluya, C. I. L., Cejes, M. T. H. M., Habacon, K. L. R., Oliva, J. R. E., & Villegas, J. D. – 2024–2025', summary: 'This qualitative phenomenological study investigates public awareness, vendor practices, and government measures on microplastic contamination in fish, revealing low public knowledge, lack of standardized safety checks, and insufficient resources for proper monitoring...', category: 'research', strand: 'STEM', level: 'Senior High School', program: 'BSCS', year: '2024', type: 'research', fileIds: ['1Gr3-XbFEkM4Y5hhT4jDABXus0htk3FBS'] },
-               { title: 'Farmers\' Perceptions On The Effectiveness Of Ventilation To Hinder Pesticide Exposure', authors: 'Aquino, B. R. A., Burgos, F. E. D., Eliserio, C. A. C., Inoc, J. V. H., & Magbato, E. Y.', meta: 'Aquino, B. R. A., Burgos, F. E. D., Eliserio, C. A. C., Inoc, J. V. H., & Magbato, E. Y. – 2025', summary: 'This qualitative phenomenological study explores farmers\' perceptions of greenhouse ventilation as a strategy to reduce pesticide exposure, highlighting that proper airflow can improve crop health, reduce pesticide dependence, and promote safer and more sustainable farming practices...', category: 'research', strand: 'BSIT', level: 'Senior High School', program: 'BSIT', year: '2025', type: 'research', fileIds: ['1ZJd0BAeDr0wUiFzhm45hcwx6EGlIvwYG'] },
-               { title: 'The Effectiveness Of Soil Enrichment On The Growth Of Spinach', authors: 'Merabe, J. R., Barco, J. S., Calma, C. R., Candelario, M. L. E., De Castro, R. M. M., & Torio, R. T.', meta: 'Merabe, J. R., Barco, J. S., Calma, C. R., Candelario, M. L. E., De Castro, R. M. M., & Torio, R. T. – 2025', summary: 'This experimental study investigates how soil enrichment techniques affect spinach growth, finding that nutrient-enriched soil significantly improves plant height, leaf size, and overall yield compared to untreated soil...', category: 'research', strand: 'BSCS', level: 'college', program: 'BSCS', year: '2025', type: 'research', fileIds: ['1exampleFileIdForSoilEnrichment'] },
-               { title: 'Analyzing Safety Protocols Adherence In Gasoline Stations: Urban vs. Rural Perspectives', authors: 'Santibañez, J., et al.', meta: 'Santibañez, J., et al. – 2024 – STI College Calamba', summary: 'This study compares urban and rural gasoline stations to examine workers\' adherence to Department of Labor and Employment (DOLE) safety protocols, finding both compliance and lapses that impact health, safety, and emergency preparedness...', category: 'research', strand: 'BSBA', level: 'college', program: 'BSBA', year: '2024', type: 'research', fileIds: ['1oycCEjyM5Wwlyz9HYzo8B-Hv_yjddemN'] },
-               { title: 'Trash to Treasure: The Role of Recycling Technologies in Sustainable Future', authors: 'Awid, Christa Belle L., Barerra, Tamiya Judea A., De Torres, Kent Hervey L., Gonzales, Christine Anne M., and Tuazon, Rancel G.', meta: 'Awid, Christa Belle L., Barerra, Tamiya Judea A., De Torres, Kent Hervey L., Gonzales, Christine Anne M., and Tuazon, Rancel G. – 2025 – STI College Calamba', summary: 'This study explores the perspectives of local government units on recycling technologies, highlighting their role in reducing waste, promoting sustainability, addressing implementation challenges, and balancing environmental goals with financial constraints...', category: 'research', strand: 'BSIT', level: 'college', program: 'BSIT', year: '2025', type: 'research', fileIds: ['1zGFTJMgLXbqTEwOhOK7YhcoJyGtHBYhn'] },
-               { title: 'Ethereal Blossom: Floral Scented Cologne Balm', authors: 'Baloloy, Winona Ashley I. Belda, Eldrich Seann T. Cubano, Rednz Nhorween C. Lulu, Kurl Angela C. Mendoza, Aizeiya N.', meta: 'Baloloy, Winona Ashley I. Belda, Eldrich Seann T. Cubano, Rednz Nhorween C. Lulu, Kurl Angela C. Mendoza, Aizeiya N. — 2025 STI College Calamba', summary: 'This feasibility study examines the market demand, financial viability, and marketing strategies for Ethereal Blossom, a floral cologne balm designed to combine elegance, skin-friendliness, and eco-consciousness for fragrance consumers...', category: 'research', strand: 'BSBA', level: 'college', program: 'BSBA', year: '2025', type: 'research', fileIds: ['1exampleFileIdForEtherealBlossom'] },
-               { title: 'STI Archives: Digital Library Management System', authors: 'ITMAWD 21 Group', meta: 'ITMAWD 21 Group – 2025 – STI College Calamba', summary: 'A comprehensive web-based digital library system designed to manage and showcase student research papers and capstone projects, featuring advanced search, categorization, and user-friendly interface for easy access to academic resources...', category: 'capstone', strand: 'BSIT', level: 'college', program: 'BSIT', year: '2025', type: 'research', fileIds: ['1exampleFileIdForSTIArchives'] },
-               { title: 'AI-Powered Student Performance Analytics', authors: 'Computer Science Department', meta: 'Computer Science Department – 2025 – STI College Calamba', summary: 'An intelligent system that analyzes student performance data using machine learning algorithms to provide personalized learning recommendations, predict academic outcomes, and help educators make data-driven decisions...', category: 'capstone', strand: 'BSCS', level: 'college', program: 'BSCS', year: '2025', type: 'research', fileIds: ['1exampleFileIdForAIPerformance'] },
-               { title: 'Sustainable Business Model for Local Coffee Shops', authors: 'Business Administration Students', meta: 'Business Administration Students – 2024 – STI College Calamba', summary: 'A feasibility study and business plan for establishing sustainable coffee shops in Laguna, incorporating eco-friendly practices, local sourcing, and community engagement to create a profitable and environmentally conscious business model...', category: 'capstone', strand: 'BSBA', level: 'college', program: 'BSBA', year: '2024', type: 'research', fileIds: ['1exampleFileIdForCoffeeShops'] },
-               { title: 'Mobile Learning Platform for Rural Schools', authors: 'Information Technology Students', meta: 'Information Technology Students – 2025 – STI College Calamba', summary: 'A mobile application designed to provide educational resources to rural schools in the Philippines, featuring offline content access, interactive quizzes, and progress tracking to bridge the digital divide in education...', category: 'capstone', strand: 'BSIT', level: 'college', program: 'BSIT', year: '2025', type: 'research', fileIds: ['1exampleFileIdForMobileLearning'] },
-               { title: 'Blockchain-Based Voting System', authors: 'Computer Science Students', meta: 'Computer Science Students – 2025 – STI College Calamba', summary: 'A secure and transparent voting system using blockchain technology to ensure election integrity, featuring cryptographic security, decentralized verification, and real-time result tracking for local government elections...', category: 'capstone', strand: 'BSCS', level: 'college', program: 'BSCS', year: '2025', type: 'research', fileIds: ['1exampleFileIdForBlockchainVoting'] },
-               { title: 'Digital Marketing Strategy for Local Tourism', authors: 'Business Administration Students', meta: 'Business Administration Students – 2024 – STI College Calamba', summary: 'A comprehensive digital marketing strategy to promote Laguna\'s tourism industry, utilizing social media campaigns, SEO optimization, and influencer partnerships to increase tourist arrivals and boost local economy...', category: 'capstone', strand: 'BSBA', level: 'college', program: 'BSBA', year: '2024', type: 'research' },
-               { title: 'IoT-Based Smart Agriculture System', authors: 'Information Technology Students', meta: 'Information Technology Students – 2025 – STI College Calamba', summary: 'An Internet of Things solution for modern farming, integrating sensors for soil moisture, temperature, and crop health monitoring with automated irrigation systems to optimize water usage and increase agricultural productivity...', category: 'capstone', strand: 'BSIT', level: 'college', program: 'BSIT', year: '2025', type: 'research', fileIds: ['1exampleFileIdForIoTAgriculture'] },
-               { title: 'Machine Learning for Disease Prediction', authors: 'Computer Science Students', meta: 'Computer Science Students – 2024 – STI College Calamba', summary: 'A machine learning model that predicts potential health risks based on patient data, symptoms, and medical history, helping healthcare providers make early interventions and improve patient outcomes...', category: 'capstone', strand: 'BSCS', level: 'college', program: 'BSCS', year: '2024', type: 'research', fileIds: ['1exampleFileIdForMLDisease'] },
-                { title: 'The Effectiveness of Lagundi Essential Oil as an Inhaler in Terms of Marketability Among Selected Grade-11 Senior High School Students in STI College Calamba', authors: 'Grade 11 Students', meta: 'Grade 11 Students – 2025 – STI College Calamba', summary: 'This study examines the marketability and effectiveness of lagundi essential oil as an inhaler product among selected Grade-11 students, evaluating consumer preferences, product viability, and potential market acceptance...', category: 'research', strand: 'STEM', level: 'Senior High School', program: 'Grade 11', year: '2025', type: 'research', fileIds: ['1nLccvtasOdYnOOWEDiUBBXQmj2nTelrZ'] }
-           ];
-           localStorage.setItem('allArticles', JSON.stringify(existingArticles));
-       }
-   }
-
-   // Load all articles from localStorage
-   function loadUploadedArticles() {
-       const allArticles = JSON.parse(localStorage.getItem('allArticles')) || [];
-       allArticles.forEach(article => {
-           const articleDiv = document.createElement('div');
-           articleDiv.className = 'article';
-           articleDiv.setAttribute('data-category', article.category);
-           articleDiv.setAttribute('data-strand', article.strand);
-           articleDiv.setAttribute('data-level', article.level);
-           articleDiv.setAttribute('data-program', article.program);
-           articleDiv.setAttribute('data-year', article.year);
-           articleDiv.setAttribute('data-type', article.type);
-
-           // Create a unique study ID for this article - use predefined keys for known articles
-           let studyId;
-           if (article.title.includes('Farmers\' Perceptions')) {
-               studyId = 'perceptions';
-           } else if (article.title.includes('Exploring Public Awareness')) {
-               studyId = 'safety_measure';
-           } else if (article.title.includes('Analyzing Safety Protocols')) {
-               studyId = 'safety_protocols';
-           } else if (article.title.includes('Trash to Treasure')) {
-               studyId = 'trash_treasure';
-           } else if (article.title.includes('Lagundi Essential Oil')) {
-               studyId = 'lagundi_oil';
-           } else {
-               // Fallback for other articles
-               studyId = article.title.toLowerCase().replace(/[^a-z0-9]/g, '').substring(0, 20);
-           }
-
-           articleDiv.innerHTML = `
-               <h3><a href="myspace.html?study=${studyId}" style="text-decoration: none; color: inherit;">${article.title}</a></h3>
-               <div class="meta">${article.meta}</div>
-               <div class="summary">${article.summary}</div>
-               <div class="source-tag">[STI College Calamba Library]</div>
-               <div class="actions">
-                   <span>★ Save</span>
-                   <span onclick="openCitationModal(this)">Cite</span>
-                   <span onclick="showRelatedArticles(this)">Related articles</span>
-               </div>
-           `;
-
-           // Store article data for myspace.html
-           articleDiv.dataset.articleData = JSON.stringify(article);
-
-           // Append to appropriate section based on category and program
-           if (article.category === 'research') {
-               // Determine which subsection to append to based on program
-               let targetContainer = null;
-
-               if (article.program === 'Grade 11') {
-                   targetContainer = document.getElementById('grade-11-articles');
-               } else if (article.program === 'Grade 12') {
-                   targetContainer = document.getElementById('grade-12-articles');
-               } else if (article.strand === 'ABM') {
-                   targetContainer = document.getElementById('abm-articles');
-               } else if (article.strand === 'CulArts') {
-                   targetContainer = document.getElementById('cularts-articles');
-               } else if (article.strand === 'ITMAWD') {
-                   targetContainer = document.getElementById('itmawd-articles');
-               } else if (article.strand === 'STEM') {
-                   targetContainer = document.getElementById('stem-articles');
-               }
-
-               // If no specific container found, append to research section
-               if (!targetContainer) {
-                   const researchSection = document.querySelector('.research-section');
-                   if (researchSection) researchSection.appendChild(articleDiv);
-               } else {
-                   targetContainer.appendChild(articleDiv);
-               }
-           } else if (article.category === 'capstone') {
-               const capstoneContainer = document.getElementById('capstone-articles');
-               if (capstoneContainer) {
-                   capstoneContainer.appendChild(articleDiv);
-               } else {
-                   const capstoneSection = document.querySelector('.capstone-section');
-                   if (capstoneSection) capstoneSection.appendChild(articleDiv);
-               }
-           }
-
-           // Also append to all-articles-container if it exists
-           const allContainer = document.querySelector('.all-articles-container');
-           if (allContainer) {
-               const clonedDiv = articleDiv.cloneNode(true);
-               // Add color border based on category
-               if (article.category === 'research') {
-                   clonedDiv.style.borderLeft = '4px solid #f4c430';
-               } else if (article.category === 'capstone') {
-                   clonedDiv.style.borderLeft = '4px solid #0057b8';
-               }
-               allContainer.appendChild(clonedDiv);
-           }
-       });
-   }
-
-   // Organize articles into sections
-   initializeArticles();
-   organizeArticles();
-   loadUploadedArticles();
-
-   // Function to make articles clickable - called after articles are loaded
-   function makeArticlesClickable() {
-     const articles = document.querySelectorAll('.article');
-     articles.forEach(article => {
-       article.addEventListener('click', function(e) {
-         // Don't trigger if clicking on action buttons or links
-         if (e.target.closest('.actions') || e.target.tagName === 'A') {
-           return;
-         }
-
-         // Find the link in the h3 and navigate to it
-         const link = article.querySelector('h3 a');
-         if (link) {
-           window.location.href = link.href;
-         }
-       });
-     });
-   }
-
-   // Call makeArticlesClickable after articles are loaded
-   setTimeout(makeArticlesClickable, 100);
-
-   document.addEventListener('DOMContentLoaded', function() {
-     // Shrink effect for search-filter-bar on scroll
-     const searchBar = document.querySelector('.search-filter-bar');
-     const navbar = document.getElementById('main-navbar');
-
-     window.addEventListener('scroll', function() {
-       if (window.scrollY > 50) {
-         searchBar.classList.add('shrink');
-         navbar.classList.add('shrink');
-       } else {
-         searchBar.classList.remove('shrink');
-         navbar.classList.remove('shrink');
-       }
-     });
-   });
-
-    // Citation Modal Functions
-    function openCitationModal(articleElement) {
-        console.log('openCitationModal called with:', articleElement);
-
-        // Remove any existing modals first
-        const existingModals = document.querySelectorAll('.citation-modal');
-        existingModals.forEach(modal => modal.remove());
-
-        // Create new modal for this specific article
-        const modal = createCitationModal(articleElement);
-        document.body.appendChild(modal);
-
-        // Modal is now centered on screen automatically
-
-        // Show the modal
-        modal.classList.add('show');
-
-        // Extract article information
-        const title = articleElement.querySelector('h3').textContent;
-        const meta = articleElement.querySelector('.meta').textContent;
-        const year = meta.match(/(\d{4})/) ? meta.match(/(\d{4})/)[1] : '2024'; // Extract year from meta or default
-
-        console.log('Article info:', { title, meta, year });
-
-        // Update modal header with article title
-        const modalHeader = modal.querySelector('.citation-modal-header h2');
-        if (modalHeader) {
-            modalHeader.textContent = `Cite: ${title}`;
-        }
-
-        // Update citations with article information
-        updateCitations(title, meta, year);
-    }
-
-    function createCitationModal(articleElement) {
-        const modal = document.createElement('div');
-        modal.className = 'citation-modal';
-        modal.id = 'citation-modal';
-        modal.innerHTML = `
-            <div class="citation-modal-content">
-                <div class="citation-modal-header">
-                    <h2>Cite</h2>
-                    <button class="citation-close" onclick="closeCitationModal()">&times;</button>
-                </div>
-
-                <div class="citation-format-tabs">
-                    <button class="citation-tab active" onclick="showCitationFormat('mla')">MLA</button>
-                    <button class="citation-tab" onclick="showCitationFormat('apa')">APA</button>
-                    <button class="citation-tab" onclick="showCitationFormat('chicago')">Chicago</button>
-                    <button class="citation-tab" onclick="showCitationFormat('harvard')">Harvard</button>
-                    <button class="citation-tab" onclick="showCitationFormat('vancouver')">Vancouver</button>
-                </div>
-
-                <div id="mla-citation" class="citation-content" style="display: block;">
-                    MLA<br>
-                    Alanzalon, Syren Kim A., et al. A Comparative Analysis of Established Businesses vs Startup Ventures of Buko Pie. STI College Calamba, 2024.
-                </div>
-
-                <div id="apa-citation" class="citation-content" style="display: none;">
-                    APA<br>
-                    Alanzalon, S. K. A., Alvarez, A. X. E., Baloloy, W. A. I., Belda, C. A., Belda, E. S. T., Delos Santos, H. T., & Villanueva, M. A. C. (2024). A comparative analysis of established businesses vs startup ventures of buko pie. STI College Calamba.
-                </div>
-
-                <div id="chicago-citation" class="citation-content" style="display: none;">
-                    Chicago<br>
-                    Alanzalon, Syren Kim A., Andrei Ximon E. Alvarez, Winona Ashley I. Baloloy, Clarizza Alleymer Belda, Eldrich Seann T. Belda, Harold T. Delos Santos, and Maria Allyssa C. Villanueva. A Comparative Analysis of Established Businesses vs Startup Ventures of Buko Pie. Calamba: STI College Calamba, 2024.
-                </div>
-
-                <div id="harvard-citation" class="citation-content" style="display: none;">
-                    Harvard<br>
-                    Alanzalon, S.K.A., Alvarez, A.X.E., Baloloy, W.A.I., Belda, C.A., Belda, E.S.T., Delos Santos, H.T. and Villanueva, M.A.C., 2024. A comparative analysis of established businesses vs startup ventures of buko pie. STI College Calamba.
-                </div>
-
-                <div id="vancouver-citation" class="citation-content" style="display: none;">
-                    Vancouver<br>
-                    Alanzalon SKA, Alvarez AXE, Baloloy WAI, Belda CA, Belda EST, Delos Santos HT, Villanueva MAC. A Comparative Analysis of Established Businesses vs Startup Ventures of Buko Pie. Calamba: STI College Calamba; 2024.
-                </div>
-
-                <button class="citation-copy-btn" onclick="copyCitation()">Copy Citation</button>
-            </div>
-        `;
-
-        return modal;
-    }
-
-
-    function closeCitationModal() {
-        console.log('closeCitationModal called');
-        const modals = document.querySelectorAll('.citation-modal');
-        modals.forEach(modal => {
-            console.log('Removing modal from DOM');
-            modal.classList.remove('show');
-            // Remove immediately without delay
-            if (modal.parentNode) {
-                modal.parentNode.removeChild(modal);
-            }
-        });
-    }
-
-    function showCitationFormat(format) {
-        // Hide all citation formats
-        const formats = ['mla', 'apa', 'chicago', 'harvard', 'vancouver'];
-        formats.forEach(fmt => {
-            document.getElementById(`${fmt}-citation`).style.display = 'none';
-            document.querySelector(`[onclick="showCitationFormat('${fmt}')"]`).classList.remove('active');
-        });
-
-        // Show selected format
-        document.getElementById(`${format}-citation`).style.display = 'block';
-        document.querySelector(`[onclick="showCitationFormat('${format}')"]`).classList.add('active');
-    }
-
-    function updateCitations(title, meta, year) {
-        // Helper functions
-        function abbreviateName(author) {
-            const initials = author.firstMiddle.split(' ').map(p => p.charAt(0) + '.').join(' ');
-            return author.last + ', ' + initials;
-        }
-
-        function fullNameFormatted(author) {
-            return author.last + ', ' + author.firstMiddle;
-        }
-
-        function vancouverName(author) {
-            const initials = author.firstMiddle.split(' ').map(p => p.charAt(0)).join('');
-            return author.last + ' ' + initials;
-        }
-
-        // Parse authors from meta
-        const authorMatch = meta.match(/^([^–—]+)[–—]/);
-        if (!authorMatch) {
-            // Fallback
-            const authors = 'Unknown Author';
-            const mlaCitation = `${authors}. ${title}. STI College Calamba, ${year}.`;
-            document.getElementById('mla-citation').innerHTML = `MLA 9th<br>${mlaCitation}`;
-            const apaCitation = `${authors} (${year}). ${title.toLowerCase()}. STI College Calamba.`;
-            document.getElementById('apa-citation').innerHTML = `APA 7th<br>${apaCitation}`;
-            const chicagoCitation = `${authors}. ${year}. ${title}. Calamba: STI College Calamba.`;
-            document.getElementById('chicago-citation').innerHTML = `Chicago 17th (Author-Date)<br>${chicagoCitation}`;
-            const harvardCitation = `${authors}, ${year}. ${title.toLowerCase()}. STI College Calamba.`;
-            document.getElementById('harvard-citation').innerHTML = `Harvard<br>${harvardCitation}`;
-            const vancouverCitation = `${authors}. ${title}. Calamba: STI College Calamba; ${year}.`;
-            document.getElementById('vancouver-citation').innerHTML = `Vancouver<br>${vancouverCitation}`;
-            return;
-        }
-
-        const authorsStr = authorMatch[1].trim();
-        let parsedAuthors = [];
-        if (authorsStr.includes(';')) {
-            // Format: Last, First Middle; Last, First Middle
-            const authorStrings = authorsStr.split('; ').map(s => s.trim());
-            parsedAuthors = authorStrings.map(s => {
-                const [last, firstMiddle] = s.split(', ');
-                return { last, firstMiddle };
-            });
-        } else {
-            // Format: First Middle Last, First Middle Last
-            const authorStrings = authorsStr.split(', ');
-            parsedAuthors = authorStrings.map(s => {
-                const parts = s.split(' ');
-                const last = parts.pop();
-                const firstMiddle = parts.join(' ');
-                return { last, firstMiddle };
-            });
-        }
-
-        // APA
-        const apaList = parsedAuthors.map(abbreviateName);
-        const apaStr = apaList.length > 1 ? apaList.slice(0, -1).join(', ') + ', & ' + apaList[apaList.length-1] : apaList[0];
-        const apaCitation = `${apaStr} (${year}). ${title.toLowerCase()}. STI College Calamba.`;
-        document.getElementById('apa-citation').innerHTML = `APA 7th<br>${apaCitation}`;
-
-        // MLA
-        const mlaFirst = fullNameFormatted(parsedAuthors[0]);
-        const mlaCitation = `${mlaFirst}, et al. ${title}. STI College Calamba, ${year}.`;
-        document.getElementById('mla-citation').innerHTML = `MLA 9th<br>${mlaCitation}`;
-
-        // Chicago
-        const chicagoAuthorsFormatted = parsedAuthors.map(fullNameFormatted);
-        const chicagoAuthors = chicagoAuthorsFormatted.length > 1 ? chicagoAuthorsFormatted.slice(0, -1).join(', ') + ', and ' + chicagoAuthorsFormatted[chicagoAuthorsFormatted.length-1] : chicagoAuthorsFormatted[0];
-        const chicagoCitation = `${chicagoAuthors}. ${year}. ${title}. Calamba: STI College Calamba.`;
-        document.getElementById('chicago-citation').innerHTML = `Chicago 17th (Author-Date)<br>${chicagoCitation}`;
-
-        // Harvard
-        const harvardList = parsedAuthors.map(abbreviateName);
-        const harvardStr = harvardList.length > 1 ? harvardList.slice(0, -1).join(', ') + ' and ' + harvardList[harvardList.length-1] : harvardList[0];
-        const harvardCitation = `${harvardStr}, ${year}. ${title.toLowerCase()}. STI College Calamba.`;
-        document.getElementById('harvard-citation').innerHTML = `Harvard<br>${harvardCitation}`;
-
-        // Vancouver
-        const vancouverAuthors = parsedAuthors.map(vancouverName).join(', ');
-        const vancouverCitation = `${vancouverAuthors}. ${title}. Calamba: STI College Calamba; ${year}.`;
-        document.getElementById('vancouver-citation').innerHTML = `Vancouver<br>${vancouverCitation}`;
-    }
-
-    function copyCitation() {
-        const activeCitation = document.querySelector('.citation-content[style*="block"]');
-        if (activeCitation) {
-            const citationText = activeCitation.textContent.replace(/^[A-Z]+\s*\n/, '').trim();
-
-            navigator.clipboard.writeText(citationText).then(() => {
-                const copyBtn = document.querySelector('.citation-copy-btn');
-                const originalText = copyBtn.textContent;
-                copyBtn.textContent = 'Copied!';
-                copyBtn.classList.add('copied');
-
-                setTimeout(() => {
-                    copyBtn.textContent = originalText;
-                    copyBtn.classList.remove('copied');
-                }, 2000);
-            }).catch(err => {
-                console.error('Failed to copy citation: ', err);
-                // Fallback for older browsers
-                const textArea = document.createElement('textarea');
-                textArea.value = citationText;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-
-                const copyBtn = document.querySelector('.citation-copy-btn');
-                const originalText = copyBtn.textContent;
-                copyBtn.textContent = 'Copied!';
-                copyBtn.classList.add('copied');
-
-                setTimeout(() => {
-                    copyBtn.textContent = originalText;
-                    copyBtn.classList.remove('copied');
-                }, 2000);
-            });
-        }
-    }
-
-
-
-    // Initialize citation modal functionality
-    function initializeCitationModal() {
-        console.log('Initializing citation modal...');
-
-        // Add click handlers to all Cite buttons in articles
-        const citeButtons = document.querySelectorAll('.actions span');
-        console.log('Found cite buttons:', citeButtons.length);
-
-        citeButtons.forEach((button, index) => {
-            if (button.textContent.trim() === 'Cite') {
-                console.log('Setting up click handler for cite button', index + 1);
-                button.style.cursor = 'pointer';
-
-                // Remove any existing event handlers
-                button.onclick = null;
-                button.removeEventListener('click', handleCiteClick);
-
-                // Add new click handler
-                function handleCiteClick(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('Cite button clicked!');
-                    const article = button.closest('.article');
-                    if (article) {
-                        console.log('Opening modal for article:', article.querySelector('h3').textContent);
-                        openCitationModal(article);
-                    } else {
-                        console.error('Could not find article element');
-                    }
-                }
-
-                button.addEventListener('click', handleCiteClick);
-                console.log('Click handler attached to cite button');
-            }
-        });
-
-        // Close modal when clicking outside the modal content
-        document.addEventListener('click', function(e) {
-            const modal = e.target.closest('.citation-modal');
-            if (modal) {
-                // If clicking on modal content or close button, don't close
-                if (e.target.classList.contains('citation-close') ||
-                    e.target.closest('.citation-modal-content')) {
-                    return;
-                }
-                // If clicking anywhere outside the modal content, close it
-                console.log('Closing modal - clicked outside modal content');
-                closeCitationModal();
-            }
-        });
-
-        // Close modal on Escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                const visibleModals = document.querySelectorAll('.citation-modal.show');
-                if (visibleModals.length > 0) {
-                    console.log('Closing modal - Escape key pressed');
-                    closeCitationModal();
-                }
-            }
-        });
-    }
-
-    // Initialize immediately when DOM is loaded
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initializeCitationModal);
-        document.addEventListener('DOMContentLoaded', addVisualIndicators);
-    } else {
-        initializeCitationModal();
-        addVisualIndicators();
-    }
-
-    // Fallback initialization after a short delay
-    setTimeout(() => {
-        if (!document.querySelector('.actions span[data-cite-initialized]')) {
-            console.log('Fallback initialization triggered');
-            initializeCitationModal();
-            addVisualIndicators();
-        }
-    }, 1000);
-
-    // Additional fallback initialization
-    setTimeout(() => {
-        console.log('Second fallback initialization...');
-        initializeCitationModal();
-        addVisualIndicators();
-    }, 2000);
-
-    // Add a visual indicator that Cite buttons are clickable
-    function addVisualIndicators() {
-        const citeButtons = document.querySelectorAll('.actions span');
-        citeButtons.forEach(button => {
-            if (button.textContent.trim() === 'Cite') {
-                button.title = 'Click to open citation modal';
-                button.setAttribute('aria-label', 'Open citation modal');
-                button.setAttribute('data-cite-initialized', 'true');
-            }
-        });
-    }
-
-    console.log('Citation modal functions loaded. Click any Cite button to open modal.');
-
-    // Sidebar Filter Functionality
-    function initializeFilters() {
-        const filterOptions = document.querySelectorAll('.filter-option');
-
-        filterOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                const filterGroup = this.closest('.filter-list').dataset.filterGroup;
-                const filterValue = this.dataset.filter;
-
-                // Remove active class from siblings in same group
-                const siblings = this.closest('.filter-list').querySelectorAll('.filter-option');
-                siblings.forEach(sibling => sibling.classList.remove('active'));
-
-                // Add active class to clicked option
-                this.classList.add('active');
-
-                // Apply unified filter
-                applyFilters(true);
-            });
-        });
-    }
-// Unified applyFilters function that handles all filters
-function applyFilters(highlightSearch = true) {
-    const searchTerm = searchInput.value.toLowerCase().trim();
-    const selectedLevel = levelFilter.value;
-    const selectedProgram = subFilter.value;
-    const yearFilterValue = document.querySelector('.filter-list[data-filter-group="year"] .filter-option.active').dataset.filter;
-    const sortFilterValue = document.querySelector('.filter-list[data-filter-group="sort"] .filter-option.active').dataset.filter;
-    const typeFilterValue = document.querySelector('.filter-list[data-filter-group="type"] .filter-option.active').dataset.filter;
-
-    const articles = document.querySelectorAll('.article');
-    let visibleCount = 0;
-    let visibleArticles = [];
-
-    articles.forEach(article => {
-        let showArticle = true;
-
-        // Get original texts
-        const h3Element = article.querySelector('h3');
-        const summaryElement = article.querySelector('.summary');
-
-        // Store original texts if not already stored
-        if (!h3Element.dataset.originalText) {
-            h3Element.dataset.originalText = h3Element.textContent;
-        }
-        if (!summaryElement.dataset.originalText) {
-            summaryElement.dataset.originalText = summaryElement.textContent;
-        }
-
-        // Text search filter - show articles that contain the search term in title, authors, or summary
-        if (searchTerm) {
-            const title = h3Element.dataset.originalText.toLowerCase();
-            const summary = summaryElement.dataset.originalText.toLowerCase();
-            const meta = article.querySelector('.meta').textContent.toLowerCase();
-
-            const searchInTitle = title.includes(searchTerm);
-            const searchInSummary = summary.includes(searchTerm);
-            const searchInMeta = meta.includes(searchTerm);
-
-            if (!searchInTitle && !searchInSummary && !searchInMeta) {
-                showArticle = false;
-            }
-        }
-
-        // Level filter
-        if (selectedLevel) {
-            const articleLevel = article.getAttribute('data-level');
-            let normalizedLevel = articleLevel;
-            if (articleLevel === 'Senior High School') {
-                normalizedLevel = 'shs';
-            }
-            if (normalizedLevel !== selectedLevel) {
-                showArticle = false;
-            }
-        }
-
-        // Program/Grade filter
-        if (selectedProgram && article.getAttribute('data-program') !== selectedProgram) {
-            showArticle = false;
-        }
-
-        // Year filter (sidebar)
-        if (yearFilterValue !== 'any') {
-            if (yearFilterValue === 'custom') {
-                // For custom range, show all for now (could implement date picker later)
-                showArticle = true;
-            } else {
-                const articleYear = parseInt(article.dataset.year);
-                const filterYear = parseInt(yearFilterValue);
-                showArticle = showArticle && (articleYear >= filterYear);
-            }
-        }
-
-        // Type filter (sidebar)
-        if (typeFilterValue !== 'any') {
-            showArticle = showArticle && (article.dataset.type === typeFilterValue);
-        }
-
-        // Show/hide article and highlight if visible
-        if (showArticle) {
-            article.style.display = 'block';
-            visibleCount++;
-            visibleArticles.push(article);
-
-            // Highlight search terms
-            if (searchTerm) {
-                h3Element.innerHTML = highlightText(h3Element.dataset.originalText, searchTerm);
-                summaryElement.innerHTML = highlightText(summaryElement.dataset.originalText, searchTerm);
-            } else {
-                // Restore original text
-                h3Element.innerHTML = h3Element.dataset.originalText;
-                summaryElement.innerHTML = summaryElement.dataset.originalText;
-            }
-        } else {
-            article.style.display = 'none';
-            // Restore original text when hidden
-            h3Element.innerHTML = h3Element.dataset.originalText;
-            summaryElement.innerHTML = summaryElement.dataset.originalText;
-        }
+  // === UTILITIES ===
+  function getRelativeTime(uploadDate) {
+    const now = new Date();
+    const upload = new Date(uploadDate);
+    const diffMs = now - upload;
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    if (diffDays === 0) return 'today';
+    if (diffDays === 1) return '1 day ago';
+    if (diffDays < 30) return `${diffDays} days ago`;
+    const diffMonths = Math.floor(diffDays / 30);
+    if (diffMonths === 1) return '1 month ago';
+    if (diffMonths < 12) return `${diffMonths} months ago`;
+    const diffYears = Math.floor(diffDays / 365);
+    return `${diffYears} year${diffYears > 1 ? 's' : ''} ago`;
+  }
+
+  function highlightText(text, searchTerm) {
+    if (!searchTerm) return text;
+    const regex = new RegExp(`(${searchTerm})`, 'gi');
+    return text.replace(regex, '<mark>$1</mark>');
+  }
+
+  // === INITIALIZE & LOAD ARTICLES ===
+  function initializeArticles() {
+    const existingArticles = [
+        { title: 'Exploring Public Awareness And Safety Measures For Microplastic Consumption In Fish', authors: 'Caluya, C. I. L., Cejes, M. T. H. M., Habacon, K. L. R., Oliva, J. R. E., & Villegas, J. D.', meta: 'Caluya, C. I. L., Cejes, M. T. H. M., Habacon, K. L. R., Oliva, J. R. E., & Villegas, J. D. – 2024–2025', summary: 'This qualitative phenomenological study investigates public awareness, vendor practices, and government measures on microplastic contamination in fish, revealing low public knowledge, lack of standardized safety checks, and insufficient resources for proper monitoring...', category: 'research', strand: 'STEM', level: 'Senior High School', program: 'Grade 11', year: '2024', type: 'research', fileIds: ['1Gr3-XbFEkM4Y5hhT4jDABXus0htk3FBS'] },
+        { title: 'Farmers\' Perceptions On The Effectiveness Of Ventilation To Hinder Pesticide Exposure', authors: 'Aquino, B. R. A., Burgos, F. E. D., Eliserio, C. A. C., Inoc, J. V. H., & Magbato, E. Y.', meta: 'Aquino, B. R. A., Burgos, F. E. D., Eliserio, C. A. C., Inoc, J. V. H., & Magbato, E. Y. – 2025', summary: 'This qualitative phenomenological study explores farmers\' perceptions of greenhouse ventilation as a strategy to reduce pesticide exposure, highlighting that proper airflow can improve crop health, reduce pesticide dependence, and promote safer and more sustainable farming practices...', category: 'research', strand: 'STEM', level: 'Senior High School', program: 'Grade 12', year: '2025', type: 'research', fileIds: ['1ZJd0BAeDr0wUiFzhm45hcwx6EGlIvwYG'] },
+        { title: 'The Effectiveness of Lagundi Essential Oil as an Inhaler in Terms of Marketability Among Selected Grade-11 Senior High School Students in STI College Calamba', authors: 'Grade 11 Students', meta: 'Grade 11 Students – 2025 – STI College Calamba', summary: 'This study examines the marketability and effectiveness of lagundi essential oil as an inhaler product among selected Grade-11 students, evaluating consumer preferences, product viability, and potential market acceptance...', category: 'research', strand: 'STEM', level: 'Senior High School', program: 'Grade 11', year: '2025', type: 'research', fileIds: ['1nLccvtasOdYnOOWEDiUBBXQmj2nTelrZ'] },
+        { title: 'Analyzing Safety Protocols Adherence In Gasoline Stations: Urban vs. Rural Perspectives', authors: 'Santibañez, J., et al.', meta: 'Santibañez, J., et al. – 2024 – STI College Calamba', summary: 'This study compares urban and rural gasoline stations to examine workers\' adherence to Department of Labor and Employment (DOLE) safety protocols, finding both compliance and lapses that impact health, safety, and emergency preparedness...', category: 'research', strand: 'ABM', level: 'college', program: 'BSBA', year: '2024', type: 'research', fileIds: ['1oycCEjyM5Wwlyz9HYzo8B-Hv_yjddemN'] },
+        { title: 'Ethereal Blossom: Floral Scented Cologne Balm', authors: 'Baloloy, Winona Ashley I. Belda, Eldrich Seann T. Cubano, Rednz Nhorween C. Lulu, Kurl Angela C. Mendoza, Aizeiya N.', meta: 'Baloloy, Winona Ashley I. Belda, Eldrich Seann T. Cubano, Rednz Nhorween C. Lulu, Kurl Angela C. Mendoza, Aizeiya N. — 2025 STI College Calamba', summary: 'This feasibility study examines the market demand, financial viability, and marketing strategies for Ethereal Blossom, a floral cologne balm designed to combine elegance, skin-friendliness, and eco-consciousness for fragrance consumers...', category: 'research', strand: 'ABM', level: 'college', program: 'BSBA', year: '2025', type: 'research', fileIds: [] },
+        { title: 'Trash to Treasure: The Role of Recycling Technologies in Sustainable Future', authors: 'Awid, Christa Belle L., Barerra, Tamiya Judea A., De Torres, Kent Hervey L., Gonzales, Christine Anne M., and Tuazon, Rancel G.', meta: 'Awid, Christa Belle L., Barerra, Tamiya Judea A., De Torres, Kent Hervey L., Gonzales, Christine Anne M., and Tuazon, Rancel G. – 2025 – STI College Calamba', summary: 'This study explores the perspectives of local government units on recycling technologies, highlighting their role in reducing waste, promoting sustainability, addressing implementation challenges, and balancing environmental goals with financial constraints...', category: 'research', strand: 'ITMAWD', level: 'college', program: 'BSIT', year: '2025', type: 'research', fileIds: ['1zGFTJMgLXbqTEwOhOK7YhcoJyGtHBYhn'] },
+        { title: 'STI Archives: Digital Library Management System', authors: 'ITMAWD 21 Group', meta: 'ITMAWD 21 Group – 2025 – STI College Calamba', summary: 'A comprehensive web-based digital library system designed to manage and showcase student research papers and capstone projects...', category: 'capstone', strand: 'ITMAWD', level: 'college', program: 'BSIT', year: '2025', type: 'research', fileIds: [] },
+        { title: 'AI-Powered Student Performance Analytics', authors: 'Computer Science Department', meta: 'Computer Science Department – 2025 – STI College Calamba', summary: 'An intelligent system that analyzes student performance data using machine learning algorithms...', category: 'capstone', strand: 'STEM', level: 'college', program: 'BSCS', year: '2025', type: 'research', fileIds: [] },
+        { title: 'Sustainable Urban Farming Practices', authors: 'Environmental Science Team', meta: 'Environmental Science Team – 2025 – STI College Calamba', summary: 'This study explores innovative urban farming techniques that promote sustainability and food security in densely populated areas...', category: 'research', strand: 'STEM', level: 'Senior High School', program: 'Grade 11', year: '2025', type: 'research', fileIds: [] },
+        { title: 'Mobile Health Monitoring App', authors: 'IT Development Group', meta: 'IT Development Group – 2025 – STI College Calamba', summary: 'A comprehensive mobile application for real-time health monitoring and telemedicine services...', category: 'capstone', strand: 'ITMAWD', level: 'college', program: 'BSIT', year: '2025', type: 'research', fileIds: [] },
+        { title: 'E-Commerce Platform for Local Businesses', authors: 'Business Informatics Team', meta: 'Business Informatics Team – 2025 – STI College Calamba', summary: 'A scalable e-commerce solution designed to help local businesses establish online presence and manage digital sales...', category: 'capstone', strand: 'ITMAWD', level: 'college', program: 'BSIT', year: '2025', type: 'research', fileIds: [] },
+        { title: 'Smart Campus Security System', authors: 'Security Systems Group', meta: 'Security Systems Group – 2025 – STI College Calamba', summary: 'An integrated security system utilizing IoT devices and AI for comprehensive campus surveillance and access control...', category: 'capstone', strand: 'ITMAWD', level: 'college', program: 'BSIT', year: '2025', type: 'research', fileIds: [] },
+        { title: 'Virtual Reality Learning Environment', authors: 'Educational Technology Dept', meta: 'Educational Technology Dept – 2025 – STI College Calamba', summary: 'An immersive VR platform for interactive learning experiences across various academic disciplines...', category: 'capstone', strand: 'ITMAWD', level: 'college', program: 'BSIT', year: '2025', type: 'research', fileIds: [] },
+        { title: 'Blockchain-Based Voting System', authors: 'Cybersecurity Research Team', meta: 'Cybersecurity Research Team – 2025 – STI College Calamba', summary: 'A secure and transparent voting system leveraging blockchain technology for elections and organizational decisions...', category: 'capstone', strand: 'ITMAWD', level: 'college', program: 'BSIT', year: '2025', type: 'research', fileIds: [] },
+        { title: 'AI-Driven Financial Advisor', authors: 'Finance Technology Group', meta: 'Finance Technology Group – 2025 – STI College Calamba', summary: 'An intelligent financial planning tool that uses AI to provide personalized investment advice and portfolio management...', category: 'capstone', strand: 'ITMAWD', level: 'college', program: 'BSIT', year: '2025', type: 'research', fileIds: [] }
+      ];
+      localStorage.setItem('allArticles', JSON.stringify(existingArticles));
+  }
+
+  function loadUploadedArticles() {
+    const allArticles = JSON.parse(localStorage.getItem('allArticles')) || [];
+    allArticles.forEach(article => {
+      const articleDiv = document.createElement('div');
+      articleDiv.className = 'article';
+      articleDiv.setAttribute('data-category', article.category);
+      articleDiv.setAttribute('data-strand', article.strand);
+      articleDiv.setAttribute('data-level', article.level);
+      articleDiv.setAttribute('data-program', article.program);
+      articleDiv.setAttribute('data-year', article.year);
+      articleDiv.setAttribute('data-type', article.type);
+
+      let studyId = article.title.toLowerCase().replace(/[^a-z0-9]/g, '').substring(0, 20);
+      if (article.title.includes('Lagundi')) studyId = 'lagundi_oil';
+      if (article.title.includes('Farmers')) studyId = 'perceptions';
+
+      articleDiv.innerHTML = `
+        <h3><a href="myspace.html?study=${studyId}" style="text-decoration: none; color: inherit;">${article.title}</a></h3>
+        <div class="meta">${article.meta}</div>
+        <div class="summary">${article.summary}</div>
+        <div class="source-tag">[STI College Calamba Library]</div>
+        <div class="actions">
+          <span>★ Save</span>
+          <span onclick="openCitationModal(this)">Cite</span>
+          <span onclick="showRelatedArticles(this)">Related articles</span>
+        </div>
+      `;
+
+      // Append to correct hidden container
+      if (article.category === 'research') {
+        let container = null;
+        if (article.program === 'Grade 11') container = document.getElementById('grade-11-articles');
+        else if (article.program === 'Grade 12') container = document.getElementById('grade-12-articles');
+        else if (article.strand === 'ABM') container = document.getElementById('abm-articles');
+        else if (article.strand === 'CulArts') container = document.getElementById('cularts-articles');
+        else if (article.strand === 'ITMAWD') container = document.getElementById('itmawd-articles');
+        else if (article.strand === 'STEM') container = document.getElementById('stem-articles');
+        if (container) container.appendChild(articleDiv);
+        else document.querySelector('.research-section').appendChild(articleDiv);
+      } else if (article.category === 'capstone') {
+        const capContainer = document.getElementById('capstone-articles');
+        if (capContainer) capContainer.appendChild(articleDiv);
+        else document.querySelector('.capstone-section').appendChild(articleDiv);
+      }
+    });
+  }
+
+  let currentPage = 1;
+  const articlesPerPage = 10;
+  let allSortedArticles = [];
+  let originalAllSortedArticles = [];
+  let currentFilters = { year: 'any', sort: 'az', type: 'any' };
+  let currentQuery = '';
+
+  // === SHOW DEFAULT VIEW: ALL ARTICLES IN .main WITH PAGINATION ===
+  function showDefaultResearchView() {
+    const main = document.querySelector('.main');
+    const researchSection = document.querySelector('.research-section');
+    const capstoneSection = document.querySelector('.capstone-section');
+
+    // Hide structured sections
+    if (researchSection) researchSection.style.display = 'none';
+    if (capstoneSection) capstoneSection.style.display = 'none';
+
+    // Check URL for category filter
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryFilter = urlParams.get('category');
+
+    // Get ALL articles from hidden containers
+    const allArticles = [];
+    const researchContainers = [
+      'grade-11-articles', 'grade-12-articles',
+      'abm-articles', 'cularts-articles', 'itmawd-articles', 'stem-articles'
+    ];
+
+    researchContainers.forEach(id => {
+      const container = document.getElementById(id);
+      if (container) {
+        const articles = Array.from(container.querySelectorAll('.article'));
+        allArticles.push(...articles);
+        // Clear the container so articles don't appear twice
+        container.innerHTML = '';
+      }
     });
 
-    // Sort visible articles
-    if (sortFilterValue === 'date') {
-        sortArticlesByDate();
-    } else if (sortFilterValue === 'az') {
-        sortArticlesAlphabetically();
-    } else {
-        sortArticlesByRelevance();
+    // Get capstone articles
+    const capstoneContainer = document.getElementById('capstone-articles');
+    if (capstoneContainer) {
+      const capstoneArticles = Array.from(capstoneContainer.querySelectorAll('.article'));
+      allArticles.push(...capstoneArticles);
+      capstoneContainer.innerHTML = '';
     }
 
-    // Update result count
-    const resultCount = document.querySelector('.result-count');
-    if (resultCount) {
-        resultCount.textContent = `About ${visibleCount} results`;
-    }
-}
-
-    function sortArticlesByDate() {
-        const allContainer = document.querySelector('.all-articles-container');
-        if (allContainer) {
-            const articles = Array.from(allContainer.querySelectorAll('.article[style*="block"]'));
-            articles.sort((a, b) => {
-                const yearA = parseInt(a.dataset.year);
-                const yearB = parseInt(b.dataset.year);
-                return yearB - yearA; // Newest first
-            });
-            // Show upload date and re-append in sorted order
-            articles.forEach(article => {
-                const uploadDateDiv = article.querySelector('.upload-date');
-                const uploadDate = article.dataset.uploadDate;
-                const relativeTime = getRelativeTime(uploadDate);
-                uploadDateDiv.textContent = `Uploaded ${relativeTime}`;
-                uploadDateDiv.style.display = 'block';
-                allContainer.appendChild(article);
-            });
-        } else {
-            const container = document.querySelector('.main');
-            const articles = Array.from(document.querySelectorAll('.article[style*="block"]'));
-
-            articles.sort((a, b) => {
-                const yearA = parseInt(a.dataset.year);
-                const yearB = parseInt(b.dataset.year);
-                return yearB - yearA; // Newest first
-            });
-
-            // Clear existing articles from sections
-            const researchSection = document.querySelector('.research-section');
-            const capstoneSection = document.querySelector('.capstone-section');
-
-            // Remove all articles from sections
-            const allArticles = document.querySelectorAll('.article');
-            allArticles.forEach(article => {
-                if (article.parentNode) {
-                    article.parentNode.removeChild(article);
-                }
-            });
-
-            // Re-append sorted articles to appropriate sections
-            articles.forEach(article => {
-                if (article.getAttribute('data-category') === 'capstone') {
-                    capstoneSection.appendChild(article);
-                } else {
-                    researchSection.appendChild(article);
-                }
-            });
-        }
+    // Filter by category if specified
+    let filteredArticles = allArticles;
+    if (categoryFilter === 'research') {
+      filteredArticles = allArticles.filter(article => article.getAttribute('data-category') === 'research');
+    } else if (categoryFilter === 'capstone') {
+      filteredArticles = allArticles.filter(article => article.getAttribute('data-category') === 'capstone');
     }
 
-    function sortArticlesByRelevance() {
-        const allContainer = document.querySelector('.all-articles-container');
-        if (allContainer) {
-            const articles = Array.from(allContainer.querySelectorAll('.article[style*="block"]'));
-            // For relevance, sort by year (newer articles are more relevant)
-            articles.sort((a, b) => {
-                const yearA = parseInt(a.dataset.year);
-                const yearB = parseInt(b.dataset.year);
-                return yearB - yearA; // Newest first
-            });
-            // Hide upload date and re-append in sorted order
-            articles.forEach(article => {
-                const uploadDateDiv = article.querySelector('.upload-date');
-                if (uploadDateDiv) uploadDateDiv.style.display = 'none';
-                allContainer.appendChild(article);
-            });
-        } else {
-            const container = document.querySelector('.main');
-            const articles = Array.from(document.querySelectorAll('.article[style*="block"]'));
+    // Sort A-Z
+    allSortedArticles = filteredArticles.sort((a, b) =>
+      a.querySelector('h3').textContent.localeCompare(b.querySelector('h3').textContent)
+    );
+    originalAllSortedArticles = [...allSortedArticles];
 
-            // For relevance, we'll sort by year (newer articles are more relevant)
-            articles.sort((a, b) => {
-                const yearA = parseInt(a.dataset.year);
-                const yearB = parseInt(b.dataset.year);
-                return yearB - yearA; // Newest first
-            });
+    // Set styles for articles
+    allSortedArticles.forEach(article => {
+      article.style.display = 'block';
+      const category = article.getAttribute('data-category');
+      if (category === 'research') {
+        article.style.borderLeft = '4px solid #f4c430';
+      } else if (category === 'capstone') {
+        article.style.borderLeft = '4px solid #0057b8';
+      }
+    });
 
-            // Clear existing articles from sections
-            const researchSection = document.querySelector('.research-section');
-            const capstoneSection = document.querySelector('.capstone-section');
+    // Render first page
+    renderPage(1);
+    renderPagination();
+  }
 
-            // Remove all articles from sections
-            const allArticles = document.querySelectorAll('.article');
-            allArticles.forEach(article => {
-                if (article.parentNode) {
-                    article.parentNode.removeChild(article);
-                }
-            });
+  function renderPage(page) {
+    currentPage = page;
+    const main = document.querySelector('.main');
 
-            // Re-append sorted articles to appropriate sections
-            articles.forEach(article => {
-                if (article.getAttribute('data-category') === 'capstone') {
-                    capstoneSection.appendChild(article);
-                } else {
-                    researchSection.appendChild(article);
-                }
-            });
-        }
+    // Clear existing articles in .main
+    const existingInMain = main.querySelectorAll('.article');
+    existingInMain.forEach(el => el.remove());
+
+    const start = (page - 1) * articlesPerPage;
+    const end = start + articlesPerPage;
+    const articlesToShow = allSortedArticles.slice(start, end);
+
+    articlesToShow.forEach(article => {
+      main.appendChild(article);
+    });
+  }
+
+  function renderPagination() {
+    const pagination = document.getElementById('pagination');
+    pagination.innerHTML = '';
+
+    const totalPages = Math.ceil(allSortedArticles.length / articlesPerPage);
+
+    if (totalPages <= 1) return;
+
+    // Previous button
+    const prevBtn = document.createElement('button');
+    prevBtn.textContent = 'Previous';
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.onclick = () => { renderPage(currentPage - 1); renderPagination(); };
+    pagination.appendChild(prevBtn);
+
+    // Page numbers
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
 
-    function showRelatedArticles(element) {
-        const article = element.closest('.article');
-        const category = article.dataset.category;
-        const currentYear = parseInt(article.dataset.year);
-        const mainDiv = document.querySelector('.main');
+    for (let i = startPage; i <= endPage; i++) {
+      const pageBtn = document.createElement('button');
+      pageBtn.textContent = i;
+      if (i === currentPage) pageBtn.classList.add('active');
+      pageBtn.onclick = () => { renderPage(i); renderPagination(); };
+      pagination.appendChild(pageBtn);
+    }
 
-        // Find related articles (same category or similar years)
-        const allArticles = document.querySelectorAll('.article');
-        const relatedArticles = [];
+    // Next button
+    const nextBtn = document.createElement('button');
+    nextBtn.textContent = 'Next';
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.onclick = () => { renderPage(currentPage + 1); renderPagination(); };
+    pagination.appendChild(nextBtn);
+  }
 
-        allArticles.forEach(art => {
-            if (art !== article) { // Don't include the current article
-                const artCategory = art.dataset.category;
-                const artYear = parseInt(art.dataset.year);
+  // === INIT ===
+  document.addEventListener('DOMContentLoaded', () => {
+    initializeArticles();
+    loadUploadedArticles(); // Articles are now in hidden containers
+    showDefaultResearchView(); // Move them to .main
 
-                // Related if same category or within 2 years
-                if (artCategory === category || Math.abs(artYear - currentYear) <= 2) {
-                    relatedArticles.push(art.cloneNode(true)); // Clone the article
-                }
-            }
+    // Make articles clickable
+    document.querySelectorAll('.article').forEach(article => {
+      article.addEventListener('click', e => {
+        if (e.target.closest('.actions') || e.target.tagName === 'A') return;
+        const link = article.querySelector('h3 a');
+        if (link) window.location.href = link.href;
+      });
+    });
+
+    // Search functionality
+    const searchInput = document.getElementById('articleSearch');
+    searchInput.addEventListener('input', function() {
+      const query = this.value.toLowerCase().trim();
+      if (query === '') {
+        allSortedArticles = [...originalAllSortedArticles];
+      } else {
+        allSortedArticles = originalAllSortedArticles.filter(article => {
+          const title = article.querySelector('h3').textContent.toLowerCase();
+          const meta = article.querySelector('.meta').textContent.toLowerCase();
+          const summary = article.querySelector('.summary').textContent.toLowerCase();
+          return title.includes(query) || meta.includes(query) || summary.includes(query);
+        }).sort((a, b) => {
+          const aTitle = a.querySelector('h3').textContent.toLowerCase();
+          const bTitle = b.querySelector('h3').textContent.toLowerCase();
+          const aStarts = aTitle.startsWith(query);
+          const bStarts = bTitle.startsWith(query);
+          if (aStarts && !bStarts) return -1;
+          if (!aStarts && bStarts) return 1;
+          return aTitle.localeCompare(bTitle);
         });
+      }
+      renderPage(1);
+      renderPagination();
+    });
 
-        // Clear main content and show related articles
-        mainDiv.innerHTML = '';
-
-        if (relatedArticles.length > 0) {
-            // Create container for back button and header
-            const topContainer = document.createElement('div');
-            topContainer.style.cssText = `
-                display: flex;
-                align-items: center;
-                margin-bottom: 20px;
-                position: relative;
-            `;
-
-            // Add back button
-            const backButton = document.createElement('button');
-            backButton.textContent = '← Back to All Articles';
-            backButton.style.cssText = `
-                background: #0057b8;
-                color: white;
-                border: none;
-                padding: 12px 24px;
-                border-radius: 8px;
-                cursor: pointer;
-                font-size: 14px;
-                font-weight: 600;
-                transition: all 0.3s ease;
-                box-shadow: 0 2px 4px rgba(0,87,184,0.2);
-            `;
-            backButton.onmouseover = function() {
-                this.style.background = '#003f8a';
-                this.style.transform = 'translateY(-1px)';
-                this.style.boxShadow = '0 4px 8px rgba(0,87,184,0.3)';
-            };
-            backButton.onmouseout = function() {
-                this.style.background = '#0057b8';
-                this.style.transform = 'translateY(0)';
-                this.style.boxShadow = '0 2px 4px rgba(0,87,184,0.2)';
-            };
-            backButton.onclick = function() {
-              window.location.href = 'library.html';
-            };
-
-            // Add header
-            const header = document.createElement('h2');
-            header.textContent = 'Related Articles';
-            header.style.cssText = `
-              color: #0057b8;
-              margin: 0;
-              font-size: 1.5rem;
-              transition: color 0.3s ease;
-              position: absolute;
-              left: 50%;
-              transform: translateX(-50%);
-            `;
-
-            // Apply fixed blue color
-            function updateHeaderColor() {
-              header.style.color = '#0057b8';
-            }
-
-            updateHeaderColor();
-
-            // Listen for theme changes
-            const observer = new MutationObserver(function(mutations) {
-              mutations.forEach(function(mutation) {
-                if (mutation.attributeName === 'class') {
-                  updateHeaderColor();
-                }
-              });
-            });
-            observer.observe(document.body, { attributes: true });
-
-            // Add elements to container
-            topContainer.appendChild(backButton);
-            topContainer.appendChild(header);
-            mainDiv.appendChild(topContainer);
-
-            // Add related articles
-            relatedArticles.forEach(art => {
-                // Update the onclick for Related articles in cloned articles
-                const relatedSpan = art.querySelector('.actions span:last-child');
-                if (relatedSpan) {
-                    relatedSpan.onclick = function() { showRelatedArticles(this); };
-                }
-                mainDiv.appendChild(art);
-            });
+    // Filter functionality
+    document.querySelectorAll('.filter-option').forEach(option => {
+      option.addEventListener('click', function() {
+        const group = this.closest('ul').getAttribute('data-filter-group');
+        let filter = this.getAttribute('data-filter');
+        if (filter === 'custom') {
+          document.getElementById('customRange').style.display = 'block';
+          return; // Don't apply yet
         } else {
-            // No related articles found
-            const backButton = document.createElement('button');
-            backButton.textContent = '← Back to All Articles';
-            backButton.style.cssText = `
-                background: #0057b8;
-                color: white;
-                border: none;
-                padding: 12px 24px;
-                border-radius: 8px;
-                cursor: pointer;
-                margin-bottom: 20px;
-                font-size: 14px;
-                font-weight: 600;
-                transition: all 0.3s ease;
-                box-shadow: 0 2px 4px rgba(0,87,184,0.2);
-            `;
-            backButton.onmouseover = function() {
-                this.style.background = '#003f8a';
-                this.style.transform = 'translateY(-1px)';
-                this.style.boxShadow = '0 4px 8px rgba(0,87,184,0.3)';
-            };
-            backButton.onmouseout = function() {
-                this.style.background = '#0057b8';
-                this.style.transform = 'translateY(0)';
-                this.style.boxShadow = '0 2px 4px rgba(0,87,184,0.2)';
-            };
-            backButton.onclick = showAllArticles;
-            mainDiv.appendChild(backButton);
-
-            const message = document.createElement('p');
-            message.textContent = 'No related articles found.';
-            message.style.cssText = `
-                text-align: center;
-                color: #666;
-                font-size: 1.1rem;
-                margin-top: 50px;
-            `;
-            mainDiv.appendChild(message);
+          document.getElementById('customRange').style.display = 'none';
         }
-    }
+        currentFilters[group] = filter;
+        // Remove active from siblings
+        this.parentNode.querySelectorAll('.filter-option').forEach(sib => sib.classList.remove('active'));
+        this.classList.add('active');
+        updateArticles();
+      });
+    });
 
-    function showAllArticles() {
-        const mainDiv = document.querySelector('.main');
+    // Custom range apply button
+    document.getElementById('applyCustomRange').addEventListener('click', function() {
+      const startYear = document.getElementById('startYear').value;
+      const endYear = document.getElementById('endYear').value;
+      if (startYear && endYear) {
+        currentFilters.year = `custom-${startYear}-${endYear}`;
+        // Set active on custom
+        document.querySelectorAll('.filter-option[data-filter="custom"]').forEach(opt => opt.classList.add('active'));
+        updateArticles();
+      }
+    });
 
-        // Recreate the original content structure
-        mainDiv.innerHTML = `
-            <div class="topbar">
-               <h2>Library</h2>
-               <div class="links">
-                 <div class="dropdown">
-                   <a href="library.html?category=research" class="dropdown-toggle">Research Papers</a>
-                   <div class="dropdown-menu">
-                     <div onclick="window.location.href='library.html?category=research&strand=ABM'">ABM</div>
-                     <div onclick="window.location.href='library.html?category=research&strand=STEM'">STEM</div>
-                     <div onclick="window.location.href='library.html?category=research&strand=ITMAWD'">ITMAWD</div>
-                     <div onclick="window.location.href='library.html?category=research&strand=CulArts'">CulArts</div>
-                   </div>
-                 </div>
-                 <div class="dropdown">
-                   <a href="library.html?category=capstone" class="dropdown-toggle">Capstone</a>
-                   <div class="dropdown-menu">
-                     <div onclick="window.location.href='library.html?category=capstone&strand=BSIT'">BSIT</div>
-                     <div onclick="window.location.href='library.html?category=capstone&strand=BSCS'">BSCS</div>
-                     <div onclick="window.location.href='library.html?category=capstone&strand=BSBA'">BSBA</div>
-                   </div>
-                 </div>
-               </div>
-             </div>
+    // Create alert
+    document.querySelector('.create-alert').addEventListener('click', () => {
+      alert('Create alert clicked');
+    });
+  });
 
-            <div class="result-count">About 10,400,000 results (0.07 sec)</div>
-
-            <!-- Article 1 -->
-            <div class="article" data-category="research" data-strand="ABM" data-level="shs" data-program="grade12" data-year="2024" data-type="research">
-                <h3><a href="myspace.html?study=research1" style="text-decoration: none; color: inherit;">A Comparative Analysis of Established Businesses vs Startup Ventures of Buko Pie</a></h3>
-                <div class="meta">S. K. Alanzalon, A. X. E. Alvarez, W. A. I. Baloloy, C. A. Belda, E. S. T. Belda, H. T. Delos Santos, M. A. C. Villanueva – 2024 – STI College Calamba</div>
-                <div class="summary">This study compares established and startup buko pie businesses in Laguna, highlighting differences in customer loyalty, pricing, and stability while noting shared focus on product quality and promotion...</div>
-                <a href="myspace.html?study=research1" style="text-decoration: none; color: inherit;"><div class="source-tag">[PDF] STI College Library</div></a>
-                <div class="actions">
-                    <span>★ Save</span>
-                    <span onclick="openCitationModal(this)">Cite</span>
-                    <span onclick="showRelatedArticles(this)">Related articles</span>
-                </div>
-            </div>
-
-            <!-- Article 2 -->
-            <div class="article" data-category="research" data-strand="CulArts" data-level="shs" data-program="grade11" data-year="2025" data-type="research">
-                <h3><a href="myspace.html?study=research2" style="text-decoration: none; color: inherit;">Ethereal Blossom: Floral Scented Cologne Balm</a></h3>
-                <div class="meta">Winona Ashley I. Baloloy, Eldrich Seann T. Belda, Rednz Nhorween C. Cubano, Kurl Angela C. Lulu, Aizeiya N. Mendoza – 2025 – STI College Calamba</div>
-                <div class="summary">This feasibility study proposes Ethereal Blossom, a floral-scented cologne balm brand offering skin-friendly, long-lasting fragrances supported by strong market demand, financial viability, and strategic marketing opportunities...</div>
-                <div class="source-tag">[PDF] researchgate.net</div>
-                <div class="actions">
-                    <span>★ Save</span>
-                    <span onclick="openCitationModal(this)">Cite</span>
-                    <span onclick="showRelatedArticles(this)">Related articles</span>
-                </div>
-            </div>
-
-            <!-- Article 3 -->
-            <div class="article" data-category="research" data-strand="STEM" data-level="college" data-program="BSCS" data-year="2017" data-type="review">
-                <h3>The health effects of cannabis and cannabinoids: The current state of evidence and recommendations for research</h3>
-                <div class="meta">An Evidence Review – 2017 – books.google.com</div>
-                <div class="summary">Provides a research agenda outlining gaps in evidence and pressing research needs...</div>
-                <div class="source-tag">[HTML] nationalacademies.org</div>
-                <div class="actions">
-                    <span>★ Save</span>
-                    <span onclick="openCitationModal(this)">Cite</span>
-                    <span onclick="showRelatedArticles(this)">Related articles</span>
-                </div>
-            </div>
-
-            <!-- Article 4 -->
-            <div class="article" data-category="capstone" data-strand="BSIT" data-level="college" data-program="BSIT" data-year="2010" data-type="research">
-                <h3><a href="myspace.html?study=capstone1" style="text-decoration: none; color: inherit;">BIO2010: Transforming undergraduate education for future research biologists</a></h3>
-                <div class="meta">National Research Council – 2010 – books.google.com</div>
-                <div class="summary">Technologies will continue to revolutionize research into recombinant DNA and the health effects of cells...</div>
-                <div class="actions">
-                    <span>★ Save</span>
-                    <span onclick="openCitationModal(this)">Cite</span>
-                    <span onclick="showRelatedArticles(this)">Related articles</span>
-                </div>
-            </div>
-
-            <!-- Article 5 -->
-            <div class="article" data-category="capstone" data-strand="BSCS" data-level="college" data-program="BSCS" data-year="2003" data-type="research">
-                <h3>Guidelines for the care and use of mammals in neuroscience and behavioral research</h3>
-                <div class="meta">National Academies – 2003 – books.google.com</div>
-                <div class="summary">Outlines ethical standards and research protocols for using mammals in neuroscience and behavioral studies...</div>
-                <div class="actions">
-                    <span>★ Save</span>
-                    <span onclick="openCitationModal(this)">Cite</span>
-                    <span onclick="showRelatedArticles(this)">Related articles</span>
-                </div>
-            </div>
-        `;
-
-        // Sort articles alphabetically
-        sortArticlesAlphabetically();
-
-        // Reinitialize citation modal functionality and result count for the restored articles
-        initializeCitationModal();
-        initializeResultCount();
-    }
-
-    // Initialize result count and filters when DOM is loaded
-    function initializeResultCount() {
-        const articles = document.querySelectorAll('.article');
-        const resultCount = document.querySelector('.result-count');
-        if (resultCount) {
-            resultCount.textContent = `About ${articles.length} results`;
-        }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeFilters();
-            initializeResultCount();
-        });
-    } else {
-        initializeFilters();
-        initializeResultCount();
-    }
-
-    // Test function to verify modal functionality
-    window.testModal = function() {
-        console.log('Testing modal functionality...');
-        const firstArticle = document.querySelector('.article');
-        if (firstArticle) {
-            console.log('✓ Found first article, opening modal...');
-            openCitationModal(firstArticle);
-        } else {
-            console.error('✗ No articles found');
-        }
-    };
-
-    // Test function to open modal for a specific article
-    window.testArticleModal = function(articleIndex = 0) {
-        const articles = document.querySelectorAll('.article');
-        if (articles[articleIndex]) {
-            console.log(`Testing modal for article ${articleIndex + 1}...`);
-            openCitationModal(articles[articleIndex]);
-        } else {
-            console.error(`Article ${articleIndex + 1} not found`);
-        }
-    };
-
-
-    // Button toggle functions
-    function showResearch() {
-        const allContainer = document.querySelector('.all-articles-container');
-        if (allContainer) {
-            // Filter to show only research articles
-            const articles = allContainer.querySelectorAll('.article');
-            articles.forEach(article => {
-                if (article.dataset.category === 'research') {
-                    article.style.display = 'block';
-                    article.style.borderLeft = '4px solid #f4c430';
-                } else {
-                    article.style.display = 'none';
-                }
-            });
-            sortArticlesAlphabetically();
-        } else {
-            showResearchSection();
-        }
-        setActive('research-btn');
-    }
-
-    function showCapstone() {
-        const allContainer = document.querySelector('.all-articles-container');
-        if (allContainer) {
-            // Filter to show only capstone articles
-            const articles = allContainer.querySelectorAll('.article');
-            articles.forEach(article => {
-                if (article.dataset.category === 'capstone') {
-                    article.style.display = 'block';
-                    article.style.borderLeft = '4px solid #0057b8';
-                } else {
-                    article.style.display = 'none';
-                }
-            });
-            sortArticlesAlphabetically();
-        } else {
-            showCapstoneSection();
-        }
-        setActive('capstone-btn');
-    }
-
-    function showAll() {
-        const allContainer = document.querySelector('.all-articles-container');
-        if (allContainer) {
-            // Show all articles
-            const articles = allContainer.querySelectorAll('.article');
-            articles.forEach(article => {
-                article.style.display = 'block';
-                // Add color border based on category
-                if (article.dataset.category === 'research') {
-                    article.style.borderLeft = '4px solid #f4c430';
-                } else if (article.dataset.category === 'capstone') {
-                    article.style.borderLeft = '4px solid #0057b8';
-                }
-            });
-            sortArticlesAlphabetically();
-        } else {
-            // Fallback to old method
-            const researchSection = document.querySelector('.research-section');
-            const capstoneSection = document.querySelector('.capstone-section');
-            if (researchSection) researchSection.style.display = 'block';
-            if (capstoneSection) capstoneSection.style.display = 'block';
-            // Show all articles
-            const allArticles = document.querySelectorAll('.article');
-            allArticles.forEach(article => {
-                article.style.display = 'block';
-                if (article.dataset.category === 'research') {
-                    article.style.borderLeft = '4px solid #f4c430';
-                } else if (article.dataset.category === 'capstone') {
-                    article.style.borderLeft = '4px solid #0057b8';
-                }
-            });
-            sortArticlesAlphabetically();
-        }
-        setActive('show-all-btn');
-    }
-
-    function setActive(btnClass) {
-        const buttons = document.querySelectorAll('.filter-btn');
-        buttons.forEach(btn => btn.classList.remove('active'));
-        document.querySelector('.' + btnClass).classList.add('active');
-    }
-
-    // Add a test function for debugging cite buttons
-    window.testCiteButtons = function() {
-        console.log('Testing cite buttons...');
-        const citeButtons = document.querySelectorAll('.actions span');
-        console.log('Found', citeButtons.length, 'action spans');
-
-        citeButtons.forEach((button, index) => {
-            console.log(`Button ${index + 1}: "${button.textContent.trim()}"`);
-            if (button.textContent.trim() === 'Cite') {
-                console.log('✓ Found cite button at index', index + 1);
-            }
-        });
-
-        // Try to trigger a click on the first cite button
-        const firstCiteButton = Array.from(citeButtons).find(btn => btn.textContent.trim() === 'Cite');
-        if (firstCiteButton) {
-            console.log('✓ Found cite button, attempting to click...');
-            firstCiteButton.click();
-        } else {
-            console.log('✗ No cite buttons found');
-        }
-    };
-
-    // Responsive library header
-    function handleResponsiveLibraryHeader() {
-        const libraryHeader = document.querySelector('.library-header');
-        const sidebar = document.querySelector('.sidebar-down');
-        const main = document.querySelector('.main');
-
-        if (window.innerWidth < 768) {
-            // Move to sidebar
-            if (libraryHeader && sidebar && !sidebar.contains(libraryHeader)) {
-                sidebar.insertBefore(libraryHeader, sidebar.firstChild);
-                // Change button container to column
-                const buttonContainer = libraryHeader.querySelector('.button-container');
-                if (buttonContainer) {
-                    buttonContainer.style.flexDirection = 'column';
-                    buttonContainer.style.gap = '10px';
-                }
-            }
-        } else {
-            // Move back to main
-            if (libraryHeader && main && !main.contains(libraryHeader)) {
-                // Insert at the beginning of main content, before any articles
-                const firstChild = main.firstElementChild;
-                if (firstChild) {
-                    main.insertBefore(libraryHeader, firstChild);
-                } else {
-                    main.appendChild(libraryHeader);
-                }
-                // Change button container back to row
-                const buttonContainer = libraryHeader.querySelector('.button-container');
-                if (buttonContainer) {
-                    buttonContainer.style.flexDirection = 'row';
-                    buttonContainer.style.gap = '20px';
-                }
-            }
-        }
-    }
-
-    window.addEventListener('resize', handleResponsiveLibraryHeader);
-    handleResponsiveLibraryHeader(); // Initial call
-   </script>
- </body>
+  // === STUB FUNCTIONS (to prevent errors) ===
+  function openCitationModal(el) { alert('Cite clicked'); }
+  function showRelatedArticles(el) { alert('Related clicked'); }
+</script>
+</body>
 </html>

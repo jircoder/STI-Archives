@@ -33,6 +33,28 @@
             padding: 0 12px;
             z-index: 1000;
             position: relative;
+            transition: height 0.3s ease;
+        }
+        .main-navbar.shrink {
+            position: fixed;
+            height: 50px;
+            box-shadow: 0 4px 12px #0003;
+        }
+        .main-navbar.shrink .sti-logo {
+            height: 24px;
+            margin-top: 0;
+        }
+        .main-navbar.shrink .sti-logo span {
+            font-size: 20px;
+        }
+        .main-navbar.shrink .nav-text {
+            font-size: 16px;
+        }
+        .main-navbar.shrink .navbar-right.user-nav-fixed .fa-user-circle {
+            font-size: 24px;
+        }
+        .main-navbar.shrink .dark-mode-toggle {
+            font-size: 20px;
         }
         .main-navbar a {
             text-decoration: none;
@@ -40,13 +62,10 @@
         .sti-logo {
             display: flex;
             align-items: center;
-        }
-        .sti-logo {
             height: 32px;
             width: auto;
             border-radius: 6px;
             margin-left: 30px;
-            margin-top: 2px;
         }
         .sti-logo span {
             font-size: 24px;
@@ -65,7 +84,7 @@
         }
         .nav-text {
             font-size: 18px;
-            color: #595d69;
+            color: #1e1e1f;
             cursor: default;
             margin: 0;
         }
@@ -101,89 +120,7 @@
         .dark-mode .fa-user-circle {
             color: #ffd700;
         }
-        /* === SIDEBAR === */
-        .sidebar {
-            position: fixed;
-            top: 8%;
-            right: -320px;
-            width: 200px;
-            height: 41%;
-            transform: cubic-bezier(-50% - 8%);
-            border-radius: 20px;
-            background: #fff;
-            box-shadow: -2px 0 16px #0002;
-            z-index: 100;
-            border: 1px solid #ccc;
-            display: flex;
-            flex-direction: column;
-            visibility: hidden;
-            user-select: none;
-            pointer-events: none;
-            z-index: 10002;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 24px;
-        }
-        .sidebar.open {
-            right: 0;
-            visibility: visible;
-            pointer-events: auto;
-        }
-        .sidebar-content {
-            padding:18px 20px 20px 20px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            
-        }
-        .close-sidebar {
-            background: none;
-            border: none;
-            font-size: 2rem;
-            
-            align-self: flex-end;
-            cursor: pointer;
-            margin-bottom: 16px;
-        }
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        .user-name a {
-            text-decoration: none;
-        }
-        .user-name h3 {
-            margin: 0;
-            font-size: 20px;
-            text-decoration: none;
-        }
-        .sidebar-content hr {
-          
-            
-            margin-right: 20px;
-            flex: 1;
-        }
-        .sidebar-content ul {
-            list-style: none;
-            
-            margin-left: 10px;
-            flex: 1;
-        }
-        .sidebar-content ul li {
-            margin-bottom: 5px;
-            
-        }
-        .sidebar-content ul li a {
-            color: #132a3f;
-            text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-        .sidebar-content ul li a:hover {
-            color: #0057b8;
-        }
+        
          /* === SEARCH BAR & RESULTS === */
         .search-bar-container {
             position: relative;
@@ -334,8 +271,8 @@
             
         }
         .dark-mode .featured-topics-header {
-            color:#a1a1a8;
-            
+            color:#ffffff;
+
         }
 
         .featured-topics {
@@ -361,7 +298,7 @@
         }
         .divider{
             border: none;
-            border-top: 1px solid #ccc;
+            border-top: 1px solid #060606;
             margin: 20px auto;
             width: 90%;
             max-width: 600px;
@@ -429,7 +366,7 @@
             color: #1e1e1f;
         }
         .dark-mode .latest-title {
-        color: #a1a1a8
+        color: #ffffff
         }
         .carousel-container {
             max-width: 1200px;
@@ -1034,7 +971,7 @@
             box-shadow: 0 2px 8px #0006;
         }
         .dark-mode .nav-text {
-            color: #a1a1a8;
+            color: #ffffff;
         }
         .dark-mode .search-bar {
             background: #232f41;
@@ -1216,70 +1153,7 @@
             </div>
         </section>
     </main>
-    <div class="mtbm-container"><img class="mtbm-img" src="Screenshot 2025-09-10 151815.png"></div>
-    <!-- === STUDENT PROMPT SECTION === -->
-    <section class="student-prompt" id="future-ready-section">
-        <div class="prompt-content">
-            <div class="left-content">
-                <h2>Show Off Your Hard Work!</h2>
-                <div class="feature-item" data-animation="fade-up">
-                    <div class="icon-box blue">
-                        <i class="fas fa-upload"></i>
-                    </div>
-                    <div class="feature-text">
-                        <h3>Upload your project in seconds!</h3>
-                        <p>Share your research, capstone, or creative work with just a few clicks. No complicated steps — just drag, drop, and publish.</p>
-                    </div>
-                </div>
-                <div class="feature-item" data-animation="fade-up">
-                    <div class="icon-box green">
-                        <i class="fas fa-lightbulb"></i>
-                    </div>
-                    <div class="feature-text">
-                        <h3>Inspire Future Researchers!</h3>
-                        <p>Your work can spark ideas, guide peers, and become a reference for students who come after you. Be the change-maker.</p>
-                    </div>
-                </div>
-                <div class="feature-item" data-animation="fade-up">
-                    <div class="icon-box yellow">
-                        <i class="fas fa-archive"></i>
-                    </div>
-                    <div class="feature-text">
-                        <h3>Preserve your legacy.</h3>
-                        <p>Let your academic journey live on. STI Archives ensures your contributions are stored, searchable, and celebrated for years to come.</p>
-                    </div>
-                </div>
-                <div class="upload-cta-container">
-                    <p class="subtitle">Don't let your effort sit in a folder. Share it, celebrate it, and let others learn from it.</p>
-                    <div class="call-to-action">
-                        <button id="uploadBtn">Upload Now!</button>
-                    </div>
-                </div>
-            </div>
-            <div class="right-image">
-                <img src="ad.jpg" alt="Student studying at desk" class="student-img">
-            </div>
-        </div>
-    </section>
-    <!-- === UPLOAD MODAL === -->
-    <div class="modal-backdrop" id="uploadModal">
-        <div class="upload-modal">
-            <button class="close-btn">×</button>
-            <h2>Upload Files</h2>
-            <div class="drop-zone" id="dropZone">
-                DROP FILE HERE OR CLICK TO UPLOAD
-            </div>
-            <div id="uploadControls" class="hidden">
-                <button>Add Files</button>
-                <input type="file" id="fileInput" multiple style="display: none;" />
-                <div class="file-queue" id="fileQueue"></div>
-                <div class="action-buttons">
-                    <button>Clear All</button>
-                    <button>Upload</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    
     <section class="articles-sections">
         
         <!-- Recommended Articles -->
@@ -1349,6 +1223,71 @@
             </div>
         </div>
     </section>
+    
+    <div class="mtbm-container"><img class="mtbm-img" src="Screenshot 2025-09-10 151815.png"></div>
+    <!-- === STUDENT PROMPT SECTION === -->
+    <section class="student-prompt" id="future-ready-section">
+        <div class="prompt-content">
+            <div class="left-content">
+                <h2>Show Off Your Hard Work!</h2>
+                <div class="feature-item" data-animation="fade-up">
+                    <div class="icon-box blue">
+                        <i class="fas fa-upload"></i>
+                    </div>
+                    <div class="feature-text">
+                        <h3>Upload your project in seconds!</h3>
+                        <p>Share your research, capstone, or creative work with just a few clicks. No complicated steps — just drag, drop, and publish.</p>
+                    </div>
+                </div>
+                <div class="feature-item" data-animation="fade-up">
+                    <div class="icon-box green">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div class="feature-text">
+                        <h3>Inspire Future Researchers!</h3>
+                        <p>Your work can spark ideas, guide peers, and become a reference for students who come after you. Be the change-maker.</p>
+                    </div>
+                </div>
+                <div class="feature-item" data-animation="fade-up">
+                    <div class="icon-box yellow">
+                        <i class="fas fa-archive"></i>
+                    </div>
+                    <div class="feature-text">
+                        <h3>Preserve your legacy.</h3>
+                        <p>Let your academic journey live on. STI Archives ensures your contributions are stored, searchable, and celebrated for years to come.</p>
+                    </div>
+                </div>
+                <div class="upload-cta-container">
+                    <p class="subtitle">Don't let your effort sit in a folder. Share it, celebrate it, and let others learn from it.</p>
+                    <div class="call-to-action">
+                        <button id="uploadBtn">Upload Now!</button>
+                    </div>
+                </div>
+            </div>
+            <div class="right-image">
+                <img src="ad.jpg" alt="Student studying at desk" class="student-img">
+            </div>
+        </div>
+    </section>
+    <!-- === UPLOAD MODAL === -->
+    <div class="modal-backdrop" id="uploadModal">
+        <div class="upload-modal">
+            <button class="close-btn">×</button>
+            <h2>Upload Files</h2>
+            <div class="drop-zone" id="dropZone">
+                DROP FILE HERE OR CLICK TO UPLOAD
+            </div>
+            <div id="uploadControls" class="hidden">
+                <button>Add Files</button>
+                <input type="file" id="fileInput" multiple style="display: none;" />
+                <div class="file-queue" id="fileQueue"></div>
+                <div class="action-buttons">
+                    <button>Clear All</button>
+                    <button>Upload</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- === ABOUT US SECTION - RESTRUCTURED WITH SLIDE ANIMATIONS === -->
     <section class="about-section" id="help">
         <h2>About Us</h2>
@@ -1423,16 +1362,9 @@
             const searchForm = document.getElementById('searchForm');
             // Load recent searches from localStorage
             let recentSearches = JSON.parse(localStorage.getItem('recentSearches')) || [];
-            const allSuggestions = [
-                'JavaScript Tutorial',
-                'How to learn coding online',
-                'Where to learn web design',
-                'Learn web development',
-                'HTML & CSS Basics',
-                'Python for Beginners',
-                'Advanced React Patterns',
-                'UI/UX Design Principles'
-            ];
+            // Load article titles from library
+            const allArticles = JSON.parse(localStorage.getItem('allArticles')) || [];
+            const allSuggestions = allArticles.map(article => article.title);
             // Save to localStorage
             function saveRecent() {
                 localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
@@ -1568,88 +1500,33 @@
         // === SCROLL ANIMATION FOR FEATURE ITEMS ===
         document.addEventListener('DOMContentLoaded', function () {
             const featureItems = document.querySelectorAll('.feature-item');
-            let hasAnimatedIn = false;
+            let lastScrollY = window.scrollY;
+            let isScrollingDown = false;
+
+            window.addEventListener('scroll', () => {
+                const currentScrollY = window.scrollY;
+                isScrollingDown = currentScrollY > lastScrollY;
+                lastScrollY = currentScrollY;
+            });
+
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        if (!hasAnimatedIn) {
-                            entry.target.classList.add('animate');
-                            entry.target.classList.remove('animate-out');
-                        }
-                    } else {
-                        const rect = entry.boundingClientRect;
-                        const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-                        if (rect.bottom < 0) {
-                            entry.target.classList.remove('animate');
-                            entry.target.classList.add('animate-out');
-                            hasAnimatedIn = false;
-                        } else if (rect.top > windowHeight) {
-                            entry.target.classList.remove('animate', 'animate-out');
-                        }
+                    if (entry.isIntersecting && isScrollingDown && !entry.target.classList.contains('animate')) {
+                        entry.target.classList.add('animate');
+                        entry.target.classList.remove('animate-out');
+                    }
+                    if (!entry.isIntersecting && !isScrollingDown && entry.target.classList.contains('animate')) {
+                        entry.target.classList.remove('animate');
+                        entry.target.classList.add('animate-out');
                     }
                 });
             }, {
-                threshold: 0.1,
+                threshold: 0.2,
                 rootMargin: '0px 0px -50px 0px'
             });
             featureItems.forEach(item => {
                 observer.observe(item);
             });
-        });
-        // === UPLOAD MODAL FUNCTIONALITY ===
-        document.addEventListener('DOMContentLoaded', function () {
-            const uploadBtn = document.getElementById('uploadBtn');
-            const uploadModal = document.getElementById('uploadModal');
-            const closeBtn = document.querySelector('.upload-modal .close-btn');
-            const dropZone = document.getElementById('dropZone');
-            const fileInput = document.getElementById('fileInput');
-            const uploadControls = document.getElementById('uploadControls');
-            const fileQueue = document.getElementById('fileQueue');
-            uploadBtn.addEventListener('click', function () {
-                uploadModal.style.display = 'flex';
-            });
-            closeBtn.addEventListener('click', function () {
-                uploadModal.style.display = 'none';
-            });
-            dropZone.addEventListener('click', function () {
-                fileInput.click();
-            });
-            dropZone.addEventListener('dragover', function (e) {
-                e.preventDefault();
-                this.style.backgroundColor = '#f0f4f8';
-            });
-            dropZone.addEventListener('dragleave', function () {
-                this.style.backgroundColor = 'transparent';
-            });
-            dropZone.addEventListener('drop', function (e) {
-                e.preventDefault();
-                this.style.backgroundColor = 'transparent';
-                const files = e.dataTransfer.files;
-                handleFiles(files);
-            });
-            fileInput.addEventListener('change', function () {
-                handleFiles(this.files);
-            });
-            function handleFiles(files) {
-                uploadControls.style.display = 'block';
-                fileQueue.innerHTML = '';
-                Array.from(files).forEach(file => {
-                    const fileItem = document.createElement('div');
-                    fileItem.className = 'file-item';
-                    fileItem.innerHTML = `
-                        <div class="file-name">${file.name}</div>
-                        <div class="file-size">${(file.size / 1024).toFixed(1)} KB</div>
-                        <button class="remove-btn">×</button>
-                    `;
-                    fileQueue.appendChild(fileItem);
-                    fileItem.querySelector('.remove-btn').addEventListener('click', function () {
-                        fileItem.remove();
-                        if (fileQueue.children.length === 0) {
-                            uploadControls.style.display = 'none';
-                        }
-                    });
-                });
-            }
         });
     </script>
 </body>

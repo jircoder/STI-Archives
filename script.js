@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (hasScrollableContent && scrollY > 50) {
                 navbar.classList.add('shrink');
+                document.body.style.paddingTop = '50px'; // Compensate for fixed navbar
                 if (imageBackground) {
                     imageBackground.style.paddingTop = '30px'; // Compensate for fixed navbar
                 }
@@ -25,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } else {
                 navbar.classList.remove('shrink');
+                document.body.style.paddingTop = '0';
                 if (imageBackground) {
                     imageBackground.style.paddingTop = '0';
                 }
@@ -181,11 +183,15 @@ document.addEventListener('DOMContentLoaded', function() {
           fileViewer.classList.remove('expanded');
           closeBtn.style.display = 'flex';
           openBtn.style.display = 'none';
+          const writerModal = document.getElementById('writerModal');
+          if (writerModal) writerModal.style.display = 'none';
         } else {
           editor.classList.add('collapsed');
           fileViewer.classList.add('expanded');
           closeBtn.style.display = 'none';
           openBtn.style.display = 'flex';
+          const writerModal = document.getElementById('writerModal');
+          if (writerModal) writerModal.style.display = 'block';
         }
       }
 
@@ -354,7 +360,9 @@ document.addEventListener('DOMContentLoaded', function() {
       fileInput.click();
     }
 
-    uploadBtn.addEventListener('click', openModal);
+    uploadBtn.addEventListener('click', () => {
+      window.location.href = 'pfp.html';
+    });
     closeBtn.addEventListener('click', closeModal);
     dropZone.addEventListener('click', triggerFileInput);
     addFilesBtn.addEventListener('click', triggerFileInput);
