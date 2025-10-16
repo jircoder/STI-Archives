@@ -1490,6 +1490,12 @@
 
             if (!valid) return;
 
+            const fullname = document.getElementById('signup-fullname').value.trim();
+            const personalEmail = document.getElementById('signup-email').value.trim();
+            const studentId = document.getElementById('signup-studentid').value.trim();
+            const role = document.getElementById('signup-role').value;
+            const section = document.getElementById('signup-section').value;
+
             // Handle file upload to backend
             const formData = new FormData();
             formData.append('fullname', fullname);
@@ -1500,12 +1506,6 @@
             formData.append('raf', rafInput.files[0]);
 
             if (!valid) return;
-
-            const fullname = document.getElementById('signup-fullname').value.trim();
-            const personalEmail = document.getElementById('signup-email').value.trim();
-            const studentId = document.getElementById('signup-studentid').value.trim();
-            const role = document.getElementById('signup-role').value;
-            const section = document.getElementById('signup-section').value;
 
             const messageDiv = document.getElementById('signup-message');
             messageDiv.textContent = 'Creating your account...';
@@ -1923,11 +1923,24 @@
         // >>> FIXED: Welcome Modal - 7 seconds + click outside (not inside) to close + SHOW ON LOAD
         const welcomeModal = document.getElementById('welcomeModal');
         if (welcomeModal) {
-            // Modal is displayed by default in CSS
-            // Auto-hide after 7 seconds
-            setTimeout(() => {
-                welcomeModal.style.display = 'none'; // Hide the modal
-            }, 7000);
+            // Check if we should show access granted modal instead
+            const urlParams = new URLSearchParams(window.location.search);
+            const showAccessGranted = urlParams.get('access_granted') === 'true' || sessionStorage.getItem('showAccessGranted') === 'true';
+
+            if (showAccessGranted) {
+                // Clear the flag
+                sessionStorage.removeItem('showAccessGranted');
+                // Show access granted modal instead of welcome modal
+                showAccessGrantedModal();
+                // Remove the query parameter from URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            } else {
+                // Modal is displayed by default in CSS
+                // Auto-hide after 7 seconds
+                setTimeout(() => {
+                    welcomeModal.style.display = 'none'; // Hide the modal
+                }, 7000);
+            }
 
             // Click outside (on the overlay part) to close - FIXED
             // This is now handled in the general window click listener above
@@ -1963,6 +1976,8 @@
             modal.style.display = 'block';
             setTimeout(() => {
                 modal.style.display = 'none';
+                // Reload the page after showing the modal
+                window.location.reload();
             }, 3000);
         }
         </script>

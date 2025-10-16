@@ -3154,6 +3154,36 @@
                 if (result.message) {
                     const actionMessage = action === 'accept' ? 'User accepted successfully! Welcome email sent.' : `User ${action}ed successfully!`;
                     alert(actionMessage);
+
+                    // If accepting a user, redirect to index.html to show access granted message
+                    if (action === 'accept') {
+                        // Store the accepted user info temporarily
+                        sessionStorage.setItem('showAccessGranted', 'true');
+                        // Redirect to index.html
+                        window.location.href = 'index.html?access_granted=true';
+                        return; // Exit early to prevent further execution
+                    }
+
+                    // Refresh the users list in the current section for other actions
+                    loadUsers().then(() => {
+                        // Re-apply any current filters or section views
+                        const currentSection = document.querySelector('.user-subsection:not([style*="display: none"])');
+                        if (currentSection) {
+                            const sectionId = currentSection.id;
+                            if (sectionId === 'verified-section') {
+                                // Stay in verified section
+                            } else if (sectionId === 'signing-up-section') {
+                                // Stay in signing up section
+                            } else if (sectionId === 'rejected-section') {
+                                // Stay in rejected section
+                            } else if (sectionId === 'banned-section') {
+                                // Stay in banned section
+                            }
+                        }
+                    }).catch(() => {
+                        // Fallback if async fails
+                        location.reload();
+                    });
                 } else {
                     alert('Failed to update user status: ' + (result.error || 'Unknown error'));
                 }
@@ -3175,6 +3205,26 @@
                 .then(result => {
                     if (result.message) {
                         alert('User removed successfully!');
+                        // Refresh the users list in the current section
+                        loadUsers().then(() => {
+                            // Re-apply any current filters or section views
+                            const currentSection = document.querySelector('.user-subsection:not([style*="display: none"])');
+                            if (currentSection) {
+                                const sectionId = currentSection.id;
+                                if (sectionId === 'verified-section') {
+                                    // Stay in verified section
+                                } else if (sectionId === 'signing-up-section') {
+                                    // Stay in signing up section
+                                } else if (sectionId === 'rejected-section') {
+                                    // Stay in rejected section
+                                } else if (sectionId === 'banned-section') {
+                                    // Stay in banned section
+                                }
+                            }
+                        }).catch(() => {
+                            // Fallback if async fails
+                            location.reload();
+                        });
                     } else {
                         alert('Failed to remove user: ' + (result.error || 'Unknown error'));
                     }
