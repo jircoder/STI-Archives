@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>My Space STI ARCHIVES</title>
   
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style> 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -949,6 +949,17 @@
                     currentLoadedDocId = doc.id;
                 }
                 localStorage.setItem('savedDocuments', JSON.stringify(savedDocuments));
+                console.log('Document saved to localStorage:', savedDocuments); // Debug log
+
+                // Trigger update in pfp.html if it's open
+                if (window.parent !== window) {
+                    // If in iframe, try to communicate with parent
+                    window.parent.postMessage({type: 'documentSaved', document: doc}, '*');
+                } else {
+                    // Try to update pfp.html if it's open in another tab/window
+                    localStorage.setItem('documentUpdateTrigger', Date.now().toString());
+                }
+
                 document.getElementById('saveMessage').textContent = 'Document Saved Successfully!';
             }
             // Show save notification modal
@@ -1004,6 +1015,7 @@
                                 <span style="font-size: 10px; color: #666;">${new Date(doc.date).toLocaleDateString()}</span>
                             </div>
                             <button onclick="loadDocument(${doc.id})" style="padding: 4px 8px; background: #0057b8; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; margin-right: 5px;">Load</button>
+                            <button onclick="sendToPfp(${doc.id})" style="padding: 4px 8px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; margin-right: 5px;">Send to PFP</button>
                             <button onclick="deleteDocument(${doc.id})" style="padding: 4px 8px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">Delete</button>
                         </div>
                         <div class="document" style="border: 1px solid #ccc; border-radius: 0; padding: 8px; height: 200px; width: 150px; overflow: hidden; font-size: 10px; color: #333; background: #fff; margin: 0 auto;">${contentPreview}</div>
@@ -1033,6 +1045,34 @@
                 document.getElementById('docTitle').value = doc.title;
                 document.getElementById('doc').innerHTML = doc.content;
                 closeSavedDocumentsModal();
+            }
+        }
+
+        // Send document to pfp.html
+        function sendToPfp(id) {
+            const savedDocuments = JSON.parse(localStorage.getItem('savedDocuments')) || [];
+            const doc = savedDocuments.find(d => d.id === id);
+            if (doc) {
+                // Add to pfp documents (could be a separate storage or same)
+                const pfpDocuments = JSON.parse(localStorage.getItem('pfpDocuments')) || [];
+                const existingIndex = pfpDocuments.findIndex(d => d.id === id);
+
+                if (existingIndex === -1) {
+                    // Add new document to pfp
+                    pfpDocuments.push({
+                        ...doc,
+                        sentFromMyspace: true,
+                        sentDate: new Date().toISOString()
+                    });
+                    localStorage.setItem('pfpDocuments', JSON.stringify(pfpDocuments));
+
+                    // Trigger update in pfp.html
+                    localStorage.setItem('pfpDocumentUpdate', Date.now().toString());
+
+                    alert('Document sent to Profile page successfully!');
+                } else {
+                    alert('Document already exists in Profile page!');
+                }
             }
         }
 

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - STI Archives</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .about-section {
+            width: 100%;
+            min-height: 700px;
+            background: linear-gradient(135deg, #182455, #0d2959);
+            padding: 40px 20px;
+            font-family: 'Poppins', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            color: #fff;
+            text-align: center;
+        }
+
+        .about-section h2 {
+            font-size: 32px;
+            margin: 20px 0 16px;
+            color: #ffd700;
+            text-shadow: 0 2px 8px rgba(255, 215, 0, 0.5);
+        }
+
+        .about-section p {
+            font-size: 16px;
+            color: #ddd;
+            margin: 0 0 40px;
+            line-height: 1.6;
+            max-width: 800px;
+        }
+
+        /* ✅ CENTERED TEAM GRID */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 32px;
+            max-width: 1000px;
+            padding: 0 15px;
+            margin: 0 auto; /* 🔑 THIS CENTERS THE GRID */
+        }
+
+        .profile-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 15px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            max-width: 250px;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .profile-pic {
+            width: 190px;
+            height: 182.5px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+            margin-bottom: 10px;
+            background: #fff;
+            padding: 4px;
+        }
+
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .profile-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            text-align: center;
+        }
+
+        .role {
+            font-size: 18px;
+            color: #ffd700;
+            font-weight: 700;
+            margin-top: 6px;
+            text-align: center;
+        }
+
+        /* 📱 On very small screens: ensure single column */
+        @media (max-width: 480px) {
+            .team-grid {
+                grid-template-columns: 1fr;
+                gap: 28px;
+                max-width: 100%;
+                padding: 0 20px;
+            }
+
+            .profile-pic {
+                width: 140px;
+                height: 140px;
+            }
+
+            .profile-name {
+                font-size: 17px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="about-section" id="help">
+        <h2>About Us</h2>
+        <p>
+            We are <strong>ITMAWD21 of S.Y. 2025–2026</strong> from <strong>STI College Calamba</strong>, Group 1 for ILS in Research and Collaborated with Computer Programming to create a website and conduct research around it.
+            The ILS we developed is called <strong>STI Archives</strong> — a platform designed to be reliable and helpful for students and researchers alike.
+        </p>
+
+        <div class="team-grid">
+            <!-- Top Row: Jirmaic, Catherine, Asis -->
+            <div class="profile-card">
+                <div class="profile-pic">
+                    <img src="img/jirmaicc.jpg" alt="Jirmaic">
+                </div>
+                <div class="profile-name">Jirmaic</div>
+                <div class="role">Developer</div>
+            </div>
+
+            <div class="profile-card">
+                <div class="profile-pic">
+                    <img src="img/cathh.jpg" alt="Catherine">
+                </div>
+                <div class="profile-name">Catherine</div>
+                <div class="role">Research Leader</div>
+            </div>
+
+            <div class="profile-card">
+                <div class="profile-pic">
+                    <img src="img/asiss.jpg" alt="Asis">
+                </div>
+                <div class="profile-name">Asis</div>
+                <div class="role">Developer</div>
+            </div>
+
+            <!-- Bottom Row: Rex, Piel, Kian -->
+            <div class="profile-card">
+                <div class="profile-pic">
+                    <img src="img/rexx.jpg" alt="Rex">
+                </div>
+                <div class="profile-name">Rex</div>
+                <div class="role">Research Member</div>
+            </div>
+
+            <div class="profile-card">
+                <div class="profile-pic">
+                    <img src="img/piell.jpg" alt="Piel">
+                </div>
+                <div class="profile-name">Piel</div>
+                <div class="role">Research Member</div>
+            </div>
+
+            <div class="profile-card">
+                <div class="profile-pic">
+                    <img src="img/kiann.jpg" alt="Kian">
+                </div>
+                <div class="profile-name">Kian</div>
+                <div class="role">Research Member</div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

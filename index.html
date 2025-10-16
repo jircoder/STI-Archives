@@ -55,8 +55,8 @@
                 background: #fff;
                 border-radius: 16px;
                 box-shadow: 0 2px 16px #0002;
-                padding: 25px 32px 32px 32px;
-                width: 350px;
+                
+                width: 450px;
                 max-width: 100vw;
                 color: #132a3f;
                 display: none;
@@ -696,9 +696,13 @@
                 }
                 .auth-container {
                     padding: 24px 6vw;
-                    width: 40vw;
-                    max-width: 320px;
+                    width: 60vw;
+                    
                     max-height:70vh;
+                }
+                .auth-container.auth-container--signup {
+                    width: 60vw;
+                    
                 }
                 .auth-container2 {
                     padding: 20px 6vw;
@@ -716,6 +720,29 @@
                 }
                 .reset-pass-content h2 {
                     font-size: 1.5rem;
+                }
+            }
+            @media (max-width:400px) {
+                .auth-container {
+
+                    width: 100vw;
+                    
+                    max-height:70vh;
+                }
+                .auth-container.auth-container--signup {
+                    width: 100vw;
+                    
+                }
+                .auth-container2 {
+                    width: 60vw;
+                    max-width: 320px;
+                }
+                .dark-mode-toggle {
+                    top: 10px;
+                    right: 10px;
+                    width: 38px;
+                    height: 38px;
+                    font-size: 1.2rem;
                 }
             }
             /* >>> NEW: Scrollbar Styling for Dark Mode */
@@ -877,7 +904,7 @@
                     </div>
                 </form>
                 <!-- SIGNUP FORM: Single-column -->
-                <form class="auth-form" id="signupForm" autocomplete="off" method="POST" action="" enctype="multipart/form-data">
+                <form class="auth-form" id="signupForm" autocomplete="off" method="POST" action="javascript:void(0);">
                     <div class="form-group">
                         <label for="signup-fullname">Full Name</label>
                         <input type="text" id="signup-fullname" name="fullname" placeholder="Enter your full name" required maxlength="100">
@@ -922,7 +949,7 @@
                             <a href="#" id="termsLinkSignup" style="color: #0057b8;">Terms of Conditions</a> & 
                             <a href="#" id="privacyLinkSignup" style="color: #0057b8;">Privacy Policy</a></label>
                     </div>
-                    <button type="submit" class="form-group full-width">Sign Up</button>
+                    <button type="button" onclick="handleSignup()" class="form-group full-width">Sign Up</button>
                     <div id="signup-message" class="form-group full-width" style="font-size: 14px; margin-top: 10px; text-align: center; display: none;"></div>
                     <div class="form-footer form-group full-width">
                         <p style="font-size: 14px; text-align: center; margin: 10px 0 0 0;">Already have an Account? <a href="#" id="switchToLogin" style="color: #0057b8; text-decoration: none;">Log in</a></p>
@@ -1021,6 +1048,10 @@
         <!-- >>> NEW: Success Login Modal (Top Right) -->
         <div id="successLoginModal" class="success-login-modal" style="display: none;">
             <p>Successfully logged in!</p>
+        </div>
+        <!-- >>> NEW: Access Granted Modal (Top Right) -->
+        <div id="accessGrantedModal" class="success-login-modal" style="display: none;">
+            <p>Your account has been created and you have been granted access to our website!</p>
         </div>
         <!-- >>> NEW: Reset Sent Modal (Top Right) -->
         <div id="resetSentModal" class="reset-sent-modal">
@@ -1226,11 +1257,11 @@
                     } else {
                         localStorage.removeItem('rememberMe');
                     }
-                    // Show success modal
-                    showSuccessModal();
+                    // Show account granted access message for newly verified users
+                    showAccessGrantedModal();
                     setTimeout(() => {
                         window.location.href = "Homepage.html";
-                    }, 2000);
+                    }, 3000);
                 } else {
                     messageDiv.textContent = 'Please double-check your credentials and try again.';
                     messageDiv.style.color = 'red';
@@ -1439,100 +1470,76 @@
         // Validate section when it changes
         signupSectionSelect.addEventListener('change', validateSection);
 
-        const signupForm = document.getElementById('signupForm');
-signupForm.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    let valid = true;
-    if (!validateFullname()) valid = false;
-    if (!validateStudentId()) valid = false;
-    if (!validateRole()) valid = false;
-    if (!validateSection()) valid = false;
+        function handleSignup() {
+            let valid = true;
+            if (!validateFullname()) valid = false;
+            if (!validateStudentId()) valid = false;
+            if (!validateRole()) valid = false;
+            if (!validateSection()) valid = false;
 
-    const rafInput = document.getElementById('signup-raf');
-    const rafError = document.getElementById('signup-raf-error');
-    if (!rafInput.files.length) {
-        rafError.style.display = 'flex';
-        rafInput.classList.add('input-error');
-        valid = false;
-    } else {
-        rafError.style.display = 'none';
-        rafInput.classList.remove('input-error');
-    }
+            const rafInput = document.getElementById('signup-raf');
+            const rafError = document.getElementById('signup-raf-error');
+            if (!rafInput.files.length) {
+                rafError.style.display = 'flex';
+                rafInput.classList.add('input-error');
+                valid = false;
+            } else {
+                rafError.style.display = 'none';
+                rafInput.classList.remove('input-error');
+            }
 
-    if (!valid) return;
+            if (!valid) return;
 
-    const fullname = document.getElementById('signup-fullname').value.trim();
-    const personalEmail = document.getElementById('signup-email').value.trim();
-    const studentId = document.getElementById('signup-studentid').value.trim();
-    const role = document.getElementById('signup-role').value;
-    const section = document.getElementById('signup-section').value;
+            // Handle file upload to backend
+            const formData = new FormData();
+            formData.append('fullname', fullname);
+            formData.append('personal_email', personalEmail);
+            formData.append('student_id', studentId);
+            formData.append('role', role);
+            formData.append('section', section);
+            formData.append('raf', rafInput.files[0]);
 
-    const messageDiv = document.getElementById('signup-message');
-    messageDiv.textContent = 'Creating your account...';
-    messageDiv.style.color = '#0057b8';
-    messageDiv.style.display = 'block';
+            if (!valid) return;
 
-    try {
-        // ⚠️ REPLACE WITH YOUR ACTUAL GOOGLE APPS SCRIPT URL
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbz6FJIAIfP0ctvYzrnuPwhr43T__QwVYxaN792T9YqZRgaayAx_SPdf0dJ3gbsncRKi/exec';
+            const fullname = document.getElementById('signup-fullname').value.trim();
+            const personalEmail = document.getElementById('signup-email').value.trim();
+            const studentId = document.getElementById('signup-studentid').value.trim();
+            const role = document.getElementById('signup-role').value;
+            const section = document.getElementById('signup-section').value;
 
-        const response = await fetch(scriptURL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({
-                fullname: fullname,
-                personal_email: personalEmail,
-                student_id: studentId,
-                role: role,
-                section: section
+            const messageDiv = document.getElementById('signup-message');
+            messageDiv.textContent = 'Creating your account...';
+            messageDiv.style.color = '#0057b8';
+            messageDiv.style.display = 'block';
+
+            // Send signup data to backend with file
+            fetch('http://localhost:5000/signup_user', {
+                method: 'POST',
+                body: formData
             })
-        });
+            .then(response => response.json())
+            .then(result => {
+                if (result.status === 'success') {
+                    messageDiv.textContent = 'Please wait a while for admin to verify your credentials.';
+                    messageDiv.style.color = '#28a745';
+                    messageDiv.style.display = 'block';
 
-        const text = await response.text();
-        let result;
-        try {
-            result = JSON.parse(text);
-        } catch (e) {
-            throw new Error('Invalid response from server');
+                    // Optional: Reset form
+                    document.getElementById('signupForm').reset();
+                    document.getElementById('sectionGroup').style.display = 'none';
+                    document.getElementById('signup-section').disabled = true;
+                } else {
+                    messageDiv.textContent = 'Failed to create account: ' + (result.error || 'Unknown error');
+                    messageDiv.style.color = '#ff6b6b';
+                    messageDiv.style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Error creating account:', error);
+                messageDiv.textContent = 'Failed to create account. Please check your connection.';
+                messageDiv.style.color = '#ff6b6b';
+            });
         }
-
-        if (result.status === 'success') {
-            // Save user to localStorage (for login to work)
-            const newUser = {
-                id: Date.now().toString(),
-                user_id: studentId,
-                name: fullname,
-                email: result.school_email, // e.g., 02000123456@calamba.sti.edu.ph
-                password: result.password,   // auto-generated
-                personal_email: personalEmail,
-                raf_path: 'uploaded_via_form', // you can enhance this later
-                created_at: new Date().toISOString(),
-                verified: true,
-                role: role,
-                section: section
-            };
-
-            const users = JSON.parse(localStorage.getItem('users') || '[]');
-            users.push(newUser);
-            localStorage.setItem('users', JSON.stringify(users));
-
-            messageDiv.textContent = 'Account created! Check your personal email for login details.';
-            messageDiv.style.color = 'green';
-
-            // Optional: Reset form
-            signupForm.reset();
-            document.getElementById('sectionGroup').style.display = 'none';
-            document.getElementById('signup-section').disabled = true;
-        } else {
-            throw new Error(result.message || 'Failed to create account');
-        }
-    } catch (error) {
-        console.error('Signup error:', error);
-        messageDiv.textContent = 'Failed to create account. Please try again.';
-        messageDiv.style.color = 'red';
-    }
-});
         const darkModeToggle = document.getElementById('darkModeToggle');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const savedMode = localStorage.getItem('darkMode');
@@ -1945,6 +1952,14 @@ signupForm.addEventListener('submit', async function(e) {
         // >>> NEW: Show Success Login Modal
         function showSuccessModal() {
             const modal = document.getElementById('successLoginModal');
+            modal.style.display = 'block';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 3000);
+        }
+        // >>> NEW: Show Access Granted Modal for newly verified users
+        function showAccessGrantedModal() {
+            const modal = document.getElementById('accessGrantedModal');
             modal.style.display = 'block';
             setTimeout(() => {
                 modal.style.display = 'none';

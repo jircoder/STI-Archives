@@ -1395,7 +1395,7 @@
         <div class="summary">${article.summary}</div>
         <div class="source-tag">[STI College Calamba Library]</div>
         <div class="actions">
-          <span>★ Save</span>
+          <span onclick="saveArticle(this)">★ Save</span>
           <span onclick="openCitationModal(this)">Cite</span>
           <span onclick="showRelatedArticles(this)">Related articles</span>
         </div>
@@ -1634,6 +1634,55 @@
   // === STUB FUNCTIONS (to prevent errors) ===
   function openCitationModal(el) { alert('Cite clicked'); }
   function showRelatedArticles(el) { alert('Related clicked'); }
+
+  // Save article functionality
+  function saveArticle(el) {
+    const article = el.closest('.article');
+    const title = article.querySelector('h3').textContent;
+    const meta = article.querySelector('.meta').textContent;
+    const summary = article.querySelector('.summary').textContent;
+    const category = article.getAttribute('data-category');
+    const strand = article.getAttribute('data-strand');
+    const level = article.getAttribute('data-level');
+    const program = article.getAttribute('data-program');
+    const year = article.getAttribute('data-year');
+
+    // Create saved article object
+    const savedArticle = {
+      title: title,
+      meta: meta,
+      summary: summary,
+      category: category,
+      strand: strand,
+      level: level,
+      program: program,
+      year: year,
+      savedDate: new Date().toISOString(),
+      originalUrl: window.location.href
+    };
+
+    // Get existing saved articles from localStorage
+    let savedArticles = JSON.parse(localStorage.getItem('savedArticles')) || [];
+
+    // Check if article is already saved
+    const isAlreadySaved = savedArticles.some(saved => saved.title === title);
+
+    if (isAlreadySaved) {
+      alert('Article already saved!');
+      return;
+    }
+
+    // Add to saved articles
+    savedArticles.push(savedArticle);
+    localStorage.setItem('savedArticles', JSON.stringify(savedArticles));
+
+    // Show success message
+    alert('Article saved successfully!');
+
+    // Change star color to indicate saved
+    el.style.color = '#ffd700';
+    el.textContent = '★ Saved';
+  }
 </script>
 </body>
 </html>

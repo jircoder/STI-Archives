@@ -80,6 +80,7 @@
             padding-left: 20px;
             padding-right: 20px;
             box-sizing: border-box;
+            justify-content: flex-start;
         }
         .sidebar ul li a i {
             width: 24px;
@@ -923,7 +924,7 @@
                 max-width: 160px;
                 height: 100px;
                 border-radius: 10px;
-                
+
             }
             .main-content {
                 margin-left: 200px;
@@ -932,7 +933,198 @@
                 left: 180px;
                 width: calc(100% - 180px);
             }
-           
+
+        }
+
+        /* Tablet responsiveness (768px - 1024px) */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .sidebar {
+                width: 180px;
+            }
+            .main-content {
+                margin-left: 180px;
+                padding: 20px 15px;
+            }
+            .header {
+                left: 160px;
+                width: calc(100% - 160px);
+            }
+            .graph-item {
+                width: 45%;
+            }
+            .chart-container {
+                height: 250px;
+            }
+            .dashboard {
+                gap: 15px;
+            }
+            .card {
+                min-width: 150px;
+            }
+            /* Resize specific charts for tablets */
+            #usr-grph {
+                height: 400px;
+                width: 100%;
+            }
+            #sgn-grph {
+                height: 400px;
+                width: 100%;
+            }
+            #sgst-grph {
+                height: 350px;
+                width: 100%;
+            }
+        }
+
+        /* Phone responsiveness (max-width: 767px) */
+        @media (max-width: 767px) {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 250px;
+                height: 100%;
+                transform: translateX(-100%);
+                z-index: 1001;
+                transition: transform 0.3s ease;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 20px 10px;
+            }
+            .header {
+                left: 0;
+                width: 100%;
+                padding: 15px;
+                position: fixed;
+                top: 0;
+                z-index: 999;
+                height: 70px;
+                display: flex;
+                align-items: center;
+            }
+            .main-content {
+                margin-top: 70px;
+            }
+            .dashboard {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .card {
+                min-width: unset;
+                width: 100%;
+                padding: 15px;
+            }
+            .graphs-section h2 {
+                font-size: 20px;
+            }
+            .graph-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .graph-item {
+                width: 100%;
+                padding: 15px;
+            }
+            .chart-container {
+                height: 200px;
+                width: 100%;
+                position: relative;
+            }
+            .chart-container canvas {
+                max-width: 100%;
+                height: 100% !important;
+            }
+            /* Make charts responsive */
+            .chart-container {
+                position: relative;
+                width: 100%;
+                height: 200px;
+            }
+            .chart-container canvas {
+                width: 100% !important;
+                height: 100% !important;
+                max-width: 100%;
+                max-height: 100%;
+            }
+            table {
+                font-size: 12px;
+                min-width: 600px;
+                overflow-x: auto;
+                display: block;
+            }
+            .users-section table {
+                min-width: 600px;
+            }
+            .modal-content {
+                width: 95%;
+                max-width: none;
+                margin: 10% auto;
+                padding: 15px;
+            }
+            .citation-modal-content {
+                width: 95%;
+                padding: 15px;
+            }
+            .upload-section form {
+                grid-template-columns: 1fr !important;
+                gap: 10px;
+            }
+            .upload-section form div {
+                grid-template-columns: 1fr !important;
+            }
+            .filter-buttons {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            .filter-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            .article {
+                padding: 15px;
+            }
+            .actions {
+                flex-direction: column;
+                gap: 5px;
+                align-items: flex-start;
+            }
+            /* Overlay for sidebar */
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.5);
+                z-index: 1000;
+            }
+            .sidebar-overlay.show {
+                display: block;
+            }
+            /* Resize specific charts for phones */
+            #usr-grph {
+                height: 350px;
+                width: 100%;
+            }
+            #sgn-grph {
+                height: 350px;
+                width: 100%;
+            }
+            #sgst-grph {
+                height: 300px;
+                width: 100%;
+            }
+            .chart-container canvas {
+                width: 100% !important;
+                height: 100% !important;
+                max-width: 100%;
+                max-height: 100%;
+            }
         }
         .welcome-container {
             text-align: center;
@@ -1743,6 +1935,7 @@
             <p>Here's what's happening with your Website today</p>
         </div>
     </div>
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <img src="STI Logo.png" alt="STI Logo" >
@@ -1769,9 +1962,9 @@
                     <span class="arrow">▼</span>
                 </a>
                 <ul class="submenu">
-                    <li><a href="#" onclick="showUploadForm(); toggleUploadsDropdown(event);"><i class="fas fa-upload"></i> Upload</a></li>
-                    <li><a href="#" onclick="showUploaded('admin'); toggleUploadsDropdown(event);"><i class="fas fa-user-tie"></i> Uploaded by Admin</a></li>
-                    <li><a href="#" onclick="showUploaded('users'); toggleUploadsDropdown(event);"><i class="fas fa-users"></i> Uploaded by Users</a></li>
+                    <li><a href="#" onclick="showUploadForm();"><i class="fas fa-upload"></i> Upload</a></li>
+                    <li><a href="#" onclick="showUploaded('admin');"><i class="fas fa-user-tie"></i> Uploaded by Admin</a></li>
+                    <li><a href="#" onclick="showUploaded('users');"><i class="fas fa-users"></i> Uploaded by Users</a></li>
                 </ul>
             </li>
             <li class="reports-dropdown" id="reports-dropdown">
@@ -1795,6 +1988,9 @@
             <h1 id="page-title"></h1>
         </div>
         <div class="header-right">
+            <button class="btn btn-info" title="Refresh Users" onclick="refreshUsers()" style="background-color: #17a2b8; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; margin-right: 10px;">
+                <i class="fas fa-sync-alt"></i> Refresh
+            </button>
             <button class="notification-bell" title="Notifications" onclick="toggleNotificationModal()">
                 <i class="fas fa-bell"></i>
                 <span class="notification-badge">0</span>
@@ -2434,7 +2630,7 @@
                 <input type="text" id="update-subject" required>
                 <label for="update-message">Message:</label>
                 <textarea id="update-message" rows="5" required></textarea>
-                <button type="submit" class="btn">Send Update</button>
+                <button type="button" class="btn" onclick="sendUpdateEmail()">Send Update</button>
             </form>
         </div>
     </div>
@@ -2456,7 +2652,16 @@
 
     <script>
         // === UTILS ===
-        function getUsers() {
+        async function getUsers() {
+            // Try to load from users.json file first, fallback to localStorage
+            try {
+                const response = await fetch('users.json');
+                if (response.ok) {
+                    return await response.json();
+                }
+            } catch (e) {
+                console.log('Could not load from users.json, using localStorage');
+            }
             return JSON.parse(localStorage.getItem('users')) || [];
         }
         function saveUsers(users) {
@@ -2852,6 +3057,9 @@
             document.getElementById('toggle-btn').addEventListener('click', toggleSidebar);
             document.querySelector('.dark-mode-toggle').addEventListener('click', toggleDarkMode);
 
+            // Overlay click to close sidebar on mobile
+            document.getElementById('sidebar-overlay').addEventListener('click', closeSidebarOnOverlayClick);
+
             // Account form
             document.getElementById('account-form').addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -2878,13 +3086,24 @@
 
 
             // Initialize
-            showSection('dashboard');
-            loadUsers();
-            renderUserChart();
-            renderUploadsChart();
-            renderSigningUpChart('day');
-            renderTimeChart();
-            renderSuggestionsChart();
+            const savedSection = localStorage.getItem('adminCurrentSection') || 'dashboard';
+            showSection(savedSection);
+            loadUsers().then(() => {
+                renderUserChart();
+                renderUploadsChart();
+                renderSigningUpChart('day');
+                renderTimeChart();
+                renderSuggestionsChart();
+            }).catch(() => {
+                // Fallback if async fails
+                renderUserChart();
+                renderUploadsChart();
+                renderSigningUpChart('day');
+                renderTimeChart();
+                renderSuggestionsChart();
+            });
+            // Clear the saved section after loading
+            localStorage.removeItem('adminCurrentSection');
         });
 
         // === SEND UPDATE MODAL FUNCTIONS ===
@@ -2894,36 +3113,128 @@
             document.getElementById('update-message').value = `Dear ${name},\n\n[Enter reason, news, or update here]\n\nBest regards,\nSTI Archives Admin`;
             document.getElementById('send-update-modal').style.display = 'block';
         }
-        function closeSendUpdateModal() {
-            document.getElementById('send-update-modal').style.display = 'none';
-        }
-        document.getElementById('send-update-form').addEventListener('submit', function(e) {
-            e.preventDefault();
+        function sendUpdateEmail() {
             const email = document.getElementById('update-email').value;
             const subject = document.getElementById('update-subject').value;
             const message = document.getElementById('update-message').value;
-            // TODO: Implement actual email sending
-            alert(`Update sent to ${email}:\nSubject: ${subject}\nMessage: ${message}`);
-            closeSendUpdateModal();
-        });
+
+            if (!email || !subject || !message) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            fetch('http://localhost:5000/send_update_email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ to_email: email, subject: subject, message: message })
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.message) {
+                    alert('Email sent successfully!');
+                    closeSendUpdateModal();
+                } else {
+                    alert('Failed to send email: ' + (result.error || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                console.error('Error sending email:', error);
+                alert('Failed to send email. Please check your connection.');
+            });
+        }
+
+        function updateUserStatus(userId, action) {
+            fetch('http://localhost:5000/update_user_status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user_id: userId, action: action })
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.message) {
+                    const actionMessage = action === 'accept' ? 'User accepted successfully! Welcome email sent.' : `User ${action}ed successfully!`;
+                    alert(actionMessage);
+                } else {
+                    alert('Failed to update user status: ' + (result.error || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                console.error('Error updating user status:', error);
+                alert('Failed to update user status. Please check your connection.');
+            });
+        }
+
+        function removeUser(userId, userName) {
+            if (confirm(`Are you sure you want to remove ${userName}'s information? This action cannot be undone.`)) {
+                fetch('http://localhost:5000/remove_user', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: userId })
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.message) {
+                        alert('User removed successfully!');
+                    } else {
+                        alert('Failed to remove user: ' + (result.error || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error removing user:', error);
+                    alert('Failed to remove user. Please check your connection.');
+                });
+            }
+        }
+        function closeSendUpdateModal() {
+            document.getElementById('send-update-modal').style.display = 'none';
+        }
+        // Email sending is now handled by sendUpdateEmail() function
 
         // === LOAD USERS FUNCTION ===
-        function loadUsers() {
-            const users = getUsers();
+        async function loadUsers() {
+            const users = await getUsers();
             // Clear all tbodys
             document.querySelectorAll('#users tbody').forEach(tbody => tbody.innerHTML = '');
             users.forEach(user => {
                 const date = user.verified_at || user.created_at || 'N/A';
+                let actions = '';
+                if (user.verified) {
+                    actions = `
+                        <button class="btn btn-warning btn-sm" onclick="updateUserStatus('${user.user_id || user.id}', 'reject')">Reject</button>
+                        <button class="btn btn-danger btn-sm" onclick="updateUserStatus('${user.user_id || user.id}', 'ban')">Ban</button>
+                        <button class="btn btn-danger btn-sm" onclick="removeUser('${user.user_id || user.id}', '${user.name}')">Remove</button>
+                    `;
+                } else if (user.rejected) {
+                    actions = `
+                        <button class="btn btn-success btn-sm" onclick="updateUserStatus('${user.user_id || user.id}', 'accept')">Accept</button>
+                        <button class="btn btn-danger btn-sm" onclick="updateUserStatus('${user.user_id || user.id}', 'ban')">Ban</button>
+                        <button class="btn btn-danger btn-sm" onclick="removeUser('${user.user_id || user.id}', '${user.name}')">Remove</button>
+                    `;
+                } else if (user.banned) {
+                    actions = `
+                        <button class="btn btn-success btn-sm" onclick="updateUserStatus('${user.user_id || user.id}', 'accept')">Accept</button>
+                        <button class="btn btn-warning btn-sm" onclick="updateUserStatus('${user.user_id || user.id}', 'reject')">Reject</button>
+                        <button class="btn btn-danger btn-sm" onclick="removeUser('${user.user_id || user.id}', '${user.name}')">Remove</button>
+                    `;
+                } else {
+                    actions = `
+                        <button class="btn btn-success btn-sm" onclick="updateUserStatus('${user.user_id || user.id}', 'accept')">Accept</button>
+                        <button class="btn btn-warning btn-sm" onclick="updateUserStatus('${user.user_id || user.id}', 'reject')">Reject</button>
+                        <button class="btn btn-danger btn-sm" onclick="updateUserStatus('${user.user_id || user.id}', 'ban')">Ban</button>
+                        <button class="btn btn-danger btn-sm" onclick="removeUser('${user.user_id || user.id}', '${user.name}')">Remove</button>
+                    `;
+                }
+                const emailToUse = user.personal_email || user.email;
                 const row = `<tr>
                     <td>${user.user_id || user.id}</td>
                     <td>${user.name}</td>
-                    <td>${user.email}</td>
+                    <td>${emailToUse}</td>
                     <td>${formatRole(user.role)}</td>
                     <td>${user.section || '-'}</td>
                     <td>${date}</td>
-                    <td><button class="btn btn-sm" onclick="previewRaf('${user.raf_path || ''}')">Preview</button></td>
-                    <td><button class="btn btn-info btn-sm" onclick="openSendUpdateModal('${user.email}', '${user.name}')">Send Update</button></td>
-                    <td><button class="btn btn-danger btn-sm">Actions</button></td>
+                    <td><button type="button" class="btn btn-sm" onclick="previewRaf('${user.raf_path || ''}')">Preview</button></td>
+                    <td><button type="button" class="btn btn-info btn-sm" onclick="openSendUpdateModal('${emailToUse}', '${user.name}')">Send Update</button></td>
+                    <td>${actions}</td>
                 </tr>`;
                 // categorized
                 let tbodyId = '';
@@ -2967,24 +3278,23 @@
             });
         }
 
-        function renderUserChart() {
-            const users = getUsers();
+        async function renderUserChart() {
+            const users = await getUsers();
             const roleCounts = {
-                admin: 10,
-                teacher: 5,
-                shs: 20,
-                college: 15
+                admin: 0,
+                teacher: 0,
+                shs: 0,
+                college: 0
             };
-            // Example data
-            // users.forEach(user => {
-            //     if (user.verified) {
-            //         const role = user.role;
-            //         if (role === 'admin') roleCounts.admin++;
-            //         else if (role === 'teacher') roleCounts.teacher++;
-            //         else if (role === 'senior_high') roleCounts.shs++;
-            //         else if (role === 'college') roleCounts.college++;
-            //     }
-            // });
+            users.forEach(user => {
+                if (user.verified) {
+                    const role = user.role;
+                    if (role === 'admin') roleCounts.admin++;
+                    else if (role === 'teacher') roleCounts.teacher++;
+                    else if (role === 'senior_high') roleCounts.shs++;
+                    else if (role === 'college') roleCounts.college++;
+                }
+            });
             const barColors = [
                 '#6f42c1',
                 '#dc3545',
@@ -3224,20 +3534,30 @@
         // === STUB FUNCTIONS (to prevent errors) ===
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('collapsed');
+            const overlay = document.getElementById('sidebar-overlay');
             const mainContent = document.getElementById('main-content');
             const header = document.querySelector('.header');
             const body = document.body;
-            if (sidebar.classList.contains('collapsed')) {
-                mainContent.style.marginLeft = '0';
-                header.style.left = '0';
-                header.style.width = '100%';
-                body.classList.add('sidebar-collapsed');
+
+            // Check if mobile view
+            if (window.innerWidth <= 767) {
+                // Mobile: toggle overlay and sidebar
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('show');
             } else {
-                mainContent.style.marginLeft = '';
-                header.style.left = '';
-                header.style.width = '';
-                body.classList.remove('sidebar-collapsed');
+                // Desktop/tablet: collapse sidebar
+                sidebar.classList.toggle('collapsed');
+                if (sidebar.classList.contains('collapsed')) {
+                    mainContent.style.marginLeft = '0';
+                    header.style.left = '0';
+                    header.style.width = '100%';
+                    body.classList.add('sidebar-collapsed');
+                } else {
+                    mainContent.style.marginLeft = '';
+                    header.style.left = '';
+                    header.style.width = '';
+                    body.classList.remove('sidebar-collapsed');
+                }
             }
         }
         function toggleDarkMode() {
@@ -3285,6 +3605,12 @@
                 dropdown.classList.remove('open');
                 document.removeEventListener('click', closeProfileDropdownOnOutsideClick);
             }
+        }
+        function closeSidebarOnOverlayClick() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            sidebar.classList.remove('open');
+            overlay.classList.remove('show');
         }
         function toggleNotificationModal() {
             const modal = document.getElementById('notification-modal');
@@ -3366,9 +3692,9 @@
                         <td>${formatRole(user.role)}</td>
                         <td>${user.section || '-'}</td>
                         <td>${date}</td>
-                        <td><button class="btn btn-sm" onclick="previewRaf('${user.raf_path || ''}')">Preview</button></td>
-                        <td><button class="btn btn-info btn-sm" onclick="openSendUpdateModal('${user.email}', '${user.name}')">Send Update</button></td>
-                        <td><button class="btn btn-danger btn-sm">Actions</button></td>
+                        <td><button type="button" class="btn btn-sm" onclick="previewRaf('${user.raf_path || ''}')">Preview</button></td>
+                        <td><button type="button" class="btn btn-info btn-sm" onclick="openSendUpdateModal('${user.email}', '${user.name}')">Send Update</button></td>
+                        <td><button type="button" class="btn btn-danger btn-sm">Actions</button></td>
                     </tr>`;
                     tbody.innerHTML += row;
                 }
@@ -3392,8 +3718,8 @@
                         <td>${user.section || '-'}</td>
                         <td>${date}</td>
                         <td><button class="btn btn-sm" onclick="previewRaf('${user.raf_path || ''}')">Preview</button></td>
-                        <td><button class="btn btn-info btn-sm" onclick="openSendUpdateModal('${user.email}', '${user.name}')">Send Update</button></td>
-                        <td><button class="btn btn-danger btn-sm">Actions</button></td>
+                        <td><button type="button" class="btn btn-info btn-sm" onclick="openSendUpdateModal('${user.email}', '${user.name}')">Send Update</button></td>
+                        <td><button type="button" class="btn btn-danger btn-sm">Actions</button></td>
                     </tr>`;
                     tbody.innerHTML += row;
                 }
@@ -3416,9 +3742,9 @@
                         <td>${formatRole(user.role)}</td>
                         <td>${user.section || '-'}</td>
                         <td>${date}</td>
-                        <td><button class="btn btn-sm" onclick="previewRaf('${user.raf_path || ''}')">Preview</button></td>
-                        <td><button class="btn btn-info btn-sm" onclick="openSendUpdateModal('${user.email}', '${user.name}')">Send Update</button></td>
-                        <td><button class="btn btn-danger btn-sm">Actions</button></td>
+                        <td><button type="button" class="btn btn-sm" onclick="previewRaf('${user.raf_path || ''}')">Preview</button></td>
+                        <td><button type="button" class="btn btn-info btn-sm" onclick="openSendUpdateModal('${user.email}', '${user.name}')">Send Update</button></td>
+                        <td><button type="button" class="btn btn-danger btn-sm">Actions</button></td>
                     </tr>`;
                     tbody.innerHTML += row;
                 }
@@ -3459,9 +3785,9 @@
                         <td>${formatRole(user.role)}</td>
                         <td>${user.section || '-'}</td>
                         <td>${date}</td>
-                        <td><button class="btn btn-sm" onclick="previewRaf('${user.raf_path || ''}')">Preview</button></td>
-                        <td><button class="btn btn-info btn-sm" onclick="openSendUpdateModal('${user.email}', '${user.name}')">Send Update</button></td>
-                        <td><button class="btn btn-danger btn-sm">Actions</button></td>
+                        <td><button type="button" class="btn btn-sm" onclick="previewRaf('${user.raf_path || ''}')">Preview</button></td>
+                        <td><button type="button" class="btn btn-info btn-sm" onclick="openSendUpdateModal('${user.email}', '${user.name}')">Send Update</button></td>
+                        <td><button type="button" class="btn btn-danger btn-sm">Actions</button></td>
                     </tr>`;
                     tbody.innerHTML += row;
                 }
@@ -3481,9 +3807,9 @@
                         <td>${formatRole(user.role)}</td>
                         <td>${user.section || '-'}</td>
                         <td>${date}</td>
-                        <td><button class="btn btn-sm" onclick="previewRaf('${user.raf_path || ''}')">Preview</button></td>
-                        <td><button class="btn btn-info btn-sm" onclick="openSendUpdateModal('${user.email}', '${user.name}')">Send Update</button></td>
-                        <td><button class="btn btn-danger btn-sm">Actions</button></td>
+                        <td><button type="button" class="btn btn-sm" onclick="previewRaf('${user.raf_path || ''}')">Preview</button></td>
+                        <td><button type="button" class="btn btn-info btn-sm" onclick="openSendUpdateModal('${user.email}', '${user.name}')">Send Update</button></td>
+                        <td><button type="button" class="btn btn-danger btn-sm">Actions</button></td>
                     </tr>`;
                     tbody.innerHTML += row;
                 }
@@ -3521,6 +3847,41 @@
         }
         function handleProfileClick() { alert('Profile settings'); }
         function handleLogoutClick() { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; }
+        function refreshUsers() {
+            fetch('http://localhost:5000/get_users')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.users) {
+                        localStorage.setItem('users', JSON.stringify(data.users));
+                        loadUsers();
+                        alert('Users list refreshed successfully!');
+                    } else {
+                        alert('Failed to refresh users: ' + (data.error || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error refreshing users:', error);
+                    alert('Failed to refresh users. Please check your connection.');
+                });
+        }
+        function previewRaf(rafPath) {
+            if (!rafPath || rafPath === '') {
+                alert('No RAF file available for preview.');
+                return;
+            }
+            // For demo purposes, since files are uploaded via form and not stored as actual files,
+            // we'll show a placeholder message
+            const previewContent = document.getElementById('raf-preview-content');
+            previewContent.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <h3>RAF File Preview</h3>
+                    <p>File Path: ${rafPath}</p>
+                    <p style="color: #666;">Note: Actual file preview is not available in this demo.</p>
+                    <p style="color: #666;">In a production environment, uploaded files would be stored and served from the server.</p>
+                </div>
+            `;
+            document.getElementById('raf-preview-modal').style.display = 'block';
+        }
         function closeRafModal() { document.getElementById('raf-preview-modal').style.display = 'none'; }
         function toggleUsersDropdown(e) {
             e.preventDefault();
@@ -3545,6 +3906,21 @@
             if (uploads) uploads.classList.toggle('open');
             if (reports) reports.classList.remove('open');
             if (terms) terms.classList.remove('open');
+
+            // Add click listener to close dropdown when clicking outside
+            if (uploads && uploads.classList.contains('open')) {
+                setTimeout(() => {
+                    document.addEventListener('click', closeUploadsDropdownOnOutsideClick);
+                }, 1);
+            }
+        }
+
+        function closeUploadsDropdownOnOutsideClick(e) {
+            const uploads = document.getElementById('uploads-dropdown');
+            if (uploads && !uploads.contains(e.target)) {
+                uploads.classList.remove('open');
+                document.removeEventListener('click', closeUploadsDropdownOnOutsideClick);
+            }
         }
         function toggleReportsDropdown(e) {
             e.preventDefault();

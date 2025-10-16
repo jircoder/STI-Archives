@@ -563,8 +563,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     // Chart.js for Admin Dashboard
-    const ctx = document.getElementById('engagementChart').getContext('2d');
-    const engagementChart = new Chart(ctx, {
+    const chartElement = document.getElementById('engagementChart');
+    if (chartElement) {
+        const ctx = chartElement.getContext('2d');
+        const engagementChart = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: ['Visits', 'File Uploads', 'Avg Duration (min)'],
@@ -793,4 +795,4 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
-
+    }
