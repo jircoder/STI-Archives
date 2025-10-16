@@ -23,6 +23,10 @@ if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+# Serve static files
+app.static_folder = '.'
+app.static_url_path = '/'
+
 # Google Drive configuration
 GOOGLE_DRIVE_FOLDER_ID = '1MQ9ukcZ2OiQYWB_fUOG9_MKEdfl-r10N'
 SERVICE_ACCOUNT_FILE = 'service_account.json'  # You'll need to create this
@@ -354,4 +358,4 @@ def remove_user():
         return jsonify({'error': 'Failed to remove user'}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)

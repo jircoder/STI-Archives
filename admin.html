@@ -3724,8 +3724,8 @@
             document.getElementById(status + '-department-title').textContent = 'Department ' + dept.toUpperCase();
             loadDepartmentUsersForStatus(status, dept);
         }
-        function loadStrandUsersForStatus(status, grade, strand) {
-            const users = getUsers();
+        async function loadStrandUsersForStatus(status, grade, strand) {
+            const users = await getUsers();
             const tbody = document.getElementById(status + '-strand-users-tbody');
             tbody.innerHTML = '';
             const statusFilter = status === 'signing-up' ? !user.verified && !user.rejected && !user.banned :
@@ -3750,8 +3750,8 @@
                 }
             });
         }
-        function loadDegreeUsersForStatus(status, degree) {
-            const users = getUsers();
+        async function loadDegreeUsersForStatus(status, degree) {
+            const users = await getUsers();
             const tbody = document.getElementById(status + '-degree-users-tbody');
             tbody.innerHTML = '';
             const statusFilter = status === 'signing-up' ? !user.verified && !user.rejected && !user.banned :
@@ -3775,8 +3775,8 @@
                 }
             });
         }
-        function loadDepartmentUsersForStatus(status, dept) {
-            const users = getUsers();
+        async function loadDepartmentUsersForStatus(status, dept) {
+            const users = await getUsers();
             const tbody = document.getElementById(status + '-department-users-tbody');
             tbody.innerHTML = '';
             const statusFilter = status === 'signing-up' ? !user.verified && !user.rejected && !user.banned :
@@ -3821,8 +3821,8 @@
             document.getElementById('department-title').textContent = 'Department ' + dept.toUpperCase();
             loadDepartmentUsers(dept);
         }
-        function loadStrandUsers(grade, strand) {
-            const users = getUsers();
+        async function loadStrandUsers(grade, strand) {
+            const users = await getUsers();
             const tbody = document.getElementById('strand-users-tbody');
             tbody.innerHTML = '';
             users.forEach(user => {
@@ -3843,8 +3843,8 @@
                 }
             });
         }
-        function loadDegreeUsers(degree) {
-            const users = getUsers();
+        async function loadDegreeUsers(degree) {
+            const users = await getUsers();
             const tbody = document.getElementById('degree-users-tbody');
             tbody.innerHTML = '';
             users.forEach(user => {
@@ -3865,8 +3865,8 @@
                 }
             });
         }
-        function loadDepartmentUsers(dept) {
-            const users = getUsers();
+        async function loadDepartmentUsers(dept) {
+            const users = await getUsers();
             const tbody = document.getElementById('department-users-tbody');
             tbody.innerHTML = '';
             users.forEach(user => {
