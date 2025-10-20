@@ -31,7 +31,7 @@ body {
     text-decoration: none;
 }
 .main-navbar .sti-logo {
-    height: 32px; /* Adjusted to fit 45px navbar */
+    height: 40px; /* Adjusted to fit 45px navbar */
     width: auto;
     border-radius: 6px;
     margin-left: 30px;
@@ -66,7 +66,7 @@ body {
 }
 .navbar-right i {
     font-size: 24px; /* Reduced to fit */
-    color: #0057b8;
+    color:#8490a4
 }
 .navbar-right.user-nav-fixed {
     position: absolute;
@@ -89,7 +89,7 @@ body {
     white-space: nowrap;
 }
 .navbar-right.user-nav-fixed .fa-user-circle {
-    font-size: 28px; /* Reduced to fit */
+    font-size: 32px; /* Reduced to fit */
     color: #0057b8;
 }
 .dark-mode .fa-user-circle {
@@ -117,7 +117,7 @@ body {
 }
 .nav-text {
     font-size: 18px; /* Reduced */
-    color: #595d69;
+    color: #000;
     cursor: default;
     margin: 0;
     transition: color 0.3s;

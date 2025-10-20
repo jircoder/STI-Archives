@@ -19,8 +19,8 @@
 
     .main-content {
         display: flex;
-        height: calc(100vh - 50px);
-        margin-top: 50px;
+        height: calc(100vh - 65px);
+        margin-top: 65px;
       }
     .main-navbar {
            display: flex;
@@ -30,11 +30,11 @@
            justify-content: space-between;
             z-index:1000;
              top:0;
-             height: 50px;
+             height: 65px;
              width: 100%;
 
 
-             color: #0057b8;
+             
              background: #fff;
              box-shadow: 0 2px 8px #0001;
              padding: 0 12px;
@@ -43,78 +43,26 @@
 
 
          }
-       /* Shrink effect */
-      .main-navbar.shrink {
-      padding: 10px 30px;
-      position:fixed;
-      background: #fff;
-      height: 50px;
-
-    }
-     .main-navbar .sti-logo {
-            height: 44px;
-            width: auto;
-            border-radius: 6px;
-            margin-left:30px;
-            margin-top:2px;
-        } 
+       
+       .main-navbar .sti-logo {
+           height: 40px;
+           width: auto;
+           border-radius: 6px;
+           margin-left: 30px;
+       }
         
-        .main-navbar.shrink .nav-text {
-            font-family: "Font Awesome 6 Free";
-        }
         .main-navbar span {
             font-size: 24px;
             font-weight: 700;
-            color: #0057b8;
-            margin-left: 10px;
-            font-family: 'Poppins', Arial, sans-serif;
-            user-select: none;
-        }
-        
-        .main-navbar.shrink span {
-            font-size: 24px;
-            font-weight: 700;
-            color: #0057b8;
-            margin-left: 10px;
-            font-family: 'Poppins', Arial, sans-serif;
-            user-select: none;
-        }
-        .nav-icons-center span {
-            font-family: "Font Awesome 6 Free";
-        }
-        .navbar-right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-family: 'Poppins', Arial, sans-serif;
-            font-weight: 600;
-            color: #132a3f;
-            font-size: 18px;
-            margin-right:30px;
-        }
-        .navbar-right i {
-            font-size: 28px;
-            color: #0057b8;
-        }
-        .dark-mode-toggle {
-            border: none;
-            background: transparent;
-        }
-        .dark-mode .main-navbar {
-            background: #232f41;
             
+            margin-left: 10px;
+            font-family: 'Poppins', Arial, sans-serif;
+            user-select: none;
         }
-        .dark-mode .navbar-right i {
-            color: #ffd700;
-        }
-        .dark-mode .nav-icon {
-            color: #ffd700;
-        }
-        .dark-mode .nav-icon:hover {
-            color: #fff;
-        }
-        .dark-mode .navbar-right.user-nav-fixed .user-name {
-            color: #ffd700;
+        .nav-center span {
+                font-family: "Alan Sans";
+                    cursor: pointer;
+
         }
         .navbar-right.user-nav-fixed {
             position: absolute;
@@ -127,67 +75,47 @@
             font-family: 'Poppins', Arial, sans-serif;
             font-weight: 600;
             color: #132a3f;
-            font-size: 18px;
+            font-size: 16px;
             z-index: 20;
         }
-        .navbar-right.user-nav-fixed .user-name {
-            font-size: 18px;
-            color: #132a3f;
-            font-weight: 600;
-            white-space: nowrap;
+
+        .dark-mode-toggle {
+            background: none;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            margin-left: 8px;
+            font-size: 24px;
+            color: #666666;
+            display: flex;
+            align-items: center;
         }
-        .navbar-right.user-nav-fixed .fa-user-circle {
-            font-size: 32px;
-            color: #0057b8;
-        }
-        .dark-mode .navbar-right.user-nav-fixed .fa-user-circle {
-            font-size: 32px;
+
+        .dark-mode .dark-mode-toggle {
             color: #ffd700;
         }
-        .nav-icons-center {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 25px;
-            align-items: center;
-            font-family: 'Poppins', Arial, sans-serif;
+
+        .navbar-right.user-nav-fixed .fa-user-circle {
+    font-size: 32px; /* Reduced to fit */
+    color: #0057b8;
+}
+
+        .dark-mode .fa-user-circle {
+            color: #ffd700;
         }
-        .nav-icon {
-            font-size: 20px;
-            color: #132a3f;
-            cursor: pointer;
-            transition: color 0.3s ease;
-            
-        }
-        .nav-icon:hover {
-            color: #0057b8;
-        }
-        .nav-icon {
-       font-size: 20px;
-       color: #0057b8;
-       margin: 0 0 2px 0;
-       cursor: pointer;
-       transition: color 0.3s;
-     }
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0;
-        }
-        .nav-item a {
-            text-decoration: none;
-            cursor: pointer ;
-            
-        }
-        .nav-text {
-            font-size: 20px;
-            color: #0057b8;
-            cursor: default;
-            margin: 0;
-            transition: color 0.3s;
-        }
+        .nav-center {
+             position: absolute;
+             left: 50%;
+             transform: translateX(-50%);
+             display: flex;
+             gap: 25px;
+             color:#1e1e1f;
+             align-items: center;
+             font-family: 'Poppins', Arial, sans-serif;
+             transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+         }
+
+
         .dark-mode .nav-text {
             color: #ffd700;
         }
@@ -195,15 +123,25 @@
             color: #ffd700;
         }
 
-        .STI-logo {
+        .sti-logo {
             display: flex;
             align-items: center;
+            height: 40px;
+            width: auto;
+            border-radius: 6px;
+            margin-left: 30px;
         }
-        .STI-logo a {
+
+        .sti-logo span {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0057b8;
+            margin-left: 10px;
+            user-select: none;
+        }
+
+        .sti-logo a {
             text-decoration: none;
-        }
-        .STI-logo span {
-            vertical-align: middle;
         }
         
         /* Sidebar */
@@ -212,7 +150,7 @@
             top: 8%;
             margin-right:10px;
             right: -320px;
-            width: 230px;
+            width: 260px;
             height: 65%;
             background: #fff;
             box-shadow: -2px 0 16px #0002;
@@ -223,6 +161,8 @@
             visibility: hidden; /* Hide by default */
             pointer-events: none; /* Prevent interaction when hidden */
             z-index: 10002;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 24px;
         }
         .sidebar.open {
             right: 0;
@@ -251,13 +191,13 @@
             font-weight: 700;
         }
         .sidebar-content ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            flex: 1;
-        }
+             list-style: none;
+             padding: 0 0 0 8px;
+             margin: 0;
+             flex: 1;
+         }
         .sidebar-content ul li {
-            margin-bottom: 18px;
+            margin-bottom: 5px;
         }
         .sidebar-content ul li a {
             color: #132a3f;
@@ -269,46 +209,43 @@
         .sidebar-content ul li a:hover {
             color: #0057b8;
         }
-        .user-profile {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
+        .account-switcher {
+            margin-left: auto;
         }
-        .user-info {
-            margin-left: 10px;
-        }
-        .user-name {
-            margin: 0;
-            font-size: 1.1rem;
-            color: #0057b8;
+        .sidebar-content ul {
+            margin-top: 20px;
+            font-size: 20px;
             font-weight: 600;
         }
-        .user-status {
-            margin: 2px 0 0 0;
-            font-size: 0.85rem;
-            color: #666;
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #user-Icon {
+            font-size: 30px;
+            color: #0057b8;
+        }
+        .user-name h3 {
+            margin: 0;
+            font-size: 20px;
+        }
+        .user-name a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .dark-mode #user-Icon {
+            color: #ffd700;
+        }
+        .dark-mode .fa-arrow-right-from-bracket {
+            color: #ffd700 !important;
+        }
+        .sidebar-content ul li a {
+            color: #0057b8;
+            font-size: 1.1rem;
             font-weight: 500;
-        }
-        .sidebar-nav {
-            display: none;
-        }
-        .dark-mode .sidebar {
-            background: #232f41;
-            color: #ffd700;
-            box-shadow: -2px 0 16px #0008;
-        }
-        .dark-mode .sidebar-content h3 {
-            color: #ffd700;
-        }
-        .dark-mode .sidebar-content ul li a {
-            color: #ffd700;
-        }
-        .dark-mode .sidebar-content ul li a:hover {
-            color: #fff;
-        }
-        .dark-mode .close-sidebar {
-            color: #ffd700;
-        }
+        }/*END SIDEBAR*/
     .file-viewer {
     flex: 0 0 50%;
     background: #fff;
@@ -638,34 +575,30 @@
 </head>
 <body>
 
-  <nav class="main-navbar"  id="main-navbar">
-       <div class="STI-logo">
-           <a href="Homepage.html"><img src="STI Logo.png" alt="STI Logo" class="sti-logo"></a>
-           <a href="Homepage.html"><span>ARCHIVES</span></a>
-       </div>
-       
-        <div style="flex:1"></div>
-
-        <div class="nav-icons-center">
-            <div class="nav-item">
-                <a href="#home"><span class="nav-text">Home</span></a>
-            </div>
-            <div class="nav-item">
-                <a href="library.html"><span class="nav-text">Library</span></a>
-            </div>
-            <div class="nav-item">
-                <a href="#help"><span class="nav-text">About</span></a>
-            </div>
-        </div>
-
-        <div class="navbar-right user-nav-fixed">
-            <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
-                <i class="fa fa-moon"></i>
-            </button>
-            <i class="fa fa-user-circle" id="userIcon" style="cursor:pointer;"></i>
-        </div>
-
-    </nav>
+  <nav class="main-navbar" id="main-navbar">
+    <div class="sti-logo">
+      <a href="Homepage.html"><img src="STI Logo.png" alt="STI Logo" class="sti-logo"></a>
+      <a href="Homepage.html"><span>ARCHIVES</span></a>
+    </div>
+    <div style="flex:1"></div>
+    <div class="nav-center">
+      <div class="nav-item">
+        <a href="#home"><span class="nav-text">Home</span></a>
+      </div>
+      <div class="nav-item">
+        <a href="library.html"><span class="nav-text">Library</span></a>
+      </div>
+      <div class="nav-item">
+        <a href="#help"><span class="nav-text">About</span></a>
+      </div>
+    </div>
+    <div class="navbar-right user-nav-fixed">
+      <button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
+        <i class="fa fa-moon"></i>
+      </button>
+      <i class="fa fa-user-circle" id="userIcon" style="cursor:pointer;"></i>
+    </div>
+  </nav>
 
     <div class="main-content">
      <div class="file-viewer expanded">
@@ -1085,6 +1018,38 @@
         }
 
 
+        // Load article from pfp saved articles
+        function loadArticleFromPfp(article) {
+            document.getElementById('selectArticle').style.display = 'none';
+            document.getElementById('docPreview').style.display = 'block';
+
+            // Clear existing content
+            const docPreview = document.getElementById('docPreview');
+            docPreview.innerHTML = '';
+
+            if (article.pdfUrl) {
+                // Create iframe for PDF
+                const iframe = document.createElement('iframe');
+                iframe.src = `https://drive.google.com/file/d/${article.pdfUrl}/preview`;
+                iframe.style.width = '100%';
+                iframe.style.height = '93vh';
+                iframe.style.border = 'none';
+
+                docPreview.appendChild(iframe);
+            } else {
+                // No PDF available, show article details
+                docPreview.innerHTML = `
+                    <div class="doc-preview">
+                        <h1>${article.title}</h1>
+                        ${article.author ? `<div class="by">By: ${article.author}</div>` : ''}
+                        ${article.meta ? `<p><strong>Meta:</strong> ${article.meta}</p>` : ''}
+                        ${article.summary ? `<h2>Summary</h2><p>${article.summary}</p>` : ''}
+                        <p><em>PDF not available for this article.</em></p>
+                    </div>
+                `;
+            }
+        }
+
         // Study viewer functionality
         function goToLibrary() {
             // Save current editor state
@@ -1092,6 +1057,14 @@
             const content = document.getElementById('doc').innerHTML;
             localStorage.setItem('editorState', JSON.stringify({title, content}));
             window.location.href = 'library.html?from=myspace';
+        }
+
+        function goToPfp(id) {
+            // Save current editor state
+            const title = document.getElementById('docTitle').value;
+            const content = document.getElementById('doc').innerHTML;
+            localStorage.setItem('editorState', JSON.stringify({title, content}));
+            window.location.href = 'pfp.html?from=myspace&id=' + id;
         }
 
         function loadStudy(studyId) {
@@ -1128,9 +1101,10 @@
             // If not a predefined study, look in allArticles from localStorage
             if (!study) {
                 const allArticles = JSON.parse(localStorage.getItem('allArticles')) || [];
+                const normalizedStudyId = studyId.toLowerCase().replace(/[^a-z0-9]/g, '').substring(0, 20);
                 const article = allArticles.find(a => {
                     const articleStudyId = a.title.toLowerCase().replace(/[^a-z0-9]/g, '').substring(0, 20);
-                    return articleStudyId === studyId;
+                    return articleStudyId === normalizedStudyId;
                 });
 
                 if (article) {
@@ -1185,7 +1159,7 @@
             }
         }
 
-        // Check for study parameter on page load
+        // Check for study parameter or article from pfp on page load
         document.addEventListener('DOMContentLoaded', function() {
             // Load saved editor state
             const editorState = JSON.parse(localStorage.getItem('editorState'));
@@ -1194,10 +1168,21 @@
                 document.getElementById('doc').innerHTML = editorState.content;
                 localStorage.removeItem('editorState');
             }
+
             const urlParams = new URLSearchParams(window.location.search);
             const studyId = urlParams.get('study');
+            const fromPfp = urlParams.get('from') === 'pfp';
+            const articleTitle = urlParams.get('article');
+
             if (studyId) {
                 loadStudy(studyId);
+            } else if (fromPfp && articleTitle) {
+                // Load article from pfp saved articles
+                const selectedArticle = JSON.parse(localStorage.getItem('selectedArticle'));
+                if (selectedArticle) {
+                    loadArticleFromPfp(selectedArticle);
+                    localStorage.removeItem('selectedArticle'); // Clean up
+                }
             }
         });
 

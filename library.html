@@ -45,7 +45,6 @@
      text-align: center;
      color: #fff;
      font-size: 14px;
-     height: 200px;
    }
    .dark-mode .library-footer {
      background: #181f2a;
@@ -91,14 +90,7 @@
    .hide {
      display: none;
    }
-   .STI-logo {
-       display: flex;
-       align-items: center;
-   }
-   .STI-logo span {
-       font-size: 24px;
-       color: #0057b8;
-   }
+   
    .sidebar-down h3 {
      margin-bottom: 15px;
      font-size: 1rem;
@@ -745,6 +737,22 @@
       justify-content: center;
       align-items: center;
     }
+
+    .citation-modal.show {
+      display: flex !important;
+      animation: modalFadeIn 0.3s ease-out;
+    }
+
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
     .citation-modal.show {
       display: flex !important;
       animation: modalFadeIn 0.3s ease-out;
@@ -871,6 +879,63 @@
     }
     .citation-copy-btn.copied {
       background-color: #28a745;
+    }
+
+    .related-articles-content {
+      padding: 20px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .related-article-item {
+      border-bottom: 1px solid #eee;
+      padding: 15px 0;
+      margin-bottom: 15px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .related-article-item:hover {
+      background-color: #f8f9fa;
+    }
+
+    .related-article-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    .dark-mode .related-article-item:hover {
+      background-color: #374151;
+    }
+
+    .related-article-item h4 {
+      margin: 0 0 8px 0;
+      color: #0057b8;
+      font-size: 1.1rem;
+    }
+
+    .related-meta {
+      font-size: 0.9rem;
+      color: #666;
+      margin: 5px 0;
+    }
+
+    .related-summary {
+      font-size: 0.95rem;
+      color: #333;
+      line-height: 1.4;
+    }
+
+    .dark-mode .related-article-item h4 {
+      color: #ffd700;
+    }
+
+    .dark-mode .related-meta {
+      color: #b0b7c3;
+    }
+
+    .dark-mode .related-summary {
+      color: #e2e8f0;
     }
     .dark-mode .citation-modal-content {
       background-color: #2d2d2d;
@@ -1115,8 +1180,55 @@
       display: flex;
       justify-content: flex-start;
       align-items: center;
-      padding: 0 20px;
+      padding: 0 12px;
       position: relative;
+      height:65px;
+    }
+    .sti-logo {
+       display: flex;
+       align-items: center;
+   }
+   .sti-logo img {
+       
+       display:flex;
+            align-items: center;
+            height: 40px;
+            width: auto;
+            border-radius: 6px;
+            margin-left: 30px;
+   }
+   .sti-logo span {
+       font-size: 24px;
+       color: #0057b8;
+   }
+    .main-navbar.shrink {
+      position: fixed;
+      height: 50px;
+      box-shadow: 0 4px 12px #0003;
+    }
+
+    .main-navbar.shrink .sti-logo {
+      height: 34px;
+      margin-top: 0;
+    }
+
+    
+
+    .main-navbar.shrink .sti-logo span {
+      font-size: 22px;
+    }
+
+    .main-navbar.shrink .nav-text {
+      font-size: 24px;
+    }
+
+    .navbar-right.user-nav-fixed .fa-user-circle {
+    font-size: 32px; /* Reduced to fit */
+    color: #0057b8;
+}
+
+    .main-navbar.shrink .dark-mode-toggle {
+      font-size: 20px;
     }
     .navbar-right {
       position: absolute;
@@ -1129,6 +1241,8 @@
       gap: 10px;
       margin: 20px 0;
       padding: 10px;
+      position: relative;
+      z-index: 1;
     }
     .pagination button {
       padding: 8px 12px;
@@ -1138,9 +1252,16 @@
       cursor: pointer;
       border-radius: 4px;
       transition: background 0.3s;
+      scroll-behavior: auto;
+      position: relative;
+      z-index: 1;
     }
     .pagination button:hover {
       background: #f0f0f0;
+    }
+
+    .pagination button:focus {
+      outline: none;
     }
     .pagination button.active {
       background: #0057b8;
@@ -1171,8 +1292,8 @@
 </head>
 <body>
   <nav class="main-navbar" id="main-navbar">
-    <div class="STI-logo">
-      <a href="Homepage.html"><img src="STI Logo.png" alt="STI Logo" class="sti-logo"></a>
+    <div class="sti-logo">
+      <a href="Homepage.html"><img src="STI Logo.png" alt="STI Logo" ></a>
       <a href="Homepage.html"><span>ARCHIVES</span></a>
     </div>
     <div class="nav-icons-center">
@@ -1185,7 +1306,7 @@
       </div>
       <!-- Research Dropdown -->
       <div class="dropdown">
-        <div class="dropdown-toggle research-btn" onclick="window.location.href='library.html?category=research'">
+        <div class="dropdown-toggle research-btn" onclick="toggleCategory('research')">
           Research
         </div>
         <div class="dropdown-menu1">
@@ -1211,7 +1332,7 @@
       </div>
       <!-- Capstone Dropdown -->
       <div class="dropdown">
-        <button class="dropdown-toggle capstone-btn" onclick="window.location.href='library.html?category=capstone'">
+        <button class="dropdown-toggle capstone-btn" onclick="toggleCategory('capstone')">
           Capstone
         </button>
         <div class="dropdown-menu2">
@@ -1270,16 +1391,7 @@
       <ul class="filter-list" data-filter-group="sort">
         <li class="filter-option active" data-filter="az">Sort A-Z</li>
         <li class="filter-option" data-filter="date">Sort by date</li>
-        <li class="filter-option" data-filter="relevance">Sort by relevance</li>
       </ul>
-      <h3>Type</h3>
-      <ul class="filter-list" data-filter-group="type">
-        <li class="filter-option active" data-filter="any">Any type</li>
-        <li class="filter-option" data-filter="review">Review articles</li>
-      </ul>
-      <label><input type="checkbox" /> Include patents</label><br />
-      <label><input type="checkbox" /> Include citations</label>
-      <div class="create-alert">+ Create alert</div>
     </div>
     <!-- Main Content -->
     <div class="main">
@@ -1525,7 +1637,17 @@
     const prevBtn = document.createElement('button');
     prevBtn.textContent = 'Previous';
     prevBtn.disabled = currentPage === 1;
-    prevBtn.onclick = () => { renderPage(currentPage - 1); renderPagination(); };
+    prevBtn.type = 'button';
+    prevBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      const scrollPos = window.pageYOffset || document.documentElement.scrollTop;
+      renderPage(currentPage - 1);
+      renderPagination();
+      window.scrollTo(0, scrollPos);
+      return false;
+    });
     pagination.appendChild(prevBtn);
 
     // Page numbers
@@ -1540,8 +1662,18 @@
     for (let i = startPage; i <= endPage; i++) {
       const pageBtn = document.createElement('button');
       pageBtn.textContent = i;
+      pageBtn.type = 'button';
       if (i === currentPage) pageBtn.classList.add('active');
-      pageBtn.onclick = () => { renderPage(i); renderPagination(); };
+      pageBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        const scrollPos = window.pageYOffset || document.documentElement.scrollTop;
+        renderPage(i);
+        renderPagination();
+        window.scrollTo(0, scrollPos);
+        return false;
+      });
       pagination.appendChild(pageBtn);
     }
 
@@ -1549,8 +1681,32 @@
     const nextBtn = document.createElement('button');
     nextBtn.textContent = 'Next';
     nextBtn.disabled = currentPage === totalPages;
-    nextBtn.onclick = () => { renderPage(currentPage + 1); renderPagination(); };
+    nextBtn.type = 'button';
+    nextBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      const scrollPos = window.pageYOffset || document.documentElement.scrollTop;
+      renderPage(currentPage + 1);
+      renderPagination();
+      window.scrollTo(0, scrollPos);
+      return false;
+    });
     pagination.appendChild(nextBtn);
+  }
+
+  // === TOGGLE CATEGORY FUNCTION ===
+  function toggleCategory(category) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentCategory = urlParams.get('category');
+
+    if (currentCategory === category) {
+      // If already on this category, go back to default (no category filter)
+      window.location.href = 'library.html';
+    } else {
+      // Go to the selected category
+      window.location.href = 'library.html?category=' + category;
+    }
   }
 
   // === INIT ===
@@ -1631,57 +1787,226 @@
     });
   });
 
-  // === STUB FUNCTIONS (to prevent errors) ===
-  function openCitationModal(el) { alert('Cite clicked'); }
-  function showRelatedArticles(el) { alert('Related clicked'); }
-
-  // Save article functionality
-  function saveArticle(el) {
+  // === MODAL FUNCTIONS ===
+  function openCitationModal(el) {
     const article = el.closest('.article');
     const title = article.querySelector('h3').textContent;
     const meta = article.querySelector('.meta').textContent;
-    const summary = article.querySelector('.summary').textContent;
-    const category = article.getAttribute('data-category');
-    const strand = article.getAttribute('data-strand');
-    const level = article.getAttribute('data-level');
-    const program = article.getAttribute('data-program');
-    const year = article.getAttribute('data-year');
 
-    // Create saved article object
-    const savedArticle = {
-      title: title,
-      meta: meta,
-      summary: summary,
-      category: category,
-      strand: strand,
-      level: level,
-      program: program,
-      year: year,
-      savedDate: new Date().toISOString(),
-      originalUrl: window.location.href
-    };
+    // Create citation modal
+    const modal = document.createElement('div');
+    modal.className = 'citation-modal';
+    // Store article data on modal element
+    modal._title = title;
+    modal._meta = meta;
+    modal.innerHTML = `
+      <div class="citation-modal-content">
+        <div class="citation-modal-header">
+          <h2>Cite This Article</h2>
+          <button class="citation-close" onclick="closeCitationModal()">&times;</button>
+        </div>
+        <div class="citation-format-tabs">
+          <button class="citation-tab active" onclick="switchCitationFormat('apa')">APA</button>
+          <button class="citation-tab" onclick="switchCitationFormat('mla')">MLA</button>
+          <button class="citation-tab" onclick="switchCitationFormat('chicago')">Chicago</button>
+        </div>
+        <div class="citation-content" id="citationContent">
+          <p>Loading citation...</p>
+        </div>
+        <button class="citation-copy-btn" onclick="copyCitation()">Copy Citation</button>
+      </div>
+    `;
 
-    // Get existing saved articles from localStorage
-    let savedArticles = JSON.parse(localStorage.getItem('savedArticles')) || [];
+    document.body.appendChild(modal);
+    modal.style.display = 'flex';
 
-    // Check if article is already saved
-    const isAlreadySaved = savedArticles.some(saved => saved.title === title);
+    // Generate APA citation by default
+    generateCitation('apa', title, meta);
+  }
 
-    if (isAlreadySaved) {
-      alert('Article already saved!');
-      return;
+  function closeCitationModal() {
+    const modal = document.querySelector('.citation-modal');
+    if (modal) modal.remove();
+  }
+
+  function switchCitationFormat(format) {
+    const tabs = document.querySelectorAll('.citation-tab');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    event.target.classList.add('active');
+
+    // Get the article from the modal's stored reference
+    const modal = document.querySelector('.citation-modal');
+    const title = modal._title;
+    const meta = modal._meta;
+
+    generateCitation(format, title, meta);
+  }
+
+  function generateCitation(format, title, meta) {
+    let citation = '';
+
+    // Extract author and year from meta
+    const metaParts = meta.split(' – ');
+    const author = metaParts[0] || 'Unknown Author';
+    const year = metaParts[1] || 'n.d.';
+
+    switch(format) {
+      case 'apa':
+        citation = `${author} (${year}). ${title}. STI College Calamba Archives.`;
+        break;
+      case 'mla':
+        citation = `${author}. "${title}." <i>STI College Calamba Archives</i>, ${year}.`;
+        break;
+      case 'chicago':
+        citation = `${author}. "${title}," STI College Calamba Archives, ${year}.`;
+        break;
     }
 
-    // Add to saved articles
-    savedArticles.push(savedArticle);
-    localStorage.setItem('savedArticles', JSON.stringify(savedArticles));
+    document.getElementById('citationContent').innerHTML = `<code>${citation}</code>`;
+  }
 
-    // Show success message
-    alert('Article saved successfully!');
+  function copyCitation() {
+    const citationText = document.querySelector('#citationContent code').textContent;
+    navigator.clipboard.writeText(citationText).then(() => {
+      const btn = document.querySelector('.citation-copy-btn');
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy Citation';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
 
-    // Change star color to indicate saved
-    el.style.color = '#ffd700';
-    el.textContent = '★ Saved';
+  function showRelatedArticles(el) {
+    const article = el.closest('.article');
+    const currentTitle = article.querySelector('h3').textContent.toLowerCase();
+    const currentArticleTitle = article.querySelector('h3').textContent;
+
+    // Find related articles (simple keyword matching)
+    const allArticles = document.querySelectorAll('.article');
+    const relatedArticles = [];
+
+    allArticles.forEach(art => {
+      if (art !== article) {
+        const title = art.querySelector('h3').textContent.toLowerCase();
+        const summary = art.querySelector('.summary').textContent.toLowerCase();
+
+        // Check for common keywords
+        const keywords = currentTitle.split(' ').filter(word => word.length > 3);
+        const hasCommonKeywords = keywords.some(keyword =>
+          title.includes(keyword) || summary.includes(keyword)
+        );
+
+        if (hasCommonKeywords) {
+          relatedArticles.push({
+            title: art.querySelector('h3').textContent,
+            meta: art.querySelector('.meta').textContent,
+            summary: art.querySelector('.summary').textContent.substring(0, 100) + '...'
+          });
+        }
+      }
+    });
+
+    // Create related articles modal
+    const modal = document.createElement('div');
+    modal.className = 'citation-modal';
+    modal.innerHTML = `
+      <div class="citation-modal-content" style="max-width: 800px;">
+        <div class="citation-modal-header">
+          <h2>Related Articles</h2>
+          <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #666; font-weight: normal;">Articles related to: "${currentArticleTitle}"</p>
+          <button class="citation-close" onclick="closeRelatedModal()">&times;</button>
+        </div>
+        <div class="related-articles-content">
+          ${relatedArticles.length > 0 ?
+            relatedArticles.slice(0, 5).map(art => `
+              <div class="related-article-item" onclick="openRelatedArticle('${art.title.replace(/'/g, "\\'")}')">
+                <h4>${art.title}</h4>
+                <p class="related-meta">${art.meta}</p>
+                <p class="related-summary">${art.summary}</p>
+              </div>
+            `).join('')
+            :
+            '<p>No related articles found.</p>'
+          }
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    modal.style.display = 'flex';
+  }
+
+  function closeRelatedModal() {
+    const modal = document.querySelector('.citation-modal');
+    if (modal) modal.remove();
+  }
+
+  function openRelatedArticle(title) {
+    // Find the study ID for this article (same logic as in the main articles)
+    let studyId = title.toLowerCase().replace(/[^a-z0-9]/g, '').substring(0, 20);
+    if (title.includes('Lagundi')) studyId = 'lagundi_oil';
+    if (title.includes('Farmers')) studyId = 'perceptions';
+
+    // Close the modal and navigate to myspace
+    closeRelatedModal();
+    window.location.href = `myspace.html?study=${studyId}`;
+  }
+
+  // Save article functionality
+  function saveArticle(el) {
+      const article = el.closest('.article');
+      const title = article.querySelector('h3').textContent;
+      const meta = article.querySelector('.meta').textContent;
+      const summary = article.querySelector('.summary').textContent;
+      const category = article.getAttribute('data-category');
+      const strand = article.getAttribute('data-strand');
+      const level = article.getAttribute('data-level');
+      const program = article.getAttribute('data-program');
+      const year = article.getAttribute('data-year');
+
+      // Find the article data to get fileIds from the actual article being saved
+      const allArticles = JSON.parse(localStorage.getItem('allArticles')) || [];
+      const articleData = allArticles.find(a => a.title === title);
+      const pdfUrl = articleData && articleData.fileIds && articleData.fileIds.length > 0 ? `https://drive.google.com/file/d/${articleData.fileIds[0]}/preview` : null;
+
+      // Create saved article object
+      const savedArticle = {
+          title: title,
+          meta: meta,
+          summary: summary,
+          category: category,
+          strand: strand,
+          level: level,
+          program: program,
+          year: year,
+          pdfUrl: pdfUrl,
+          savedDate: new Date().toISOString(),
+          originalUrl: window.location.href
+      };
+
+      // Get existing saved articles from localStorage
+      let savedArticles = JSON.parse(localStorage.getItem('savedArticles')) || [];
+
+      // Check if article is already saved
+      const isAlreadySaved = savedArticles.some(saved => saved.title === title);
+
+      if (isAlreadySaved) {
+          alert('Article already saved!');
+          return;
+      }
+
+      // Add to saved articles
+      savedArticles.push(savedArticle);
+      localStorage.setItem('savedArticles', JSON.stringify(savedArticles));
+
+      // Show success message
+      alert('Article saved successfully!');
+
+      // Change star color to indicate saved
+      el.style.color = '#ffd700';
+      el.textContent = '★ Saved';
   }
 </script>
 </body>

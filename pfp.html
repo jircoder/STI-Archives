@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <script>
+        // Configure PDF.js worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+    </script>
     <style>
         * {
             margin: 0;
@@ -21,6 +25,7 @@
             font-family: 'Poppins', Arial, sans-serif;
             background: #fff;   /* FIXED background */
             max-width: 100vw;
+            overflow-x: hidden;
 
         }
       
@@ -54,6 +59,14 @@
 
 }
        .sti-logo {
+           display: flex;
+           align-items: center;
+           height: 40px;
+           width: auto;
+           border-radius: 6px;
+           margin-left: 30px;
+       }
+       .sti-logo img {
            display: flex;
            align-items: center;
            height: 40px;
@@ -132,9 +145,13 @@
             cursor: pointer;
             margin-left: 8px;
             font-size: 24px;
-            color: #ffd700;
+            color: #666666;
             display: flex;
             align-items: center;
+        }
+
+        .dark-mode .dark-mode-toggle {
+            color: #ffd700;
         }
 
         .fa-user-circle {
@@ -147,23 +164,8 @@
         }
         
 
-        .navbar-right {
-             display: flex;
-             align-items: center;
-             gap: 12px;
-             font-family: 'Poppins', Arial, sans-serif;
-             font-weight: 600;
-             color: #132a3f;
-             font-size: 18px;
-             margin-right:30px;
-             transition: font-size 0.4s cubic-bezier(0.4, 0, 0.2, 1), gap 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-
-         }
-        .navbar-right i {
-            font-size: 28px;
-            
-            
-        }
+        
+        
         .navbar-right.user-nav-fixed {
             position: absolute;
             right: 12px;
@@ -219,8 +221,8 @@
             top: 8%;
             margin-right:10px;
             right: -320px;
-            width: 260px;
-            height: 65%;
+            width: 220px;
+            height: 40%;
             background: #fff;
             box-shadow: -2px 0 16px #0002;
             z-index: 100;
@@ -339,6 +341,10 @@
             transition: width 0.3s ease;
         }
 
+        .dark-mode .sdbr1 {
+            background: #232f41;
+        }
+
         .sdbr1.collapsed {
             width: 50px;
         }
@@ -372,6 +378,10 @@
             position: relative;
         }
 
+        .dark-mode .collapsed-menu-item {
+            color: #ffd700;
+        }
+
         .collapsed-menu-item:hover {
             color: #0057b8;
         }
@@ -402,6 +412,10 @@
             transition: background 0.2s ease;
         }
 
+        .dark-mode .collapsed-dropdown div {
+            color: #e2e8f0;
+        }
+
         .collapsed-dropdown div:hover {
             background: rgba(0, 87, 184, 0.1);
         }
@@ -417,7 +431,11 @@
             cursor: pointer;
             z-index: 15;
             padding-left:5px;
-            
+
+        }
+
+        .dark-mode .toggle-collapse {
+            color: #ffd700;
         }
 
         .sdbr1.collapsed .toggle-collapse {
@@ -438,7 +456,7 @@
         }
         .sdbr1-menu li {
             margin-bottom: 15px;
-            
+
         }
         .sdbr1-menu li {
             margin-bottom: 15px;
@@ -449,6 +467,10 @@
             border-radius: 4px;
             cursor: pointer;
             font-weight: normal;
+        }
+
+        .dark-mode .sdbr1-menu li {
+            color:#e2e8f0;
         }
 
         .sdbr1-menu li:hover {
@@ -504,6 +526,10 @@
             min-width: 140px;
             background: transparent;
             pointer-events: none;
+        }
+
+        .dark-mode .menu-header {
+            color: #ffd700;
         }
 
         .menu-header:hover {
@@ -719,42 +745,6 @@
             background: #0056b3;
         }
 
-        /* Friends Section Styles */
-        .friends-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 30px;
-            padding: 20px 0;
-        }
-
-        .friend-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 15px;
-            transition: transform 0.2s ease;
-            cursor: pointer;
-        }
-
-        .friend-item:hover {
-            transform: scale(1.05);
-        }
-
-        .friend-avatar {
-            margin-bottom: 15px;
-        }
-
-        .friend-avatar i {
-            font-size: 72px;
-            color: #0057b8;
-        }
-
-        .friend-name {
-            font-size: 18px;
-            font-weight: 500;
-            color: #333;
-            text-align: center;
-        }
 
         .name-section {
             margin-top: 20px;
@@ -792,6 +782,90 @@
             outline: none;
             border-color: #0057b8;
             box-shadow: 0 0 0 2px rgba(0, 87, 184, 0.25);
+        }
+
+        .update-name-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s ease;
+            margin-top: 15px;
+        }
+
+        .update-name-btn:hover {
+            background: #218838;
+        }
+
+        /* Bio Section Styles */
+        .bio-section {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .bio-section label {
+            display: block;
+            margin: 0 0 15px 0;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .bio-section textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 80px;
+            background: white;
+            color: #333;
+        }
+
+        .bio-section textarea:focus {
+            outline: none;
+            border-color: #0057b8;
+            box-shadow: 0 0 0 2px rgba(0, 87, 184, 0.25);
+        }
+
+        .bio-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .update-bio-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s ease;
+        }
+
+        .update-bio-btn:hover {
+            background: #218838;
+        }
+
+        .char-count {
+            font-size: 0.85rem;
+            color: #666;
         }
         .sdbr1-menu .sub-dropdown {
             position: relative;
@@ -944,8 +1018,8 @@
 
         .status-cloud {
             position: absolute;
-            top: -20px;
-            right:-40px;
+            top: -35px;
+            right:-35px;
             background: #0b4dd1;
             padding: 6px 14px;
             border-radius: 999px;
@@ -989,12 +1063,6 @@
             color: rgb(58, 58, 58);
         }
 
-        .friends-count {
-            font-size: 1.2rem;
-            color: #333333;
-            margin-top: 4px;
-            margin-left: 0;
-        }
 
         .bio-text {
             font-size: 1rem;
@@ -1024,6 +1092,7 @@
             margin-bottom: 20px;
             border-left: 4px solid #0057b8;
             position: relative;
+            cursor:pointer;
         }
 
         .saved-article-header {
@@ -1076,6 +1145,18 @@
             font-size: 0.8rem;
             color: #888;
             font-style: italic;
+        }
+
+        .article-pdf {
+            margin-top: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .article-pdf iframe {
+            border: none;
+            border-radius: 8px;
         }
 
         .saved-document {
@@ -1140,37 +1221,14 @@
         .sdbr2 {
             margin-top:65px;
             padding-top:80px;
-            background-color:rgb(125, 125, 236);
             right:0%;
             width:299px;
             height: calc(100vh - 65px);
             z-index:10;
-            position:absolute;
+            position:fixed;
         }
 
-        .online-container {
-            background-color: orange;
-            border-radius: 15px;
-            padding: 10px;
-        }
-
-        .sdbr2 .online-user {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            padding-left: 20px;
-        }
-
-        .sdbr2 .online-user i {
-            font-size: 24px;
-            color: #0057b8;
-        }
-
-        .sdbr2 .online-user span {
-            font-size: 16px;
-            color: #333;
-        }
+        
 
         .dark-mode .sdbr2 .online-container {
             background-color: #374151;
@@ -1205,21 +1263,22 @@
         .main-content{
             position: relative;
             height: 120vh;
-            width:67vw;
+            width: calc(100vw - 200px);
             margin-left:200px;
-            margin-right:299px;
+            margin-right:0px;
             margin-top:65px;
+            overflow-x: hidden;
         }
 
         .main-content.expanded {
-            margin-right: 0;
-            width: calc(100vw - 200px);
+            width: calc(100vw - 50px);
+            margin-left: 50px;
         }
         .reset-size-btn {
             position: absolute;
             top: 3px;
             left: 3px;
-            
+
             color: rgb(35, 35, 35);
             border: none;
             border-radius: 50%;
@@ -1246,9 +1305,56 @@
             gap: 20px;
             height:auto;
             width:auto;
-            
+
             background-color: #a97e7ebd;
-            
+
+        }
+
+        .upload-section {
+            padding: 20px;
+            margin: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .upload-section h2 {
+            color: #0057b8;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            background: #f9f9f9;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover,
+        .upload-area.drag-over {
+            border-color: #0057b8;
+            background: #f0f8ff;
+        }
+
+        .upload-area i {
+            font-size: 48px;
+            color: #0057b8;
+            margin-bottom: 15px;
+        }
+
+        .upload-area p {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .upload-area input[type="file"] {
+            display: none;
         }
         .upld-boxes{
             background-color: #f0f0f0;
@@ -1265,8 +1371,64 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
             resize: both;
-            overflow: auto;
+            overflow: hidden;
             position: relative;
+        }
+
+        .upld-boxes .upld-dscrpt {
+            width: 100%;
+            text-align: center;
+            padding: 0 10px 5px 10px;
+            box-sizing: border-box;
+        }
+
+        .upld-boxes .upld-dscrpt small {
+            display: block;
+            line-height: 1.2;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .upld-boxes .upld-dscrpt small.description-text {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            max-height: 3.6em;
+            line-height: 1.2;
+        }
+
+        .upload-drop-zone {
+            border: 2px dashed #ccc;
+            background-color: #fafafa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-drop-zone:hover {
+            border-color: #0057b8;
+            background-color: #f0f8ff;
+        }
+
+        .upload-drop-zone.drag-over {
+            border-color: #0057b8;
+            background-color: #e6f3ff;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: #0057b8;
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            text-align: center;
+            color: #666;
+        }
+
+        .upload-text p {
+            margin: 5px 0;
+            font-size: 16px;
         }
         .upld-boxes:hover{
             transform: translateY(-5px);
@@ -1355,8 +1517,10 @@
             display: flex;
         }
         .upld-boxes img{
-            width: 100px;
-            height: 100px;
+            width: calc(100% - 20px);
+            height: calc(70% - 40px);
+            max-width: calc(100% - 20px);
+            max-height: calc(70% - 40px);
             object-fit: contain;
             margin-bottom: 15px;
         }
@@ -1486,7 +1650,7 @@
 <body>
     <nav class="main-navbar" id="main-navbar">
         <div class="sti-logo">
-            <a href="Homepage.html"><img src="STI Logo.png" alt="STI Logo" class="sti-logo"></a>
+            <a href="Homepage.html"><img src="STI Logo.png" alt="STI Logo" ></a>
             <a href="Homepage.html"><span>ARCHIVES</span></a>
         </div>
         <div style="flex:1"></div>
@@ -1512,25 +1676,22 @@
     <!-- Sidebar -->
     <div id="sidebar" class="sidebar">
         <div class="sidebar-content">
-            
             <div class="user-info">
                 <a href="pfp.html"><i class="fa fa-user-circle" id="user-Icon"></i></a>
                 <div class="user-name">
                     <a href="pfp.html"><h3>UserName</h3></a>
                 </div>
-                <div class="account-switcher" >
-                    <i class="fas fa-exchange-alt" title="Account Switcher"></i>
-                </div>
+
             </div>
-            
+
             <ul>
-              
-              
-                <li><a href="library.html"><i class="fas fa-book"></i> Library</a></li>
-                <li><a href="upload.php"><i class="fa-solid fa-upload"></i> <span class="text">My Uploads</span></a></li>
+                <hr>
+                <li><a href="pfp.html"><i class="fa-solid fa-user"></i> <span class="text">Profile</span></a></li>
+                <li><a href="pfp.html"><i class="fa-solid fa-upload"></i> <span class="text">My Uploads</span></a></li>
                 <li style="margin-top: 10px;"><a href="myspace.html"><i class="fa-solid fa-feather-pointed"></i> <span class="text">My Space</span></a></li>
-                <li style="margin-top: 10px;"><a href="#help"><i class="fa-solid fa-question-circle"></i> <span class="text">Help</span></a></li>
-                <hr><li style="margin-top: 10px;"><a href="index.html"><i class="fa-solid fa-sign-out-alt"></i> <span class="text">Sign out</span></a></li>
+                <li><a href="pfp.html/#p-s-account"><i class="fa-solid fa-cog"></i> <span class="text">Settings</span></a></li>
+                <hr>
+                <li style="margin-top: 10px;"><a href="index.html"><i class="fa-solid fa-sign-out-alt"></i> <span class="text">Sign out</span></a></li>
             </ul>
         </div>
     </div>
@@ -1541,7 +1702,6 @@
         <ul class="sdbr1-menu">
             <li class="menu-header">Account</li>
             <li class="dropdown-item profile active" onclick="showSection('p-n-p', event)">Profile</li>
-            <li class="dropdown-item friends" onclick="showSection('p-n-friends', event)">Friends</li>
             <li class="menu-header">MyLibrary</li>
             <li class="dropdown-item myuploads" onclick="showSection('p-n-m', event)">MyUploads</li>
             <li class="dropdown-item saved-articles" onclick="showSection('p-n-b', event)">Saved Articles</li>
@@ -1557,7 +1717,6 @@
                 👤
                 <div class="collapsed-dropdown">
                     <div onclick="showSection('p-n-p')">Profile</div>
-                    <div onclick="showSection('p-n-friends')">Friends</div>
                 </div>
             </div>
             <div class="collapsed-menu-item" title="My Library">
@@ -1580,38 +1739,12 @@
 
     </section>
 
-    <div class="sdbr2">
-        <div class="online-container">
-            <h3>Online Users</h3>
-            <div class="online-user">
-                <i class="fa fa-user-circle"></i>
-                <span>User 1</span>
-            </div>
-            <div class="online-user">
-                <i class="fa fa-user-circle"></i>
-                <span>User 2</span>
-            </div>
-            <div class="online-user">
-                <i class="fa fa-user-circle"></i>
-                <span>User 3</span>
-            </div>
-        </div>
-        <div class="upload-container" style="margin-top: 20px; padding: 20px; border: 2px dashed #ccc; border-radius: 10px; text-align: center; cursor: pointer; background: #f9f9f9;">
-            <i class="fas fa-cloud-upload-alt" style="font-size: 48px; color: #0057b8; margin-bottom: 10px;"></i>
-            <p style="margin: 0; font-size: 18px; color: #333;">Drag & drop files here or click to upload</p>
-            <input type="file" id="file-upload" accept="application/pdf,.doc,.docx" multiple style="display: none;">
-        </div>
-    </div>
-
-    <div class="toggle-sdbr2" id="toggleSdbr2">
-        <span>></span>
-    </div>
 
     <section class="main-content">
         <div id="p-n-p" class="profile-section" style="display:none; text-align: center;">
             <div clas="pfp-p-container" style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
                 <div class="background-image-container" id="backgroundContainer" style="background-image: url('dbgc.png'); background-size: cover; background-position: center;">
-                    
+
                     <input type="file" id="backgroundUpload" accept="image/*" onchange="changeBackground(event)" style="display: none;" />
                     <div class="pfp-container" style="position: absolute; top: 175px; left: 50%; transform: translateX(-50%);">
                         <label for="pfp-profileUpload">
@@ -1626,7 +1759,6 @@
 
                 <div class="profile-info-block" style="text-align: center;">
                     <div class="full-name">Username</div>
-                    <div class="friends-count">0 friends</div>
                     <div class="bio-text">This is my bio. Welcome to my profile!</div>
                     <div class="status-cloud" id="statusCloud">
                         <div class="status-bubble1"></div>
@@ -1681,6 +1813,16 @@
                     <img src="paper2.png">
                     <div class="upld-dscrpt">Description</div>
                 </div>
+                <div class="upld-boxes upload-drop-zone">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <div class="upload-text">
+                        <p>Drag & drop files here</p>
+                        <p>or click to upload</p>
+                    </div>
+                    <input type="file" id="file-upload" accept="application/pdf,.doc,.docx" multiple style="display: none;">
+                </div>
             </div>
         </div>
         <div id="p-n-b" class="profile-section" style="display:none;">
@@ -1689,44 +1831,10 @@
                 <!-- Saved articles will be loaded here -->
             </div>
         </div>
-        <div id="p-n-f" class="profile-section" style="display:none;">
-            <h2>Friends</h2>
-            <p>Your friends list and connections.</p>
-            <!-- Add more content as needed -->
-        </div>
         <div id="p-n-s" class="profile-section" style="display:none;">
             <h2>Settings</h2>
             <p>Account settings and preferences.</p>
             <!-- Add more content as needed -->
-        </div>
-        <div id="p-n-friends" class="profile-section" style="display:none;">
-            
-            <div class="friends-list">
-                <div class="friend-item">
-                    <div class="friend-avatar">
-                        <i class="fas fa-user-circle"></i>
-                    </div>
-                    <div class="friend-name">John Doe</div>
-                </div>
-                <div class="friend-item">
-                    <div class="friend-avatar">
-                        <i class="fas fa-user-circle"></i>
-                    </div>
-                    <div class="friend-name">Jane Smith</div>
-                </div>
-                <div class="friend-item">
-                    <div class="friend-avatar">
-                        <i class="fas fa-user-circle"></i>
-                    </div>
-                    <div class="friend-name">Mike Johnson</div>
-                </div>
-                <div class="friend-item">
-                    <div class="friend-avatar">
-                        <i class="fas fa-user-circle"></i>
-                    </div>
-                    <div class="friend-name">Sarah Wilson</div>
-                </div>
-            </div>
         </div>
         <div id="p-n-docs" class="profile-section" style="display:none;">
             <div id="saved-documents-container">
@@ -1759,12 +1867,27 @@
                     <div class="name-row">
                         <div class="name-input-group">
                             <label for="firstName">First Name</label>
-                            <input type="text" id="firstName" value="John" oninput="updateNameAuto()" />
+                            <input type="text" id="firstName" value="John" />
                         </div>
                         <div class="name-input-group">
                             <label for="lastName">Last Name</label>
-                            <input type="text" id="lastName" value="Doe" oninput="updateNameAuto()" />
+                            <input type="text" id="lastName" value="Doe" />
                         </div>
+                    </div>
+                    <button class="update-name-btn" onclick="updateName()">
+                        <i class="fas fa-save"></i> Save Name
+                    </button>
+                </div>
+
+                <!-- Bio Section -->
+                <div class="bio-section">
+                    <label for="userBio">Bio</label>
+                    <textarea id="userBio" placeholder="Tell us about yourself..." rows="4" maxlength="500"></textarea>
+                    <div class="bio-actions">
+                        <button class="update-bio-btn" onclick="updateBio()">
+                            <i class="fas fa-save"></i> Save Bio
+                        </button>
+                        <span class="char-count"><span id="bioCharCount">0</span>/500</span>
                     </div>
                 </div>
             </div>
@@ -1773,7 +1896,7 @@
             <div class="account-section">
                 <h3>Email</h3>
                 <div class="email-section">
-                    <input type="email" id="userEmailInput" value="user@example.com" readonly />
+                    <input type="email" id="userEmailInput" value="user@sti.archives.clmb" readonly />
                     <button class="update-email-btn" onclick="updateEmail()">
                         <i class="fas fa-plus"></i> Update Email
                     </button>
@@ -1786,7 +1909,7 @@
                 <div class="password-section">
                     <div class="password-input-container">
                         <i class="fas fa-lock password-icon"></i>
-                        <input type="password" id="currentPassword" placeholder="Current password" class="password-input" />
+                        <input type="password" id="currentPassword" placeholder="Current password" class="password-input" value="usertesting" />
                         <i class="fas fa-eye password-toggle" onclick="togglePasswordVisibility('currentPassword')"></i>
                     </div>
                     <div class="password-input-container">
@@ -1804,7 +1927,7 @@
             </div>
         </div>
         <div id="p-n-terms" class="profile-section" style="display:none;">
-            <h2>Terms and Conditions</h2>
+            
 
             <!-- Terms and Conditions Section -->
             <div class="account-section">
@@ -1838,7 +1961,7 @@
         </div>
 
         <div id="p-n-privacy" class="profile-section" style="display:none;">
-            <h2>Privacy Policy</h2>
+            
 
             <!-- Privacy Policy Section -->
             <div class="account-section">
@@ -1916,6 +2039,11 @@
 
             if (savedProfilePic) {
                 document.getElementById('pfpPic').src = savedProfilePic;
+                // Also update mini profile picture
+                const miniPfpPic = document.getElementById('miniPfpPic');
+                if (miniPfpPic) {
+                    miniPfpPic.src = savedProfilePic;
+                }
             }
 
             if (savedBackground) {
@@ -1923,6 +2051,14 @@
                 backgroundContainer.style.backgroundImage = `url(${savedBackground})`;
                 backgroundContainer.style.backgroundSize = 'cover';
                 backgroundContainer.style.backgroundPosition = 'center';
+
+                // Also update mini background
+                const miniBackgroundContainer = document.querySelector('.mini-background-image-container');
+                if (miniBackgroundContainer) {
+                    miniBackgroundContainer.style.backgroundImage = `url(${savedBackground})`;
+                    miniBackgroundContainer.style.backgroundSize = 'cover';
+                    miniBackgroundContainer.style.backgroundPosition = 'center';
+                }
             }
         }
 
@@ -2398,7 +2534,21 @@
                     <div class="meta">${article.meta}</div>
                     <div class="summary">${article.summary}</div>
                     <div class="saved-date">Saved on: ${new Date(article.savedDate).toLocaleDateString()}</div>
+                    ${article.pdfUrl ? `<div class="article-pdf" style="display: none;"><iframe src="${article.pdfUrl}" width="100%" height="400px" frameborder="0" allowfullscreen></iframe></div>` : ''}
                 `;
+
+                // Make article clickable to go to myspace with article data, but not if clicking remove button
+                articleDiv.onclick = (e) => {
+                    if (!e.target.closest('.remove-article-btn')) {
+                        // Store article data for myspace to load
+                        localStorage.setItem('selectedArticle', JSON.stringify(article));
+                        let studyId = article.title.toLowerCase().replace(/[^a-z0-9]/g, '').substring(0, 20);
+                        if (article.title.includes('Lagundi')) studyId = 'lagundi_oil';
+                        if (article.title.includes('Farmers')) studyId = 'perceptions';
+                        window.location.href = 'myspace.html?study=' + encodeURIComponent(studyId);
+                    }
+                };
+
                 container.appendChild(articleDiv);
             });
         }
@@ -2675,31 +2825,14 @@
             const sidebar = document.getElementById('sdbr1');
             const mainContent = document.querySelector('.main-content');
             const toggleBtn = document.querySelector('.toggle-collapse');
-            const sdbr2 = document.querySelector('.sdbr2');
 
             if (sidebar.classList.contains('collapsed')) {
                 sidebar.classList.remove('collapsed');
-                if (sdbr2.style.display === 'none') {
-                    mainContent.style.width = 'calc(100vw - 200px)';
-                    mainContent.style.marginLeft = '200px';
-                    mainContent.style.marginRight = '0';
-                } else {
-                    mainContent.style.width = '67vw';
-                    mainContent.style.marginLeft = '200px';
-                    mainContent.style.marginRight = '299px';
-                }
+                mainContent.classList.remove('expanded');
                 toggleBtn.textContent = '☰';
             } else {
                 sidebar.classList.add('collapsed');
-                if (sdbr2.style.display === 'none') {
-                    mainContent.style.width = 'calc(100vw - 50px)';
-                    mainContent.style.marginLeft = '50px';
-                    mainContent.style.marginRight = '0';
-                } else {
-                    mainContent.style.width = 'calc(100vw - 349px)';
-                    mainContent.style.marginLeft = '50px';
-                    mainContent.style.marginRight = '299px';
-                }
+                mainContent.classList.add('expanded');
                 toggleBtn.textContent = '☰';
             }
         }
@@ -2723,11 +2856,12 @@
             setDarkMode(!document.body.classList.contains('dark-mode'));
         };
 
-        // Load saved name and email on page load
+        // Load saved name, email, and bio on page load
         function loadSavedName() {
             const savedFirstName = localStorage.getItem('userFirstName');
             const savedLastName = localStorage.getItem('userLastName');
             const savedEmail = localStorage.getItem('userEmail');
+            const savedBio = localStorage.getItem('userBio');
 
             if (savedFirstName) {
                 document.getElementById('firstName').value = savedFirstName;
@@ -2738,9 +2872,18 @@
             if (savedEmail) {
                 document.getElementById('userEmailInput').value = savedEmail;
             }
+            if (savedBio) {
+                document.getElementById('userBio').value = savedBio;
+                updateBioCharCount();
+            }
 
             if (savedFirstName && savedLastName) {
                 document.querySelector('.full-name').textContent = `${savedFirstName} ${savedLastName}`;
+            }
+
+            // Update bio display on profile page
+            if (savedBio) {
+                document.querySelector('.bio-text').textContent = savedBio;
             }
         }
 
@@ -2813,38 +2956,234 @@
 
         // File upload functionality
         function initializeFileUpload() {
-            const uploadContainer = document.querySelector('.upload-container');
+            const uploadDropZone = document.querySelector('.upload-drop-zone');
             const fileInput = document.getElementById('file-upload');
 
-            uploadContainer.addEventListener('click', () => {
-                fileInput.click();
-            });
+            if (uploadDropZone && fileInput) {
+                // Remove any existing click listeners to prevent duplicates
+                const newUploadDropZone = uploadDropZone.cloneNode(true);
+                uploadDropZone.parentNode.replaceChild(newUploadDropZone, uploadDropZone);
 
-            uploadContainer.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadContainer.style.borderColor = '#0057b8';
-                uploadContainer.style.background = '#f0f8ff';
-            });
+                // Re-query the element after replacement
+                const freshUploadDropZone = document.querySelector('.upload-drop-zone');
 
-            uploadContainer.addEventListener('dragleave', () => {
-                uploadContainer.style.borderColor = '#ccc';
-                uploadContainer.style.background = '#f9f9f9';
-            });
+                // Add click handler for upload drop zone
+                let isFileDialogOpen = false;
+                let clickTimeout;
 
-            uploadContainer.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadContainer.style.borderColor = '#ccc';
-                uploadContainer.style.background = '#f9f9f9';
-                handleFileUpload(e.dataTransfer.files);
-            });
+                freshUploadDropZone.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
 
-            fileInput.addEventListener('change', (e) => {
-                handleFileUpload(e.target.files);
-            });
+                    if (!isFileDialogOpen) {
+                        isFileDialogOpen = true;
+
+                        // Clear any existing timeout
+                        if (clickTimeout) {
+                            clearTimeout(clickTimeout);
+                        }
+
+                        fileInput.click();
+
+                        // Reset the flag after a longer delay to prevent rapid clicking
+                        clickTimeout = setTimeout(() => {
+                            isFileDialogOpen = false;
+                        }, 1000);
+                    }
+                });
+
+                // Add drag and drop event listeners
+                freshUploadDropZone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    freshUploadDropZone.classList.add('drag-over');
+                });
+
+                freshUploadDropZone.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    freshUploadDropZone.classList.remove('drag-over');
+                });
+
+                freshUploadDropZone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    freshUploadDropZone.classList.remove('drag-over');
+                    handleFileUpload(e.dataTransfer.files);
+                });
+
+                fileInput.addEventListener('change', (e) => {
+                    handleFileUpload(e.target.files);
+                });
+            }
         }
 
+        // Global variable to store files for upload
+        let filesToUpload = [];
+
         function handleFileUpload(files) {
+            // Store files globally for later use
+            filesToUpload = Array.from(files);
+            // Show upload modal for file details
             showUploadModal(files);
+        }
+
+        function createUploadBox(file, customTitle = null, customAuthor = null, customDescription = null) {
+            const upldContent = document.querySelector('.upld-content');
+            const uploadDropZone = upldContent.querySelector('.upload-drop-zone');
+
+            // Create new upload box
+            const newBox = document.createElement('div');
+            newBox.className = 'upld-boxes';
+
+            // Use custom metadata if provided, otherwise use defaults
+            const title = customTitle || file.name.replace(/\.[^/.]+$/, "");
+            const author = customAuthor || "Unknown";
+            const description = customDescription || `${file.type} • ${(file.size / 1024).toFixed(2)} KB`;
+
+            // Handle different file types
+            if (file.type.startsWith('image/')) {
+                // For images, show the image
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    newBox.innerHTML = `
+                        <button class="box-options-btn" onclick="toggleBoxOptions(this)">⋮</button>
+                        <div class="box-options-menu">
+                            <div onclick="editBox(this)">✏️ Edit</div>
+                            <div onclick="deleteBox(this)">🗑️ Delete</div>
+                        </div>
+                        <button class="delete-btn" onclick="confirmDelete(this)">×</button>
+                        <img src="${e.target.result}" style="width: calc(100% - 20px); height: calc(70% - 40px); max-width: calc(100% - 20px); max-height: calc(70% - 40px); object-fit: contain;">
+                        <div class="upld-dscrpt">
+                            <strong>${title}</strong><br>
+                            <small>by ${author}</small><br>
+                            <small class="description-text">${description}</small>
+                        </div>
+                    `;
+                    // Insert before the upload drop zone
+                    upldContent.insertBefore(newBox, uploadDropZone);
+                };
+                reader.readAsDataURL(file);
+            } else if (file.type === 'application/pdf') {
+                // For PDFs, show the first page as canvas
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    pdfjsLib.getDocument({data: e.target.result}).promise.then(function(pdf) {
+                        pdf.getPage(1).then(function(page) {
+                            const desiredHeight = 200; // Smaller for thumbnail
+                            const viewport = page.getViewport({scale: 1});
+                            const scale = (desiredHeight / viewport.height) * 2;
+                            const scaledViewport = page.getViewport({scale: scale});
+
+                            const canvas = document.createElement('canvas');
+                            canvas.height = scaledViewport.height;
+                            canvas.width = scaledViewport.width;
+                            canvas.style.width = '100%';
+                            canvas.style.height = '100%';
+                            canvas.style.maxWidth = '100%';
+                            canvas.style.maxHeight = '100%';
+                            canvas.style.objectFit = 'contain';
+                            canvas.style.borderRadius = '8px';
+
+                            const renderContext = {
+                                canvasContext: canvas.getContext('2d'),
+                                viewport: scaledViewport
+                            };
+
+                            page.render(renderContext).promise.then(function() {
+                                // Create the box HTML with the rendered canvas
+                                newBox.innerHTML = `
+                                    <button class="box-options-btn" onclick="toggleBoxOptions(this)">⋮</button>
+                                    <div class="box-options-menu">
+                                        <div onclick="editBox(this)">✏️ Edit</div>
+                                        <div onclick="deleteBox(this)">🗑️ Delete</div>
+                                    </div>
+                                    <button class="delete-btn" onclick="confirmDelete(this)">×</button>
+                                    <div style="width: calc(100% - 20px); height: calc(70% - 40px); display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 8px;">
+                                        ${canvas.outerHTML}
+                                    </div>
+                                    <div class="upld-dscrpt">
+                                        <strong>${title}</strong><br>
+                                        <small>by ${author}</small><br>
+                                        <small class="description-text">${description}</small>
+                                    </div>
+                                `;
+                                // Insert before the upload drop zone
+                                upldContent.insertBefore(newBox, uploadDropZone);
+                                console.log('PDF canvas inserted into upload box');
+                            }).catch(function(renderError) {
+                                console.error('Error rendering PDF page:', renderError);
+                                // Fallback to file icon if rendering fails
+                                const fileIcon = 'fa-file-pdf';
+                                const fileColor = '#dc3545';
+                                newBox.innerHTML = `
+                                    <button class="box-options-btn" onclick="toggleBoxOptions(this)">⋮</button>
+                                    <div class="box-options-menu">
+                                        <div onclick="editBox(this)">✏️ Edit</div>
+                                        <div onclick="deleteBox(this)">🗑️ Delete</div>
+                                    </div>
+                                    <button class="delete-btn" onclick="confirmDelete(this)">×</button>
+                                    <div style="width: calc(100% - 20px); height: calc(70% - 40px); max-width: calc(100% - 20px); max-height: calc(100% - 40px); display: flex; align-items: center; justify-content: center;">
+                                        <i class="fas ${fileIcon}" style="font-size: min(48px, calc(100% - 20px)); color: ${fileColor};"></i>
+                                    </div>
+                                    <div class="upld-dscrpt">
+                                        <strong>${title}</strong><br>
+                                        <small>by ${author}</small><br>
+                                        <small class="description-text">${description}</small>
+                                    </div>
+                                `;
+                                upldContent.insertBefore(newBox, uploadDropZone);
+                            });
+                        });
+                    }).catch(function(error) {
+                        console.error('Error loading PDF:', error);
+                        // Fallback to file icon if PDF rendering fails
+                        const fileIcon = 'fa-file-pdf';
+                        const fileColor = '#dc3545';
+                        newBox.innerHTML = `
+                            <button class="box-options-btn" onclick="toggleBoxOptions(this)">⋮</button>
+                            <div class="box-options-menu">
+                                <div onclick="editBox(this)">✏️ Edit</div>
+                                <div onclick="deleteBox(this)">🗑️ Delete</div>
+                            </div>
+                            <button class="delete-btn" onclick="confirmDelete(this)">×</button>
+                            <div style="width: calc(100% - 20px); height: calc(70% - 40px); max-width: calc(100% - 20px); max-height: calc(100% - 40px); display: flex; align-items: center; justify-content: center;">
+                                <i class="fas ${fileIcon}" style="font-size: min(48px, calc(100% - 20px)); color: ${fileColor};"></i>
+                            </div>
+                            <div class="upld-dscrpt">
+                                <strong>${title}</strong><br>
+                                <small>by ${author}</small><br>
+                                <small class="description-text">${description}</small>
+                            </div>
+                        `;
+                        upldContent.insertBefore(newBox, uploadDropZone);
+                    });
+                };
+                reader.readAsArrayBuffer(file);
+            } else {
+                // For other documents, show file icon
+                const fileIcon = 'fa-file';
+                const fileColor = '#6c757d';
+
+                newBox.innerHTML = `
+                    <button class="box-options-btn" onclick="toggleBoxOptions(this)">⋮</button>
+                    <div class="box-options-menu">
+                        <div onclick="editBox(this)">✏️ Edit</div>
+                        <div onclick="deleteBox(this)">🗑️ Delete</div>
+                    </div>
+                    <button class="delete-btn" onclick="confirmDelete(this)">×</button>
+                    <div style="width: calc(100% - 20px); height: calc(70% - 40px); max-width: calc(100% - 20px); max-height: calc(100% - 40px); display: flex; align-items: center; justify-content: center;">
+                        <i class="fas ${fileIcon}" style="font-size: min(48px, calc(100% - 20px)); color: ${fileColor};"></i>
+                    </div>
+                    <div class="upld-dscrpt">
+                        <strong>${title}</strong><br>
+                        <small>by ${author}</small><br>
+                        <small class="description-text">${description}</small>
+                    </div>
+                `;
+                // Insert before the upload drop zone
+                upldContent.insertBefore(newBox, uploadDropZone);
+            }
         }
 
         function showUploadModal(files) {
@@ -2857,6 +3196,11 @@
                 if ((file.type === 'application/pdf' || file.type.includes('word') || file.type.includes('document')) && !previewFile) {
                     previewFile = file;
                 }
+            }
+
+            // If no files provided, show empty modal for manual file selection
+            if (files.length === 0) {
+                filesList = '<li>No files selected. Click "Add File" to select files.</li>';
             }
             modal.innerHTML = `
                 <div class="upload-modal-content">
@@ -2871,14 +3215,18 @@
                             ${previewFile ? (previewFile.type === 'application/pdf' ? `<div class="pdf-preview"><canvas id="pdf-canvas"></canvas></div>` : `<div class="file-preview"><embed src="${URL.createObjectURL(previewFile)}" type="${previewFile.type}" width="100%" height="400px" style="border: 1px solid #ddd; border-radius: 8px;"></embed></div>`) : ''}
                         </div>
                         <div class="modal-right">
-                            <div class="upload-form">
+                            <form class="upload-form">
                                 <input type="text" id="doc-title" placeholder="Title" required>
                                 <input type="text" id="doc-author" placeholder="Author">
                                 <textarea id="doc-description" placeholder="Description" rows="3"></textarea>
-                            </div>
+                            </form>
                             <ul class="uploaded-files-list">
                                 ${filesList.replace(/<li>(.*?)<\/li>/g, '<li><span class="file-info">$1</span><button class="file-delete-btn" onclick="removeFile(this)">🗑️</button></li>')}
                             </ul>
+                            <div class="file-selection" id="file-selection-area" style="display: none;">
+                                <input type="file" id="modal-file-upload" accept="application/pdf,.doc,.docx,image/*" multiple style="display: none;">
+                                <button class="btn-add-file" onclick="document.getElementById('modal-file-upload').click()">Add File</button>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-buttons">
@@ -2965,7 +3313,7 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    margin-top: 20px;
+                    
                 }
 
                 .modal-right {
@@ -2989,11 +3337,12 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
+                    margin-bottom: 20px;
                 }
 
                 .pdf-preview, .file-preview {
                     max-width: 100%;
-                    max-height: 400px;
+                    max-height: 450px;
                     display: flex;
                     justify-content: center;
                     align-items: center;
@@ -3006,6 +3355,22 @@
                     border-radius: 8px;
                 }
 
+                #pdf-canvas {
+                    width: 100% !important;
+                    height: auto !important;
+                    max-width: 100%;
+                    max-height: 450px;
+                    
+                }
+
+                [id^="pdf-canvas-"] {
+                    width: 100% !important;
+                    height: auto !important;
+                    max-width: 100%;
+                    max-height: 450px;
+                    margin-top: 20px;
+                }
+
                 .modal-right {
                     flex: 1;
                     display: flex;
@@ -3013,7 +3378,7 @@
                 }
 
                 .pdf-preview {
-                    margin-bottom: 20px;
+                    
                     text-align: center;
                 }
 
@@ -3038,19 +3403,21 @@
 
                 #pdf-canvas {
                     max-width: 100%;
-                    max-height: 400px;
+                    max-height: 450px;
                     border: 1px solid #ddd;
                     border-radius: 8px;
                     object-fit: contain;
+                    
                 }
 
                 [id^="pdf-canvas-"] {
                     max-width: 100%;
-                    max-height: 400px;
+                    max-height: 450px;
                     border: 1px solid #ddd;
                     border-radius: 8px;
                     object-fit: contain;
                     aspect-ratio: 1;
+                    margin-top:20px;
                 }
 
                 .additional-modal-body {
@@ -3100,7 +3467,7 @@
                 }
 
                 .modal-buttons {
-                    margin-top: 20px;
+                    
                     display: flex;
                     justify-content: space-between;
                     gap: 10px;
@@ -3216,27 +3583,87 @@
             if (previewFile && previewFile.type === 'application/pdf') {
                 renderPDF(previewFile);
             }
+
+            // Handle file selection in modal
+            const modalFileInput = modal.querySelector('#modal-file-upload');
+
+            modalFileInput.addEventListener('change', function(e) {
+                const newFiles = Array.from(e.target.files);
+                if (newFiles.length > 0) {
+                    // Add new files to the global array
+                    filesToUpload = [...filesToUpload, ...newFiles];
+
+                    // Update the files list display
+                    let updatedFilesList = '';
+                    for (let file of filesToUpload) {
+                        updatedFilesList += `<li><span class="file-info">${file.name} (${(file.size / 1024).toFixed(2)} KB)</span><button class="file-delete-btn" onclick="removeFile(this)">🗑️</button></li>`;
+                    }
+                    const filesListElement = modal.querySelector('.uploaded-files-list');
+                    filesListElement.innerHTML = updatedFilesList;
+
+                    // Hide the add file button since we now have files
+                    const fileSelectionArea = modal.querySelector('.file-selection');
+                    if (fileSelectionArea) {
+                        fileSelectionArea.style.display = 'none';
+                    }
+
+                    // Always update preview with the first file when adding new files
+                    const firstFile = filesToUpload[0];
+                    if (firstFile) {
+                        const modalLeft = modal.querySelector('.modal-left');
+                        if (firstFile.type === 'application/pdf') {
+                            modalLeft.innerHTML = `<div class="pdf-preview"><canvas id="pdf-canvas"></canvas></div>`;
+                            renderPDF(firstFile);
+                        } else {
+                            modalLeft.innerHTML = `<div class="file-preview"><embed src="${URL.createObjectURL(firstFile)}" type="${firstFile.type}" width="100%" height="400px" style="border: 1px solid #ddd; border-radius: 8px;"></embed></div>`;
+                        }
+                    }
+                }
+                // Reset the input value to allow re-selecting the same file
+                setTimeout(() => {
+                    e.target.value = '';
+                }, 100);
+            });
         }
 
         function renderPDF(file, canvasId) {
             const canvas = document.getElementById(canvasId || 'pdf-canvas');
-            const context = canvas.getContext('2d');
-            pdfjsLib.getDocument(URL.createObjectURL(file)).promise.then(function(pdf) {
-                pdf.getPage(1).then(function(page) {
-                    const desiredHeight = 400;
-                    const viewport = page.getViewport({scale: 1});
-                    const scale = (desiredHeight / viewport.height) * 2; // Increase scale for sharper rendering
-                    const scaledViewport = page.getViewport({scale: scale});
-                    canvas.height = scaledViewport.height;
-                    canvas.width = scaledViewport.width;
+            if (!canvas) return;
 
-                    const renderContext = {
-                        canvasContext: context,
-                        viewport: scaledViewport
-                    };
-                    page.render(renderContext);
+            const context = canvas.getContext('2d');
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                pdfjsLib.getDocument({data: e.target.result}).promise.then(function(pdf) {
+                    pdf.getPage(1).then(function(page) {
+                        const isAdditional = canvasId && canvasId.includes('-');
+                        const desiredWidth = isAdditional ? 1000 : 1000; // Same width as original for consistent container sizing
+                        const desiredHeight = isAdditional ? 400 : 400; // Same height as original for consistent container sizing
+
+                        const viewport = page.getViewport({scale: 1});
+                        const scaleHeight = desiredHeight / viewport.height;
+                        const scaleWidth = desiredWidth / viewport.width;
+                        const scale = Math.min(scaleHeight, scaleWidth) * 2; // Use same scale multiplier as original for consistent behavior
+
+                        const scaledViewport = page.getViewport({scale: scale});
+                        canvas.height = scaledViewport.height;
+                        canvas.width = scaledViewport.width;
+
+                        const renderContext = {
+                            canvasContext: context,
+                            viewport: scaledViewport
+                        };
+                        page.render(renderContext).promise.then(function() {
+                            // Render completed successfully
+                        }).catch(function(renderError) {
+                            console.error('Error during PDF render:', renderError);
+                        });
+                    });
+                }).catch(function(error) {
+                    console.error('Error rendering PDF in modal:', error);
                 });
-            });
+            };
+            reader.readAsArrayBuffer(file);
         }
 
         function closeUploadModal() {
@@ -3266,24 +3693,48 @@
                 return;
             }
 
-            // Here you would typically send the data to server
-            showNotification('Document uploaded successfully!', 'success');
+            // Use the stored files from the global variable
+            const files = filesToUpload;
+
+            if (files.length === 0) {
+                showNotification('Please select at least one file', 'error');
+                return;
+            }
+
+            // Create upload boxes for each file with the provided metadata
+            for (let file of files) {
+                createUploadBox(file, title, author, description);
+            }
+
+            showNotification(`${files.length} file(s) uploaded successfully!`, 'success');
             closeUploadModal();
             // Reset the file input after successful upload
             const fileInput = document.getElementById('file-upload');
             if (fileInput) {
                 fileInput.value = '';
             }
+            // Clear the global files array
+            filesToUpload = [];
         }
 
         // Remove file from upload list
         function removeFile(btn) {
             const li = btn.parentElement;
+            const fileName = li.querySelector('.file-info').textContent.split(' (')[0]; // Extract filename
+
+            // Remove from global files array
+            filesToUpload = filesToUpload.filter(file => file.name !== fileName);
+
             li.remove();
 
             // Check if there are any files left
             const remainingFiles = document.querySelectorAll('.uploaded-files-list li');
             if (remainingFiles.length === 0) {
+                // Show the add file button in place of the file list
+                const fileSelectionArea = document.querySelector('.file-selection');
+                if (fileSelectionArea) {
+                    fileSelectionArea.style.display = 'block';
+                }
                 // Remove the preview area if no files left
                 const modalLeft = document.querySelector('.modal-left');
                 if (modalLeft) {
@@ -3292,16 +3743,20 @@
             } else {
                 // Update preview with the next available file
                 const firstFile = remainingFiles[0];
-                const fileInfo = firstFile.querySelector('.file-info').textContent;
-                const fileName = fileInfo.split(' (')[0]; // Extract filename
+                const nextFileName = firstFile.querySelector('.file-info').textContent.split(' (')[0];
 
-                // Find the corresponding file in the original files array
-                // This is a simplified approach - in a real app you'd track files properly
-                const modalLeft = document.querySelector('.modal-left');
-                if (modalLeft && modalLeft.innerHTML.includes('pdf-preview')) {
-                    // If it was a PDF, keep the preview area but it would need to be updated
-                    // For now, we'll just clear it since we don't have the actual file objects
-                    modalLeft.innerHTML = '';
+                // Find the corresponding file in the files array
+                const nextFile = filesToUpload.find(file => file.name === nextFileName);
+                if (nextFile) {
+                    const modalLeft = document.querySelector('.modal-left');
+                    if (modalLeft) {
+                        if (nextFile.type === 'application/pdf') {
+                            modalLeft.innerHTML = `<div class="pdf-preview"><canvas id="pdf-canvas"></canvas></div>`;
+                            renderPDF(nextFile);
+                        } else {
+                            modalLeft.innerHTML = `<div class="file-preview"><embed src="${URL.createObjectURL(nextFile)}" type="${nextFile.type}" width="100%" height="400px" style="border: 1px solid #ddd; border-radius: 8px;"></embed></div>`;
+                        }
+                    }
                 }
             }
 
@@ -3319,7 +3774,14 @@
             additionalFileInput.addEventListener('change', handleAdditionalFiles);
             document.body.appendChild(additionalFileInput);
             additionalFileInput.click();
-            setTimeout(() => document.body.removeChild(additionalFileInput), 1000);
+            // Remove the input after file selection is handled
+            additionalFileInput.addEventListener('change', function() {
+                setTimeout(() => {
+                    if (document.body.contains(additionalFileInput)) {
+                        document.body.removeChild(additionalFileInput);
+                    }
+                }, 100);
+            });
         }
 
         // Handle adding additional files
@@ -3334,13 +3796,17 @@
                 newModalBody.className = 'upload-modal-body additional-modal-body';
                 newModalBody.innerHTML = `
                     <div class="modal-left">
-                        ${files[0].type === 'application/pdf' ? `<div class="pdf-preview"><canvas id="pdf-canvas-${Date.now()}"></canvas></div>` : `<div class="file-preview"><embed src="${URL.createObjectURL(files[0])}" type="${files[0].type}" width="100%" height="400px" style="border: 1px solid #ddd; border-radius: 8px;"></embed></div>`}
+                        ${files[0].type === 'application/pdf' ? `<div class="pdf-preview"><canvas id="pdf-canvas-${Date.now()}" style="width: 100% !important; height: auto !important; max-width: 100%; max-height: 450px;"></canvas></div>` : `<div class="file-preview"><embed src="${URL.createObjectURL(files[0])}" type="${files[0].type}" width="100%" height="450px" style="border: 1px solid #ddd; border-radius: 8px;"></embed></div>`}
                     </div>
                     <div class="modal-right">
-                        <div class="upload-form">
-                            <input type="text" placeholder="Title" required>
-                            <input type="text" placeholder="Author">
-                            <textarea placeholder="Description" rows="3"></textarea>
+                        <form class="upload-form">
+                            <input type="text" id="additional-doc-title" placeholder="Title" required>
+                            <input type="text" id="additional-doc-author" placeholder="Author">
+                            <textarea id="additional-doc-description" placeholder="Description" rows="3"></textarea>
+                        </form>
+                        <div class="file-selection" style="display: none;">
+                            <input type="file" accept="application/pdf,.doc,.docx,image/*" multiple style="display: none;">
+                            <button class="btn-add-file" onclick="this.previousElementSibling.click()">Add File</button>
                         </div>
                         <ul class="uploaded-files-list">
                             ${Array.from(files).map(file => `<li><span class="file-info">${file.name} (${(file.size / 1024).toFixed(2)} KB)</span><button class="file-delete-btn" onclick="removeFile(this)">🗑️</button></li>`).join('')}
@@ -3541,8 +4007,8 @@
             }
         }
 
-        // Update name functionality (auto-update on input)
-        function updateNameAuto() {
+        // Update name functionality (manual save button)
+        function updateName() {
             const firstName = document.getElementById('firstName').value.trim();
             const lastName = document.getElementById('lastName').value.trim();
 
@@ -3551,9 +4017,15 @@
                 document.querySelector('.full-name').textContent = fullName;
                 localStorage.setItem('userFirstName', firstName);
                 localStorage.setItem('userLastName', lastName);
+                showNotification('Name updated successfully!', 'success');
             } else if (firstName || lastName) {
                 const partialName = firstName || lastName;
                 document.querySelector('.full-name').textContent = partialName;
+                localStorage.setItem('userFirstName', firstName);
+                localStorage.setItem('userLastName', lastName);
+                showNotification('Name updated successfully!', 'success');
+            } else {
+                showNotification('Please enter at least a first name or last name', 'error');
             }
         }
 
@@ -3602,6 +4074,37 @@
             }
         }
 
+        // Update bio functionality
+        function updateBio() {
+            const bioTextarea = document.getElementById('userBio');
+            const bio = bioTextarea.value.trim();
+
+            if (bio.length <= 500) {
+                localStorage.setItem('userBio', bio);
+                document.querySelector('.bio-text').textContent = bio || 'This is my bio. Welcome to my profile!';
+                showNotification('Bio updated successfully!', 'success');
+            } else {
+                showNotification('Bio must be 500 characters or less', 'error');
+            }
+        }
+
+        // Update bio character count
+        function updateBioCharCount() {
+            const bioTextarea = document.getElementById('userBio');
+            const charCount = document.getElementById('bioCharCount');
+            if (bioTextarea && charCount) {
+                charCount.textContent = bioTextarea.value.length;
+            }
+        }
+
+        // Add event listener for bio textarea
+        document.addEventListener('DOMContentLoaded', function() {
+            const bioTextarea = document.getElementById('userBio');
+            if (bioTextarea) {
+                bioTextarea.addEventListener('input', updateBioCharCount);
+            }
+        });
+
         // Toggle box options menu
         function toggleBoxOptions(btn) {
             const menu = btn.nextElementSibling;
@@ -3627,34 +4130,59 @@
             box.classList.toggle('show-delete');
         }
 
-        // Edit box functionality
+        // Edit box functionality - now shows upload modal
         function editBox(element) {
             const box = element.closest('.upld-boxes');
-            const img = box.querySelector('img');
-            const desc = box.querySelector('.upld-dscrpt');
+            window.currentEditingBox = box; // Store the box being edited
 
-            // Create edit modal
+            // Get current content from the box
+            const img = box.querySelector('img') || box.querySelector('div[style*="display: flex"]');
+            const desc = box.querySelector('.upld-dscrpt');
+            let currentTitle = '', currentAuthor = '', currentDescription = '';
+
+            if (desc) {
+                const strong = desc.querySelector('strong');
+                const smalls = desc.querySelectorAll('small');
+                if (strong) currentTitle = strong.textContent;
+                if (smalls.length >= 2) {
+                    currentAuthor = smalls[0].textContent.replace('by ', '');
+                    currentDescription = smalls[1].textContent;
+                }
+            }
+
+            // Create upload modal for editing
             const modal = document.createElement('div');
-            modal.className = 'edit-modal';
+            modal.className = 'upload-modal';
             modal.innerHTML = `
-                <div class="edit-modal-content">
-                    <div class="edit-modal-header">
-                        <h3>Edit Box Content</h3>
-                        <button class="edit-modal-close" onclick="closeEditModal()">&times;</button>
+                <div class="upload-modal-content">
+                    <div class="upload-modal-header">
+                        <h3>Upload Document</h3>
+                        <button class="upload-modal-close" onclick="closeUploadModal()">&times;</button>
                     </div>
-                    <div class="edit-modal-body">
-                        <div class="edit-form-group">
-                            <label>Image URL:</label>
-                            <input type="text" id="editImageUrl" value="${img.src}" placeholder="Enter image URL">
+                    <div class="upload-modal-body">
+                        <div class="modal-left">
+                            <div class="file-preview-area">
+                                ${img ? (img.tagName === 'IMG' ? `<img src="${img.src}" style="max-width: 100%; max-height: 100%; object-fit: contain;">` : img.outerHTML) : '<p>Preview will appear here</p>'}
+                            </div>
                         </div>
-                        <div class="edit-form-group">
-                            <label>Description:</label>
-                            <textarea id="editDescription" rows="3" placeholder="Enter description">${desc.textContent}</textarea>
+                        <div class="modal-right">
+                            <form class="upload-form">
+                                <input type="text" id="edit-doc-title" placeholder="Title" value="${currentTitle}" required>
+                                <input type="text" id="edit-doc-author" placeholder="Author" value="${currentAuthor}">
+                                <textarea id="edit-doc-description" placeholder="Description" rows="3">${currentDescription}</textarea>
+                            </form>
+                            <div class="file-selection">
+                                <input type="file" id="edit-file-upload" accept="application/pdf,.doc,.docx,image/*" style="display: none;">
+                                <button class="btn-select-file" onclick="document.getElementById('edit-file-upload').click()">Select File</button>
+                                <div id="selected-file-info" style="margin-top: 10px; font-size: 14px; color: #666;"></div>
+                            </div>
                         </div>
                     </div>
-                    <div class="edit-modal-footer">
-                        <button class="btn-cancel" onclick="closeEditModal()">Cancel</button>
-                        <button class="btn-save" onclick="saveBoxEdit('${box.dataset.boxId || 'box-' + Date.now()}')">Save Changes</button>
+                    <div class="modal-buttons">
+                        <div class="modal-buttons-right">
+                            <button class="btn-cancel" onclick="closeUploadModal()">Cancel</button>
+                            <button class="btn-upload" onclick="saveEditedBox()">Save to Box</button>
+                        </div>
                     </div>
                 </div>
             `;
@@ -3671,19 +4199,24 @@
                 justify-content: center;
                 align-items: center;
                 z-index: 1000;
+                animation: fadeIn 0.3s ease;
             `;
 
             const style = document.createElement('style');
             style.textContent = `
-                .edit-modal-content {
+                .upload-modal-content {
                     background: white;
                     border-radius: 12px;
-                    width: 90%;
-                    max-width: 500px;
+                    width: 60%;
+                    height: 650px;
                     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                    display: flex;
+                    flex-direction: column;
+                    animation: slideIn 0.3s ease;
+                    overflow-y: auto;
                 }
 
-                .edit-modal-header {
+                .upload-modal-header {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
@@ -3691,43 +4224,84 @@
                     border-bottom: 1px solid #eee;
                 }
 
-                .edit-modal-header h3 {
+                .upload-modal-header h3 {
                     margin: 0;
                     color: #0057b8;
                 }
 
-                .edit-modal-close {
+                .upload-modal-close {
                     background: none;
                     border: none;
-                    font-size: 24px;
+                    font-size: 20px;
                     cursor: pointer;
                     color: #666;
                 }
 
-                .edit-modal-body {
+                .upload-modal-body {
                     padding: 20px;
+                    display: flex;
+                    height: 520px;
                 }
 
-                .edit-form-group {
-                    margin-bottom: 15px;
+                .modal-left {
+                    flex: 1;
+                    padding-right: 20px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                 }
 
-                .edit-form-group label {
-                    display: block;
-                    margin-bottom: 5px;
-                    font-weight: 500;
-                    color: #333;
-                }
-
-                .edit-form-group input, .edit-form-group textarea {
+                .file-preview-area {
                     width: 100%;
-                    padding: 10px;
+                    height: 400px;
+                    border: 2px dashed #ddd;
+                    border-radius: 8px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    color: #666;
+                    background: #f9f9f9;
+                }
+
+                .modal-right {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .upload-form {
+                    margin-bottom: 20px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                }
+
+                .upload-form input, .upload-form textarea {
+                    padding: 8px;
                     border: 1px solid #ddd;
                     border-radius: 4px;
                     font-family: inherit;
                 }
 
-                .edit-modal-footer {
+                .file-selection {
+                    margin-top: auto;
+                }
+
+                .btn-select-file {
+                    padding: 10px 20px;
+                    background: #0057b8;
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 14px;
+                }
+
+                .btn-select-file:hover {
+                    background: #003f8a;
+                }
+
+                .modal-buttons {
                     padding: 20px;
                     border-top: 1px solid #eee;
                     display: flex;
@@ -3735,7 +4309,7 @@
                     gap: 10px;
                 }
 
-                .btn-cancel, .btn-save {
+                .btn-cancel, .btn-upload {
                     padding: 10px 20px;
                     border: none;
                     border-radius: 4px;
@@ -3748,14 +4322,49 @@
                     color: #666;
                 }
 
-                .btn-save {
+                .btn-upload {
                     background: #0057b8;
                     color: white;
+                }
+
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+
+                @keyframes slideIn {
+                    from { transform: translateY(-50px); opacity: 0; }
+                    to { transform: translateY(0); opacity: 1; }
                 }
             `;
 
             document.head.appendChild(style);
             document.body.appendChild(modal);
+
+            // Handle file selection for edit modal
+            const fileInput = modal.querySelector('#edit-file-upload');
+            const fileInfo = modal.querySelector('#selected-file-info');
+            const previewArea = modal.querySelector('.file-preview-area');
+
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    fileInfo.textContent = `Selected: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+
+                    // Show preview
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            previewArea.innerHTML = `<img src="${e.target.result}" style="max-width: 100%; max-height: 100%; object-fit: contain;">`;
+                        };
+                        reader.readAsDataURL(file);
+                    } else if (file.type === 'application/pdf') {
+                        previewArea.innerHTML = `<div style="text-align: center;"><i class="fas fa-file-pdf" style="font-size: 48px; color: #dc3545;"></i><p>${file.name}</p></div>`;
+                    } else {
+                        previewArea.innerHTML = `<div style="text-align: center;"><i class="fas fa-file" style="font-size: 48px; color: #6c757d;"></i><p>${file.name}</p></div>`;
+                    }
+                }
+            });
 
             // Hide options menu
             document.querySelectorAll('.box-options-menu').forEach(menu => menu.classList.remove('show'));
@@ -3769,28 +4378,242 @@
             }
         }
 
-        // Save box edit
-        function saveBoxEdit(boxId) {
-            const imageUrl = document.getElementById('editImageUrl').value;
-            const description = document.getElementById('editDescription').value;
+        // Save edited box with uploaded content
+        function saveEditedBox() {
+            const title = document.getElementById('edit-doc-title').value;
+            const author = document.getElementById('edit-doc-author').value;
+            const description = document.getElementById('edit-doc-description').value;
+            const fileInput = document.getElementById('edit-file-upload');
+            const file = fileInput.files[0];
 
-            // Find the box (for now, we'll just update the first one since we don't have IDs)
-            const boxes = document.querySelectorAll('.upld-boxes');
-            const box = boxes[0]; // This should be improved to target the specific box
+            if (!title) {
+                showNotification('Please enter a title', 'error');
+                return;
+            }
+
+            // Use the stored box being edited
+            const box = window.currentEditingBox;
+            const existingImg = box.querySelector('img') || box.querySelector('div[style*="display: flex"]');
+
+            // If no new file selected but there's existing content, just update the text
+            if (!file && existingImg) {
+                const desc = box.querySelector('.upld-dscrpt');
+                if (desc) {
+                    desc.innerHTML = `
+                        <div class="upld-dscrpt">
+                            <strong>${title}</strong><br>
+                            <small>by ${author || 'Unknown'}</small><br>
+                            <small class="description-text">${description || 'No description'}</small>
+                        </div>
+                    `;
+                }
+                showNotification('Box content updated successfully!', 'success');
+                closeUploadModal();
+                return;
+            }
+
+            if (!file) {
+                showNotification('Please select a file', 'error');
+                return;
+            }
 
             if (box) {
                 const img = box.querySelector('img');
                 const desc = box.querySelector('.upld-dscrpt');
 
-                if (imageUrl) img.src = imageUrl;
-                if (description) desc.textContent = description;
+                // Create file preview
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        img.src = e.target.result;
+                        img.style.width = 'calc(100% - 20px)';
+                        img.style.height = 'calc(70% - 40px)';
+                        img.style.maxWidth = 'calc(100% - 20px)';
+                        img.style.maxHeight = 'calc(70% - 40px)';
+                        img.style.objectFit = 'contain';
 
-                showNotification('Box content updated successfully!', 'success');
+                        // Update description with title, author, and description
+                        desc.innerHTML = `
+                            <div style="text-align: center; padding: 5px; margin: 0 8px; overflow: hidden;">
+                                <strong style="display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 2px;">${title}</strong>
+                                <small style="display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 1px;">by ${author || 'Unknown'}</small>
+                                <small style="display: block; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; line-height: 1.2; max-height: 3.6em;">${description || 'No description'}</small>
+                            </div>
+                        `;
+
+                        showNotification('File uploaded to box successfully!', 'success');
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    // For non-image files, show file icon
+                    const fileIcon = file.type === 'application/pdf' ? 'fa-file-pdf' : 'fa-file';
+                    const fileColor = file.type === 'application/pdf' ? '#dc3545' : '#6c757d';
+
+                    img.outerHTML = `<div style="width: calc(100% - 20px); height: calc(70% - 40px); max-width: calc(100% - 20px); max-height: calc(70% - 40px); display: flex; align-items: center; justify-content: center;">
+                        <i class="fas ${fileIcon}" style="font-size: min(48px, calc(100% - 20px)); color: ${fileColor};"></i>
+                    </div>`;
+
+                    desc.innerHTML = `
+                        <div style="text-align: center; padding: 5px; margin: 0 10px; overflow: hidden;">
+                            <strong style="display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 2px;">${title}</strong>
+                            <small style="display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 1px;">by ${author || 'Unknown'}</small>
+                            <small style="display: block; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; line-height: 1.2; max-height: 3.6em;">${description || 'No description'}</small>
+                        </div>
+                    `;
+
+                    showNotification('File uploaded to box successfully!', 'success');
+                }
             }
 
-            closeEditModal();
+            closeUploadModal();
         }
 
+        // Close upload modal
+        function closeUploadModal() {
+            const modal = document.querySelector('.upload-modal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+
+        // Calendar functionality
+        let currentDate = new Date();
+
+        function renderCalendar() {
+            const calendarGrid = document.getElementById('calendar-grid');
+            const monthYear = document.getElementById('calendar-month-year');
+
+            // Clear previous calendar
+            calendarGrid.innerHTML = '';
+
+            // Set month and year header
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                              'July', 'August', 'September', 'October', 'November', 'December'];
+            monthYear.textContent = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+
+            // Add day names
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            dayNames.forEach(day => {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day calendar-day-name';
+                dayElement.textContent = day;
+                calendarGrid.appendChild(dayElement);
+            });
+
+            // Get first day of month and last day
+            const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - firstDay.getDay());
+
+            // Generate calendar days
+            const today = new Date();
+            for (let i = 0; i < 42; i++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = startDate.getDate();
+
+                // Check if current month
+                if (startDate.getMonth() === currentDate.getMonth()) {
+                    dayElement.classList.add('current-month');
+                } else {
+                    dayElement.classList.add('other-month');
+                }
+
+                // Check if today
+                if (startDate.toDateString() === today.toDateString()) {
+                    dayElement.classList.add('today');
+                }
+
+                calendarGrid.appendChild(dayElement);
+                startDate.setDate(startDate.getDate() + 1);
+            }
+        }
+
+        // Calendar navigation
+        const prevMonthBtn = document.getElementById('prev-month');
+        const nextMonthBtn = document.getElementById('next-month');
+        if (prevMonthBtn) {
+            prevMonthBtn.addEventListener('click', function() {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+                renderCalendar();
+            });
+        }
+        if (nextMonthBtn) {
+            nextMonthBtn.addEventListener('click', function() {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+                renderCalendar();
+            });
+        }
+
+        // Todo functionality
+        function loadTodos() {
+            const todos = JSON.parse(localStorage.getItem('todos')) || [];
+            const todoList = document.getElementById('todo-list');
+            todoList.innerHTML = '';
+
+            todos.forEach((todo, index) => {
+                const todoItem = document.createElement('div');
+                todoItem.className = 'todo-item';
+                todoItem.innerHTML = `
+                    <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''} onchange="toggleTodo(${index})">
+                    <span class="todo-text ${todo.completed ? 'completed' : ''}">${todo.text}</span>
+                    <button class="todo-delete" onclick="deleteTodo(${index})">×</button>
+                `;
+                todoList.appendChild(todoItem);
+            });
+        }
+
+        function addTodo() {
+            const input = document.getElementById('todo-input');
+            const text = input.value.trim();
+
+            if (text) {
+                const todos = JSON.parse(localStorage.getItem('todos')) || [];
+                todos.push({ text, completed: false });
+                localStorage.setItem('todos', JSON.stringify(todos));
+                input.value = '';
+                loadTodos();
+                showNotification('Todo added successfully!', 'success');
+            }
+        }
+
+        function toggleTodo(index) {
+            const todos = JSON.parse(localStorage.getItem('todos')) || [];
+            todos[index].completed = !todos[index].completed;
+            localStorage.setItem('todos', JSON.stringify(todos));
+            loadTodos();
+        }
+
+        function deleteTodo(index) {
+            const todos = JSON.parse(localStorage.getItem('todos')) || [];
+            todos.splice(index, 1);
+            localStorage.setItem('todos', JSON.stringify(todos));
+            loadTodos();
+            showNotification('Todo deleted!', 'info');
+        }
+
+        // Add todo on Enter key press
+        const todoInput = document.getElementById('todo-input');
+        if (todoInput) {
+            todoInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addTodo();
+                }
+            });
+        }
+
+        // Add todo button click
+        const addTodoBtn = document.getElementById('add-todo-btn');
+        if (addTodoBtn) {
+            addTodoBtn.addEventListener('click', addTodo);
+        }
+
+        // Initialize file upload on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeFileUpload();
+        });
 
         // Keyboard shortcuts
         document.addEventListener('keydown', function(e) {

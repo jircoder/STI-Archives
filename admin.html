@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-treemap@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* ... [All your existing CSS remains unchanged] ... */
         * {
             margin: 0;
             padding: 0;
@@ -40,12 +41,76 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: flex-start;
         }
         .sidebar img {
             max-width: 120px;
             height: 105px;
             margin-bottom: 20px;
             object-fit: contain;
+        }
+        .sidebar .admin-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: auto;
+            padding-top: 20px;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .profile-menu-items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .profile-menu-items a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+            font-size: 14px;
+        }
+        .profile-menu-items a:hover {
+            background-color: #555;
+        }
+        .profile-menu-items a i {
+            width: 16px;
+            text-align: center;
+        }
+        .sidebar .admin-info .profile-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .sidebar .admin-info .admin-name {
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        @media (max-width: 500px) {
+            .sidebar .admin-info .admin-name {
+                display: block;
+            }
+            .sidebar .admin-info .admin-name .a-prefix {
+                display: none;
+            }
+            .profile-menu-items {
+                display: none;
+            }
         }
         .sidebar.collapsed {
             transform: translateX(-250px);
@@ -106,7 +171,6 @@
         .terms-dropdown {
             position: relative;
             background-color: transparent !important;
-
         }
         .uploads-dropdown {
             display: flex;
@@ -122,7 +186,6 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
-
             padding-right: 20px !important;
         }
         .uploads-dropdown > a {
@@ -199,7 +262,6 @@
         .terms-dropdown.open .arrow {
             transform: rotate(180deg);
         }
-        
         .submenu {
             list-style: none;
             padding: 0;
@@ -260,7 +322,6 @@
             transition: margin-left 0.3s;
             overflow-y: auto;
         }
-        
         #page-title {
             font-size:30px;
             font-weight: bold;
@@ -275,6 +336,23 @@
             display: flex;
             align-items: center;
             gap: 15px;
+        }
+        @media (max-width: 500px) {
+            .header-right {
+                gap: 10px;
+            }
+            .notification-bell {
+                padding: 6px;
+            }
+            .notification-bell i {
+                font-size: 18px;
+            }
+            .dark-mode-toggle {
+                padding: 6px;
+            }
+            .dark-mode-toggle i {
+                font-size: 18px;
+            }
         }
         .notification-bell {
             position: relative;
@@ -368,6 +446,40 @@
             padding: 0;
             margin: 0;
         }
+        .sidebar-profile-menu {
+            display: none;
+            position: absolute;
+            top: -60px;
+            left: 0;
+            right: 0;
+            background-color: #0f1a41;
+            z-index: 1002;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            border-radius: 8px 8px 0 0;
+        }
+        .sidebar-profile-menu.open {
+            display: block;
+        }
+        .sidebar-profile-menu li {
+            padding: 10px 20px;
+            border-bottom: 1px solid #333;
+        }
+        .sidebar-profile-menu li:last-child {
+            border-bottom: none;
+        }
+        .sidebar-profile-menu li a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0;
+        }
+        .sidebar-profile-menu li a:hover {
+            color: #ffd700;
+        }
         .profile-dropdown.open .profile-menu {
             display: block;
         }
@@ -408,6 +520,12 @@
         }
         body.dark-mode .profile-menu .logout-item:hover {
             background-color: #4d2d2d;
+        }
+        body.dark-mode .sidebar-profile-menu {
+            background-color: #0f1a41;
+        }
+        body.dark-mode .sidebar-profile-menu li a:hover {
+            color: #ffd700;
         }
         body.dark-mode {
             background-color: #181f2a;
@@ -511,7 +629,6 @@
         }
         .graphs-section {
             margin-top: 15px;
-            
         }
         .graphs-section h2 {
             margin-bottom: 20px;
@@ -526,7 +643,6 @@
             justify-content: center;
         }
         .graph-item {
-            
             background: white;
             padding: 20px;
             border-radius: 8px;
@@ -543,21 +659,17 @@
         }
         /*USER STATISTIC EACH CONTAINER & CHARTS*/
         #usr-grph{
-            
             height:400px;
             width: 550px;
-            
         }
         #usr-chart{
             height:350px;
             width: 520px;
         }
-
         #sgn-grph{
             height:400px;
             width: 600px;
         }
-        
         #sgn-chart{
             height:350px;
             width: 550px;
@@ -565,10 +677,8 @@
         #upld-grph{
             height:320px;
             width: 280px;
-            
         }
         #upld-chart{
-            
             height:240px;
             width: 240px;
         }
@@ -588,8 +698,6 @@
             height:450px;
             width: 520px;
         }
-
-        
         .content-section {
             display: none;
         }
@@ -791,10 +899,9 @@
         }
         .sidebar-header {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            
-            
         }
         .sidebar-header img {
             max-width: 140px;
@@ -810,6 +917,17 @@
             .sidebar {
                 width: 160px;
             }
+            .sidebar .admin-info {
+                padding-top: 10px;
+            }
+            .sidebar .admin-info .profile-avatar {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+            .sidebar .admin-info .admin-name {
+                font-size: 12px;
+            }
             .sidebar-header {
                 margin-bottom: 20px;
                 padding: 0 10px;
@@ -820,7 +938,6 @@
                 margin: 15px;
                 border-radius: 10px;
             }
-            
             .sidebar ul li {
                 padding: 12px 10px;
                 font-size: 14px;
@@ -857,6 +974,17 @@
         @media (max-width: 480px) {
             .sidebar {
                 width: 120px;
+            }
+            .sidebar .admin-info {
+                padding-top: 5px;
+            }
+            .sidebar .admin-info .profile-avatar {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+            }
+            .sidebar .admin-info .admin-name {
+                font-size: 11px;
             }
             .sidebar-header img {
                 max-width: 100px;
@@ -904,7 +1032,6 @@
             .sidebar-header img {
                 max-width: 140px;
                 height: 70px;
-                
                 border-radius: 10px;
             }
             .main-content {
@@ -914,7 +1041,6 @@
                 left: 180px;
                 width: calc(100% - 180px);
             }
-            
         }
         @media (min-width: 1200px) {
             .sidebar {
@@ -924,7 +1050,6 @@
                 max-width: 160px;
                 height: 100px;
                 border-radius: 10px;
-
             }
             .main-content {
                 margin-left: 200px;
@@ -933,9 +1058,131 @@
                 left: 180px;
                 width: calc(100% - 180px);
             }
-
         }
-
+        /* Show admin dropdown in header on screens 501px and above */
+        @media (min-width: 501px) {
+            .header .admin-dropdown {
+                position: relative;
+                display: flex;
+                align-items: center;
+                margin-left: 20px;
+            }
+            .header .admin-btn {
+                display: flex;
+                align-items: center;
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 8px;
+                border-radius: 20px;
+                transition: background-color 0.3s;
+                gap: 8px;
+            }
+            .header .admin-btn:hover {
+                background-color: #f0f0f0;
+            }
+            .header .admin-btn .profile-avatar {
+                width: 32px;
+                height: 32px;
+            }
+            .header .admin-btn span {
+                color: #333;
+                font-size: 14px;
+                font-weight: bold;
+            }
+            .header .admin-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                right: 0;
+                background-color: white;
+                min-width: 180px;
+                box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+                border-radius: 8px;
+                z-index: 1001;
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+            .header .admin-menu a {
+                color: #333;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 10px 15px;
+                transition: background-color 0.3s;
+            }
+            .header .admin-menu a:hover {
+                background-color: #f0f0f0;
+            }
+            .header .admin-menu a:last-child {
+                border-top: 1px solid #eee;
+                color: #ff4444;
+            }
+            .header .admin-menu a:last-child:hover {
+                background-color: #ffebee;
+            }
+            .header .admin-dropdown.open .admin-menu {
+                display: block;
+            }
+            .sidebar .admin-info {
+                display: none;
+            }
+        }
+        /* Show admin info in sidebar on screens 500px and below */
+        @media (max-width: 500px) {
+            .sidebar .admin-info {
+                display: flex;
+            }
+            .sidebar {
+                justify-content: space-between;
+            }
+            .header .admin-dropdown {
+                display: none;
+            }
+            .sidebar .admin-info .profile-menu-items {
+                display: none;
+            }
+            .sidebar .admin-info .logout-only {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                margin-bottom: 10px;
+            }
+            .sidebar .admin-info .logout-only a {
+                color: white;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 8px 12px;
+                border-radius: 6px;
+                transition: background-color 0.3s;
+                font-size: 14px;
+            }
+            .sidebar .admin-info .logout-only a:hover {
+                background-color: #555;
+            }
+            .sidebar .admin-info .avatar-name-row {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                cursor: pointer;
+                padding: 8px 12px;
+                border-radius: 6px;
+                transition: background-color 0.3s;
+            }
+            .sidebar .admin-info .avatar-name-row:hover {
+                background-color: #555;
+            }
+            .sidebar .admin-info .admin-name {
+                cursor: pointer;
+            }
+            .sidebar .admin-info .admin-name .a-prefix {
+                display: none;
+            }
+        }
         /* Tablet responsiveness (768px - 1024px) */
         @media (min-width: 768px) and (max-width: 1024px) {
             .sidebar {
@@ -975,7 +1222,6 @@
                 width: 100%;
             }
         }
-
         /* Phone responsiveness (max-width: 767px) */
         @media (max-width: 767px) {
             .sidebar {
@@ -1124,6 +1370,86 @@
                 height: 100% !important;
                 max-width: 100%;
                 max-height: 100%;
+            }
+        }
+        /* Additional media query for screens 703px and below */
+        @media (max-width: 703px) {
+            .users-section {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .users-section .user-subsection {
+                overflow-x: visible;
+            }
+            .users-section table {
+                min-width: 600px;
+                overflow-x: visible;
+                display: block;
+            }
+        }
+        /* Specific fixes for max-width: 500px and below */
+        @media (max-width: 500px) {
+            .sidebar {
+                width: 150px;
+            }
+            .users-section table {
+                min-width: 600px;
+                overflow-x: auto;
+                display: block;
+            }
+            .users-section {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .users-section .user-subsection {
+                overflow-x: visible;
+            }
+            .users-section table {
+                font-size: 12px;
+                min-width: 600px;
+                overflow-x: auto;
+                display: block;
+            }
+            .dashboard {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 8px;
+                justify-content: space-between;
+            }
+            .card {
+                width: calc(50% - 4px);
+                min-width: unset;
+                padding: 12px;
+                height: auto;
+                min-height: 80px;
+                box-sizing: border-box;
+            }
+            .card h3 {
+                font-size: 15px;
+            }
+            #usr-grph {
+                height: 300px;
+                width: 100%;
+            }
+            #usr-chart {
+                height: 250px;
+                width: 100%;
+            }
+            #sgn-grph {
+                height: 300px;
+                width: 100%;
+            }
+            #sgn-chart {
+                height: 250px;
+                width: 100%;
+            }
+            #sgst-grph {
+                height: 300px;
+                width: 100%;
+            }
+            #sgst-chart {
+                height: 250px;
+                width: 100%;
             }
         }
         .welcome-container {
@@ -1472,6 +1798,45 @@
         }
         .filter-btn.active {
             background-color: #0056b3;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+        .dropdown-content.show {
+            display: block;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        .dropdown.show .dropdown-content {
+            display: block;
+        }
+        .dropdown:hover button i {
+            transform: rotate(180deg);
+        }
+        .dropdown.show button i {
+            transform: rotate(180deg);
+        }
+        .dropdown button i {
+            transition: transform 0.3s;
         }
         .article {
             background: white;
@@ -1929,6 +2294,7 @@
     </style>
 </head>
 <body>
+    <!-- ... [All your existing HTML structure remains unchanged] ... -->
     <div id="welcome-modal" class="welcome-modal">
         <div class="welcome-modal-content">
             <h1>Welcome Admin!</h1>
@@ -1980,7 +2346,18 @@
                 </ul>
             </li>
             <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> <span class="text">Settings</span></a></li>
+
+
         </ul>
+        <div class="admin-info">
+            <div class="logout-only">
+                <a href="#" onclick="handleLogoutClick()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+            <div class="avatar-name-row">
+                <div class="profile-avatar">A</div>
+                <div class="admin-name" onclick="openProfileModal()"><span class="a-prefix">A </span>Admin</div>
+            </div>
+        </div>
     </div>
     <div class="header">
         <div style="display: flex; align-items: center;">
@@ -1988,24 +2365,20 @@
             <h1 id="page-title"></h1>
         </div>
         <div class="header-right">
-            <button class="btn btn-info" title="Refresh Users" onclick="refreshUsers()" style="background-color: #17a2b8; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; margin-right: 10px;">
-                <i class="fas fa-sync-alt"></i> Refresh
-            </button>
             <button class="notification-bell" title="Notifications" onclick="toggleNotificationModal()">
                 <i class="fas fa-bell"></i>
                 <span class="notification-badge">0</span>
             </button>
             <button class="dark-mode-toggle" title="Toggle Dark Mode"><i class="fas fa-moon"></i></button>
-            <div class="profile-dropdown" id="profile-dropdown">
-                <button class="profile-btn" onclick="toggleProfileDropdown()">
+            <div class="admin-dropdown">
+                <button class="admin-btn" onclick="toggleAdminDropdown()">
                     <div class="profile-avatar">A</div>
                     <span>Admin</span>
                 </button>
-                <ul class="profile-menu">
-                    <li><a href="#" onclick="handleProfileClick();"><i class="fas fa-user-cog"></i> Profile Settings</a></li>
-                    <li><a href="Homepage.html"><i class="fas fa-arrow-right"></i> Go to Website</a></li>
-                    <li class="logout-item"><a href="#" onclick="handleLogoutClick();"><i class="fas fa-sign-out-alt"></i> Log out</a></li>
-                </ul>
+                <div class="admin-menu">
+                    <a href="#" onclick="handleProfileClick()"><i class="fas fa-user"></i> Profile</a>
+                    <a href="#" onclick="handleLogoutClick()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
             </div>
         </div>
     </div>
@@ -2028,24 +2401,20 @@
                     <h3>Avg Time</h3>
                     <p id="orders-count">0 min</p>
                 </div>
-                <div class="card" onclick="navigateToReports()">
-                    <h3>Suggestions</h3>
-                    <p id="messages-count">0</p>
-                </div>
             </div>
             <div class="graphs-section">
                 <h2>User Statistics</h2>
                 <div class="graph-container">
                     <div class="graph-item" id="usr-grph">
-                        <h4>TOTAL USERS</h4>
-                        <div class="chart-container" id="usr-chart">
+                                            <h4>Total Users</h4>
+                                            <div class="chart-container" id="usr-chart">
                             <canvas id="user-chart" style="width:1px; padding-bottom:50px;"></canvas>
                         </div>
                     </div>
                     <div class="graph-item" id="sgn-grph">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <h4>Total of Signing Up Users</h4>
-                            <div class="filter-buttons">
+                                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                <h4>New Signups</h4>
+                                                <div class="filter-buttons">
                                 <button class="filter-btn active" onclick="renderSigningUpChart('day', this)">Day</button>
                                 <button class="filter-btn" onclick="renderSigningUpChart('week', this)">Week</button>
                                 <button class="filter-btn" onclick="renderSigningUpChart('month', this)">Month</button>
@@ -2058,7 +2427,7 @@
                     </div>
                     <div class="graph-item" id="upld-grph">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <h4>Total User Upload</h4>
+                            <h4>Uploads</h4>
                             <button id="toggle-uploads-chart" onclick="toggleUploadsChartType()" style="background-color: #007bff; color: white; border: none; padding: 8px 10px; border-radius: 4px; cursor: pointer;">Pie</button>
                         </div>
                         <div class="chart-container" id="upld-chart">
@@ -2066,14 +2435,14 @@
                         </div>
                     </div>
                     <div class="graph-item" id="avg-grph">
-                        <h4>Average Session Duration of User</h4>
-                        <div class="chart-container" id="avg-chart">
+                                            <h4>Average Time</h4>
+                                            <div class="chart-container" id="avg-chart">
                             <canvas id="time-chart"></canvas>
                         </div>
                     </div>
                     <div class="graph-item" id="sgst-grph">
-                        <h4>Suggestion of Users</h4>
-                        <div class="chart-container" id="sgst-chart">
+                                                <h4>Suggestions</h4>
+                                                <div class="chart-container" id="sgst-chart">
                             <canvas id="suggestions-chart" ></canvas>
                         </div>
                     </div>
@@ -2083,17 +2452,93 @@
         <div id="statistics" class="content-section">
             <div class="statistics-section">
                 <h2>Statistics Overview</h2>
-                <h3>SHS Users by Strand and Grade</h3>
+                <div class="filter-buttons">
+                    <div class="dropdown">
+                        <button class="filter-btn active" onclick="toggleDropdown('week-dropdown')">
+                            Week <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div id="week-dropdown" class="dropdown-content">
+                            <a href="#" onclick="setPeriod('this-week')">This Week</a>
+                            <a href="#" onclick="setPeriod('last-week')">Last Week</a>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button class="filter-btn" onclick="toggleDropdown('month-dropdown')">
+                            Month <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div id="month-dropdown" class="dropdown-content">
+                            <a href="#" onclick="setPeriod('this-month')">This Month</a>
+                            <a href="#" onclick="setPeriod('last-month')">Last Month</a>
+                        </div>
+                    </div>
+                </div>
+                <h3>Total Users by Strand</h3>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="renderTotalUsersChart('grade11')">Grade 11</button>
+                    <button class="filter-btn" onclick="renderTotalUsersChart('grade12')">Grade 12</button>
+                    <button class="filter-btn" onclick="renderTotalUsersChart('college')">College</button>
+                    <button class="filter-btn" onclick="renderTotalUsersChart('teacher')">Teacher</button>
+                </div>
                 <div class="chart-container">
-                    <canvas id="shsTreemap"></canvas>
+                    <canvas id="statistics-totalUsersChart" width="400" height="300"></canvas>
+                </div>
+                <h3>New Signups</h3>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="renderNewSignupsChart('grade11')">Grade 11</button>
+                    <button class="filter-btn" onclick="renderNewSignupsChart('grade12')">Grade 12</button>
+                    <button class="filter-btn" onclick="renderNewSignupsChart('college')">College</button>
+                    <button class="filter-btn" onclick="renderNewSignupsChart('teacher')">Teacher</button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="statistics-newSignupsChart" width="400" height="300"></canvas>
+                </div>
+                <h3>Uploads</h3>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="renderUploadsByStrandChart('grade11')">Grade 11</button>
+                    <button class="filter-btn" onclick="renderUploadsByStrandChart('grade12')">Grade 12</button>
+                    <button class="filter-btn" onclick="renderUploadsByStrandChart('college')">College</button>
+                    <button class="filter-btn" onclick="renderUploadsByStrandChart('teacher')">Teacher</button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="statistics-uploadsChart" width="400" height="300"></canvas>
+                </div>
+                <h3>Average Time</h3>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="renderAvgTimeChart('grade11')">Grade 11</button>
+                    <button class="filter-btn" onclick="renderAvgTimeChart('grade12')">Grade 12</button>
+                    <button class="filter-btn" onclick="renderAvgTimeChart('college')">College</button>
+                    <button class="filter-btn" onclick="renderAvgTimeChart('teacher')">Teacher</button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="statistics-avgTimeChart" width="400" height="300"></canvas>
+                </div>
+                <h3>Suggestions</h3>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="renderSuggestionsChart('grade11')">Grade 11</button>
+                    <button class="filter-btn" onclick="renderSuggestionsChart('grade12')">Grade 12</button>
+                    <button class="filter-btn" onclick="renderSuggestionsChart('college')">College</button>
+                    <button class="filter-btn" onclick="renderSuggestionsChart('teacher')">Teacher</button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="statistics-suggestionsChart" width="400" height="300"></canvas>
+                </div>
+                <h3>Reports</h3>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="renderReportsChart('grade11')">Grade 11</button>
+                    <button class="filter-btn" onclick="renderReportsChart('grade12')">Grade 12</button>
+                    <button class="filter-btn" onclick="renderReportsChart('college')">College</button>
+                    <button class="filter-btn" onclick="renderReportsChart('teacher')">Teacher</button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="statistics-reportsChart" width="400" height="300"></canvas>
                 </div>
             </div>
         </div>
+        <!-- ... [Rest of your HTML sections remain unchanged] ... -->
         <div id="upload" class="content-section">
             <div class="upload-section">
                 <h2>Article Management</h2>
                 <div class="admn-U_A">
-                    <!-- Upload Form -->
                     <form id="article-upload-form" style="display: grid; gap: 15px; max-width: 600px;">
                         <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; align-items: center;">
                             <label for="article-title" style="font-weight: bold;">Title:</label>
@@ -2145,12 +2590,10 @@
                             <button type="submit" class="btn" style="background-color: #0057b8; color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px;">Upload Article</button>
                         </div>
                     </form>
-
                     <h3 style="color: #0057b8; margin: 40px 0 20px 0;">Uploaded Articles by Admin</h3>
                     <div id="admin-uploaded-articles" style="max-width: 800px;">
                         <p class="empty-state">No articles uploaded by admin yet.</p>
                     </div>
-
                     <h3 style="color: #0057b8; margin: 40px 0 20px 0;">Uploaded Articles by Users</h3>
                     <div id="user-uploaded-articles" style="max-width: 800px;">
                         <p class="empty-state">No articles uploaded by users yet.</p>
@@ -2160,7 +2603,6 @@
         </div>
         <div id="users" class="content-section">
             <div class="users-section">
-                
                 <!-- Verified Users Section -->
                 <div id="verified-section" class="user-subsection" style="--border-color: #28a745; --header-color: #28a745;">
                     <h3 style="color: var(--header-color);">✅ Verified Users</h3>
@@ -2193,7 +2635,7 @@
                         <div id="strand-table" style="display: none; margin-top: 20px; overflow-x: auto;">
                             <h6 id="strand-title"></h6>
                             <table id="strand-users-table">
-                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Verified</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Str/B.S.</th><th>Date Verified</th><th>Status</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
                                 <tbody id="strand-users-tbody"></tbody>
                             </table>
                         </div>
@@ -2209,7 +2651,7 @@
                         <div id="degree-table" style="display: none; margin-top: 20px; overflow-x: auto;">
                             <h5 id="degree-title"></h5>
                             <table id="degree-users-table">
-                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Verified</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Str/B.S.</th><th>Date Verified</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
                                 <tbody id="degree-users-tbody"></tbody>
                             </table>
                         </div>
@@ -2224,14 +2666,14 @@
                         <div id="department-table" style="display: none; margin-top: 20px; overflow-x: auto;">
                             <h5 id="department-title"></h5>
                             <table id="department-users-table">
-                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Verified</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Str/B.S.</th><th>Date Verified</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
                                 <tbody id="department-users-tbody"></tbody>
                             </table>
                         </div>
                     </div>
                     <div style="overflow-x: auto;">
                         <table id="verified-users-table">
-                            <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Verified</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                            <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Str/B.S.</th><th>Date Verified</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
                             <tbody id="verified-users-tbody"></tbody>
                         </table>
                     </div>
@@ -2268,7 +2710,7 @@
                         <div id="signing-up-strand-table" style="display: none; margin-top: 20px;">
                             <h6 id="signing-up-strand-title"></h6>
                             <table id="signing-up-strand-users-table">
-                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Signed Up</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Str/B.S.</th><th>Date Signed Up</th><th>Status</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
                                 <tbody id="signing-up-strand-users-tbody"></tbody>
                             </table>
                         </div>
@@ -2284,7 +2726,7 @@
                         <div id="signing-up-degree-table" style="display: none; margin-top: 20px;">
                             <h5 id="signing-up-degree-title"></h5>
                             <table id="signing-up-degree-users-table">
-                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Signed Up</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Str/B.S.</th><th>Date Signed Up</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
                                 <tbody id="signing-up-degree-users-tbody"></tbody>
                             </table>
                         </div>
@@ -2299,14 +2741,14 @@
                         <div id="signing-up-department-table" style="display: none; margin-top: 20px;">
                             <h5 id="signing-up-department-title"></h5>
                             <table id="signing-up-department-users-table">
-                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Signed Up</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Str/B.S.</th><th>Date Signed Up</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
                                 <tbody id="signing-up-department-users-tbody"></tbody>
                             </table>
                         </div>
                     </div>
                     <div style="overflow-x: auto;">
                         <table id="signing-up-users-table">
-                            <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Signed Up</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                            <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Str/B.S.</th><th>Date Signed Up</th><th>Status</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
                             <tbody id="signing-up-users-tbody"></tbody>
                         </table>
                     </div>
@@ -2343,7 +2785,7 @@
                         <div id="rejected-strand-table" style="display: none; margin-top: 20px;">
                             <h6 id="rejected-strand-title"></h6>
                             <table id="rejected-strand-users-table">
-                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Rejected</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Str/B.S.</th><th>Date Rejected</th><th>Status</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
                                 <tbody id="rejected-strand-users-tbody"></tbody>
                             </table>
                         </div>
@@ -2359,7 +2801,7 @@
                         <div id="rejected-degree-table" style="display: none; margin-top: 20px;">
                             <h5 id="rejected-degree-title"></h5>
                             <table id="rejected-degree-users-table">
-                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Rejected</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Str/B.S.</th><th>Date Rejected</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
                                 <tbody id="rejected-degree-users-tbody"></tbody>
                             </table>
                         </div>
@@ -2374,14 +2816,14 @@
                         <div id="rejected-department-table" style="display: none; margin-top: 20px;">
                             <h5 id="rejected-department-title"></h5>
                             <table id="rejected-department-users-table">
-                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Rejected</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Str/B.S.</th><th>Date Rejected</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
                                 <tbody id="rejected-department-users-tbody"></tbody>
                             </table>
                         </div>
                     </div>
                     <div style="overflow-x: auto;">
                         <table id="rejected-users-table">
-                            <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Rejected</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                            <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Str/B.S.</th><th>Date Rejected</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
                             <tbody id="rejected-users-tbody"></tbody>
                         </table>
                     </div>
@@ -2418,7 +2860,7 @@
                         <div id="banned-strand-table" style="display: none; margin-top: 20px;">
                             <h6 id="banned-strand-title"></h6>
                             <table id="banned-strand-users-table">
-                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Banned</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Str/B.S.</th><th>Date Banned</th><th>Status</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
                                 <tbody id="banned-strand-users-tbody"></tbody>
                             </table>
                         </div>
@@ -2434,7 +2876,7 @@
                         <div id="banned-degree-table" style="display: none; margin-top: 20px;">
                             <h5 id="banned-degree-title"></h5>
                             <table id="banned-degree-users-table">
-                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Banned</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Str/B.S.</th><th>Date Banned</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
                                 <tbody id="banned-degree-users-tbody"></tbody>
                             </table>
                         </div>
@@ -2449,14 +2891,14 @@
                         <div id="banned-department-table" style="display: none; margin-top: 20px;">
                             <h5 id="banned-department-title"></h5>
                             <table id="banned-department-users-table">
-                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Banned</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                                <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Str/B.S.</th><th>Date Banned</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
                                 <tbody id="banned-department-users-tbody"></tbody>
                             </table>
                         </div>
                     </div>
                     <div style="overflow-x: auto;">
                         <table id="banned-users-table">
-                            <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Section</th><th>Date Banned</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
+                            <thead><tr><th>Student ID</th><th>Full Name</th><th>Email</th><th>Role</th><th>Str/B.S.</th><th>Date Banned</th><th>RAF Preview</th><th>Send Update</th><th>Actions</th></tr></thead>
                             <tbody id="banned-users-tbody"></tbody>
                         </table>
                     </div>
@@ -2484,6 +2926,7 @@
                                     <th>Email</th>
                                     <th>Permissions</th>
                                     <th>Date Created</th>
+                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -2533,7 +2976,6 @@
                             </form>
                         </div>
                         <div id="terms-conditions-settings" class="settings-subsection">
-                            <h2>Terms and Conditions</h2>
                             <div class="editable-content" id="terms-content">
                                 <div class="view-mode">
                                     <div class="content-text" id="terms-text" style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 20px; background: #fff; border-radius: 8px; color: #333;"></div>
@@ -2547,7 +2989,6 @@
                             </div>
                         </div>
                         <div id="privacy-policy-settings" class="settings-subsection">
-                            <h2>Privacy Policy</h2>
                             <div class="editable-content" id="privacy-content">
                                 <div class="view-mode">
                                     <div class="content-text" id="privacy-text" style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 20px; background: #fff; border-radius: 8px; color: #333;"></div>
@@ -2566,7 +3007,6 @@
         </div>
         <div id="reports" class="content-section">
             <div class="reports-section">
-                
                 <div id="reports-requests" class="reports-subsection active">
                     <h3>Requests</h3>
                     <div id="requests-list"></div>
@@ -2595,7 +3035,6 @@
             </div>
         </div>
     </div>
-
     <!-- RAF Preview Modal -->
     <div id="raf-preview-modal" class="modal">
         <div class="modal-content">
@@ -2617,7 +3056,6 @@
             <button class="view-all-btn" onclick="showSection('reports'); toggleNotificationModal();">View All</button>
         </div>
     </div>
-
     <!-- Send Update Modal -->
     <div id="send-update-modal" class="modal">
         <div class="modal-content">
@@ -2634,7 +3072,6 @@
             </form>
         </div>
     </div>
-
     <!-- Password Change Modal -->
     <div id="password-change-modal" class="modal">
         <div class="modal-content">
@@ -2648,12 +3085,29 @@
             <button onclick="verifyCode()">Verify</button>
         </div>
     </div>
-
-
+    <!-- Citation Modal -->
+    <div id="citationModal" class="citation-modal">
+      <div class="citation-modal-content">
+        <div class="citation-modal-header">
+          <h2>Citation Formats</h2>
+          <button class="citation-close" onclick="closeCitationModal()">&times;</button>
+        </div>
+        <div class="citation-format-tabs">
+          <button class="citation-tab active" onclick="switchCitationTab('APA')">APA</button>
+          <button class="citation-tab" onclick="switchCitationTab('MLA')">MLA</button>
+          <button class="citation-tab" onclick="switchCitationTab('Chicago')">Chicago</button>
+          <button class="citation-tab" onclick="switchCitationTab('IEEE')">IEEE</button>
+          <button class="citation-tab" onclick="switchCitationTab('Harvard')">Harvard</button>
+        </div>
+        <div class="citation-content" id="citationContent">
+          APA citation format will appear here.
+        </div>
+        <button class="citation-copy-btn" onclick="copyCitation()">Copy Citation</button>
+      </div>
+    </div>
     <script>
         // === UTILS ===
         async function getUsers() {
-            // Try to load from users.json file first, fallback to localStorage
             try {
                 const response = await fetch('users.json');
                 if (response.ok) {
@@ -2685,193 +3139,185 @@
             if (role === 'admin') return 'Admin';
             return 'Teacher';
         }
-
+        function getStatus(createdAt) {
+            if (!createdAt) return 'Pending';
+            const now = new Date();
+            const created = new Date(createdAt);
+            const diffMs = now - created;
+            const diffHours = diffMs / (1000 * 60 * 60);
+            return diffHours < 1 ? 'Just Now' : 'Pending';
+        }
         let uploadsChartType = 'doughnut';
-
         function toggleUploadsChartType() {
             uploadsChartType = uploadsChartType === 'pie' ? 'doughnut' : 'pie';
             document.getElementById('toggle-uploads-chart').innerText = uploadsChartType === 'pie' ? 'Doughnut' : 'Pie';
             renderUploadsChart();
         }
 
-
-  // === CREATE ARTICLE TEMPLATE (VIEW/EDIT TOGGLE) ===
-  function createArticleTemplate(articleData = {}) {
-    const wrapper = document.createElement('div');
-    wrapper.style.marginBottom = '20px';
-
-    const template = document.createElement('div');
-    template.className = `article ${articleData.category === 'capstone' ? 'capstone' : ''}`;
-    template.setAttribute('data-category', articleData.category);
-
-    const actionButtons = document.createElement('div');
-    actionButtons.style.display = 'flex';
-    actionButtons.style.justifyContent = 'flex-start';
-    actionButtons.style.gap = '10px';
-    actionButtons.style.marginTop = '10px';
-
-    wrapper.appendChild(template);
-    wrapper.appendChild(actionButtons);
-
-    function setViewMode() {
-      template.classList.remove('editing');
-      template.innerHTML = `
-          <h3><a href="#" style="text-decoration: none; color: inherit;">${articleData.title}</a></h3>
-          <div class="meta">${articleData.meta}</div>
-          <div class="summary">${articleData.summary}</div>
-          <div class="actions">
-              <span>★ Save</span>
-              <span onclick="openCitationModal(this)">Cite</span>
-              <span onclick="alert('Related clicked')">Related articles</span>
-              <div class="source-tag" style="float: right; margin-left: auto;">[STI College Calamba Library]</div>
-          </div>
-      `;
-      actionButtons.innerHTML = '';
-      const editBtn = document.createElement('button');
-      editBtn.className = 'edit-btn';
-      editBtn.style.backgroundColor = 'gray';
-      editBtn.style.color = 'white';
-      editBtn.style.border = 'none';
-      editBtn.style.padding = '5px 10px';
-      editBtn.style.borderRadius = '4px';
-      editBtn.style.cursor = 'pointer';
-      editBtn.textContent = 'Edit';
-      editBtn.addEventListener('click', setEditMode);
-      actionButtons.appendChild(editBtn);
-    }
-
-    function setEditMode() {
-      template.classList.add('editing');
-      template.innerHTML = `
-          <div>
-              <input type="text" class="article-title" value="${articleData.title}" placeholder="Article Title" style="border: none; background: transparent; color: #0057b8; font-size: 18px; font-weight: bold; width: 100%; outline: none;">
-          </div>
-          <div class="meta">
-              <input type="text" class="article-authors" value="${articleData.authors}" placeholder="Authors" style="border: none; background: transparent; color: #555; font-size: 14px; width: auto; outline: none;">
-              <span> – </span>
-              <input type="text" class="article-meta" value="${articleData.meta}" placeholder="Meta (e.g., Authors – Year – Institution)" style="border: none; background: transparent; color: #555; font-size: 14px; width: auto; outline: none;">
-          </div>
-          <div class="summary">
-              <textarea class="article-summary" placeholder="Summary" style="border: none; background: transparent; color: #333; font-size: 14px; line-height: 1.5; width: 100%; resize: vertical; outline: none;">${articleData.summary}</textarea>
-          </div>
-          <div class="actions">
-              <span onclick="alert('Cite clicked')">Cite</span>
-              <span onclick="alert('Related clicked')">Related articles</span>
-              <div class="source-tag" style="float: right; margin-left: auto;">[STI College Calamba Library]</div>
-          </div>
-          <div class="actions-row">
-              <label>Category:</label>
-              <select class="category-select">
-                  <option value="research" ${articleData.category === 'research' ? 'selected' : ''}>Research</option>
-                  <option value="capstone" ${articleData.category === 'capstone' ? 'selected' : ''}>Capstone</option>
-              </select>
-              <div class="research-options" style="display: ${articleData.category === 'research' ? 'inline' : 'none'};">
-                  <label>Grade:</label>
-                  <select class="grade-select">
-                      <option value="Grade 11" ${articleData.program === 'Grade 11' ? 'selected' : ''}>Grade 11</option>
-                      <option value="Grade 12" ${articleData.program === 'Grade 12' ? 'selected' : ''}>Grade 12</option>
-                  </select>
-                  <label>Strand:</label>
-                  <select class="strand-select">
-                      <option value="ABM" ${articleData.strand === 'ABM' ? 'selected' : ''}>ABM</option>
-                      <option value="CulArts" ${articleData.strand === 'CulArts' ? 'selected' : ''}>CulArts</option>
-                      <option value="ITMAWD" ${articleData.strand === 'ITMAWD' ? 'selected' : ''}>ITMAWD</option>
-                      <option value="STEM" ${articleData.strand === 'STEM' ? 'selected' : ''}>STEM</option>
-                  </select>
-              </div>
-              <div class="capstone-options" style="display: ${articleData.category === 'capstone' ? 'inline' : 'none'};">
-                  <label>Program:</label>
-                  <select class="program-select">
-                      <option value="BSBA" ${articleData.strand === 'BSBA' ? 'selected' : ''}>BSBA</option>
-                      <option value="BSCS" ${articleData.strand === 'BSCS' ? 'selected' : ''}>BSCS</option>
-                      <option value="BSIT" ${articleData.strand === 'BSIT' ? 'selected' : ''}>BSIT</option>
-                  </select>
-              </div>
-              <label>GDrive ID:</label>
-              <input type="text" class="gdrive-input" value="${articleData.gdriveId || ''}" placeholder="Google Drive File ID">
-          </div>
-      `;
-
-      // Add event listeners for category
-      const categorySelect = template.querySelector('.category-select');
-      categorySelect.addEventListener('change', function() {
-        const researchOpts = template.querySelector('.research-options');
-        const capstoneOpts = template.querySelector('.capstone-options');
-        if (this.value === 'research') {
-          researchOpts.style.display = 'inline';
-          capstoneOpts.style.display = 'none';
-          template.classList.remove('capstone');
-        } else {
-          researchOpts.style.display = 'none';
-          capstoneOpts.style.display = 'inline';
-          template.classList.add('capstone');
+        // === CREATE ARTICLE TEMPLATE (VIEW/EDIT TOGGLE) ===
+        function createArticleTemplate(articleData = {}) {
+            const wrapper = document.createElement('div');
+            wrapper.style.marginBottom = '20px';
+            const template = document.createElement('div');
+            template.className = `article ${articleData.category === 'capstone' ? 'capstone' : ''}`;
+            template.setAttribute('data-category', articleData.category);
+            const actionButtons = document.createElement('div');
+            actionButtons.style.display = 'flex';
+            actionButtons.style.justifyContent = 'flex-start';
+            actionButtons.style.gap = '10px';
+            actionButtons.style.marginTop = '10px';
+            wrapper.appendChild(template);
+            wrapper.appendChild(actionButtons);
+            function setViewMode() {
+                template.classList.remove('editing');
+                template.innerHTML = `
+                    <h3><a href="#" style="text-decoration: none; color: inherit;">${articleData.title}</a></h3>
+                    <div class="meta">${articleData.meta}</div>
+                    <div class="summary">${articleData.summary}</div>
+                    <div class="actions">
+                        <span>★ Save</span>
+                        <span onclick="openCitationModal(this)">Cite</span>
+                        <span onclick="alert('Related clicked')">Related articles</span>
+                        <div class="source-tag" style="float: right; margin-left: auto;">[STI College Calamba Library]</div>
+                    </div>
+                `;
+                actionButtons.innerHTML = '';
+                const editBtn = document.createElement('button');
+                editBtn.className = 'edit-btn';
+                editBtn.style.backgroundColor = 'gray';
+                editBtn.style.color = 'white';
+                editBtn.style.border = 'none';
+                editBtn.style.padding = '5px 10px';
+                editBtn.style.borderRadius = '4px';
+                editBtn.style.cursor = 'pointer';
+                editBtn.textContent = 'Edit';
+                editBtn.addEventListener('click', setEditMode);
+                actionButtons.appendChild(editBtn);
+            }
+            function setEditMode() {
+                template.classList.add('editing');
+                template.innerHTML = `
+                    <div>
+                        <input type="text" class="article-title" value="${articleData.title}" placeholder="Article Title" style="border: none; background: transparent; color: #0057b8; font-size: 18px; font-weight: bold; width: 100%; outline: none;">
+                    </div>
+                    <div class="meta">
+                        <input type="text" class="article-authors" value="${articleData.authors}" placeholder="Authors" style="border: none; background: transparent; color: #555; font-size: 14px; width: auto; outline: none;">
+                        <span> – </span>
+                        <input type="text" class="article-meta" value="${articleData.meta}" placeholder="Meta (e.g., Authors – Year – Institution)" style="border: none; background: transparent; color: #555; font-size: 14px; width: auto; outline: none;">
+                    </div>
+                    <div class="summary">
+                        <textarea class="article-summary" placeholder="Summary" style="border: none; background: transparent; color: #333; font-size: 14px; line-height: 1.5; width: 100%; resize: vertical; outline: none;">${articleData.summary}</textarea>
+                    </div>
+                    <div class="actions">
+                        <span onclick="alert('Cite clicked')">Cite</span>
+                        <span onclick="alert('Related clicked')">Related articles</span>
+                        <div class="source-tag" style="float: right; margin-left: auto;">[STI College Calamba Library]</div>
+                    </div>
+                    <div class="actions-row">
+                        <label>Category:</label>
+                        <select class="category-select">
+                            <option value="research" ${articleData.category === 'research' ? 'selected' : ''}>Research</option>
+                            <option value="capstone" ${articleData.category === 'capstone' ? 'selected' : ''}>Capstone</option>
+                        </select>
+                        <div class="research-options" style="display: ${articleData.category === 'research' ? 'inline' : 'none'};">
+                            <label>Grade:</label>
+                            <select class="grade-select">
+                                <option value="Grade 11" ${articleData.program === 'Grade 11' ? 'selected' : ''}>Grade 11</option>
+                                <option value="Grade 12" ${articleData.program === 'Grade 12' ? 'selected' : ''}>Grade 12</option>
+                            </select>
+                            <label>Strand:</label>
+                            <select class="strand-select">
+                                <option value="ABM" ${articleData.strand === 'ABM' ? 'selected' : ''}>ABM</option>
+                                <option value="CulArts" ${articleData.strand === 'CulArts' ? 'selected' : ''}>CulArts</option>
+                                <option value="ITMAWD" ${articleData.strand === 'ITMAWD' ? 'selected' : ''}>ITMAWD</option>
+                                <option value="STEM" ${articleData.strand === 'STEM' ? 'selected' : ''}>STEM</option>
+                            </select>
+                        </div>
+                        <div class="capstone-options" style="display: ${articleData.category === 'capstone' ? 'inline' : 'none'};">
+                            <label>Program:</label>
+                            <select class="program-select">
+                                <option value="BSBA" ${articleData.strand === 'BSBA' ? 'selected' : ''}>BSBA</option>
+                                <option value="BSCS" ${articleData.strand === 'BSCS' ? 'selected' : ''}>BSCS</option>
+                                <option value="BSIT" ${articleData.strand === 'BSIT' ? 'selected' : ''}>BSIT</option>
+                            </select>
+                        </div>
+                        <label>GDrive ID:</label>
+                        <input type="text" class="gdrive-input" value="${articleData.gdriveId || ''}" placeholder="Google Drive File ID">
+                    </div>
+                `;
+                // Add event listeners for category
+                const categorySelect = template.querySelector('.category-select');
+                categorySelect.addEventListener('change', function() {
+                    const researchOpts = template.querySelector('.research-options');
+                    const capstoneOpts = template.querySelector('.capstone-options');
+                    if (this.value === 'research') {
+                        researchOpts.style.display = 'inline';
+                        capstoneOpts.style.display = 'none';
+                        template.classList.remove('capstone');
+                    } else {
+                        researchOpts.style.display = 'none';
+                        capstoneOpts.style.display = 'inline';
+                        template.classList.add('capstone');
+                    }
+                });
+                // Create buttons in actionButtons
+                actionButtons.innerHTML = '';
+                const editBtn = document.createElement('button');
+                editBtn.className = 'edit-btn';
+                editBtn.style.backgroundColor = 'gray';
+                editBtn.style.color = 'white';
+                editBtn.style.border = 'none';
+                editBtn.style.padding = '5px 10px';
+                editBtn.style.borderRadius = '4px';
+                editBtn.style.cursor = 'pointer';
+                editBtn.textContent = 'Edit';
+                const cancelBtn = document.createElement('button');
+                cancelBtn.className = 'cancel-btn';
+                cancelBtn.style.backgroundColor = '#6c757d';
+                cancelBtn.style.color = 'white';
+                cancelBtn.style.border = 'none';
+                cancelBtn.style.padding = '5px 10px';
+                cancelBtn.style.borderRadius = '4px';
+                cancelBtn.style.cursor = 'pointer';
+                cancelBtn.textContent = 'Cancel';
+                cancelBtn.addEventListener('click', setViewMode);
+                const saveBtn = document.createElement('button');
+                saveBtn.className = 'save-btn';
+                saveBtn.style.backgroundColor = '#28a745';
+                saveBtn.style.color = 'white';
+                saveBtn.style.border = 'none';
+                saveBtn.style.padding = '5px 10px';
+                saveBtn.style.borderRadius = '4px';
+                saveBtn.style.cursor = 'pointer';
+                saveBtn.textContent = 'Save';
+                saveBtn.addEventListener('click', function() {
+                    articleData.title = template.querySelector('.article-title').value;
+                    articleData.authors = template.querySelector('.article-authors').value;
+                    articleData.meta = template.querySelector('.article-meta').value;
+                    articleData.summary = template.querySelector('.article-summary').value;
+                    articleData.category = template.querySelector('.category-select').value;
+                    if (articleData.category === 'research') {
+                        articleData.program = template.querySelector('.grade-select').value;
+                        articleData.strand = template.querySelector('.strand-select').value;
+                    } else {
+                        articleData.program = '';
+                        articleData.strand = template.querySelector('.program-select').value;
+                    }
+                    articleData.gdriveId = template.querySelector('.gdrive-input').value;
+                    setViewMode();
+                    alert('Article updated!');
+                });
+                actionButtons.appendChild(editBtn);
+                actionButtons.appendChild(cancelBtn);
+                actionButtons.appendChild(saveBtn);
+            }
+            setViewMode(); // Start in view mode
+            return wrapper;
         }
-      });
-
-      // Create buttons in actionButtons
-      actionButtons.innerHTML = '';
-      const editBtn = document.createElement('button');
-      editBtn.className = 'edit-btn';
-      editBtn.style.backgroundColor = 'gray';
-      editBtn.style.color = 'white';
-      editBtn.style.border = 'none';
-      editBtn.style.padding = '5px 10px';
-      editBtn.style.borderRadius = '4px';
-      editBtn.style.cursor = 'pointer';
-      editBtn.textContent = 'Edit';
-
-      const cancelBtn = document.createElement('button');
-      cancelBtn.className = 'cancel-btn';
-      cancelBtn.style.backgroundColor = '#6c757d';
-      cancelBtn.style.color = 'white';
-      cancelBtn.style.border = 'none';
-      cancelBtn.style.padding = '5px 10px';
-      cancelBtn.style.borderRadius = '4px';
-      cancelBtn.style.cursor = 'pointer';
-      cancelBtn.textContent = 'Cancel';
-      cancelBtn.addEventListener('click', setViewMode);
-
-      const saveBtn = document.createElement('button');
-      saveBtn.className = 'save-btn';
-      saveBtn.style.backgroundColor = '#28a745';
-      saveBtn.style.color = 'white';
-      saveBtn.style.border = 'none';
-      saveBtn.style.padding = '5px 10px';
-      saveBtn.style.borderRadius = '4px';
-      saveBtn.style.cursor = 'pointer';
-      saveBtn.textContent = 'Save';
-      saveBtn.addEventListener('click', function() {
-        articleData.title = template.querySelector('.article-title').value;
-        articleData.authors = template.querySelector('.article-authors').value;
-        articleData.meta = template.querySelector('.article-meta').value;
-        articleData.summary = template.querySelector('.article-summary').value;
-        articleData.category = template.querySelector('.category-select').value;
-        if (articleData.category === 'research') {
-          articleData.program = template.querySelector('.grade-select').value;
-          articleData.strand = template.querySelector('.strand-select').value;
-        } else {
-          articleData.program = '';
-          articleData.strand = template.querySelector('.program-select').value;
-        }
-        articleData.gdriveId = template.querySelector('.gdrive-input').value;
-        setViewMode();
-        alert('Article updated!');
-      });
-
-      actionButtons.appendChild(editBtn);
-      actionButtons.appendChild(cancelBtn);
-      actionButtons.appendChild(saveBtn);
-    }
-
-    setViewMode(); // Start in view mode
-    return wrapper;
-  }
-
 
         // === UPLOAD FORM HANDLER ===
         document.getElementById('article-upload-form').addEventListener('submit', function(e) {
             e.preventDefault();
-
             const formData = {
                 title: document.getElementById('article-title').value,
                 meta: document.getElementById('article-meta').value,
@@ -2884,18 +3330,15 @@
                 citation: document.getElementById('article-citation').value,
                 gdriveId: document.getElementById('article-gdrive-id').value
             };
-
             const articles = getArticles();
             articles.push(formData);
             saveArticles(articles);
-
             const newArticle = createArticleTemplate(formData);
             const container = document.getElementById('admin-uploaded-articles');
             if (container.querySelector('.empty-state')) {
                 container.innerHTML = '';
             }
             container.appendChild(newArticle);
-
             // Reset form
             this.reset();
             document.getElementById('article-category').value = 'research';
@@ -2907,40 +3350,33 @@
             // Show welcome modal
             const welcomeModal = document.getElementById('welcome-modal');
             const welcomeModalContent = document.querySelector('.welcome-modal-content');
-
             function closeWelcomeModal() {
                 welcomeModal.classList.remove('show');
             }
-
             welcomeModal.classList.add('show');
             setTimeout(closeWelcomeModal, 4000); // 4 seconds
-
             // Close modal when clicking outside
             welcomeModal.addEventListener('click', function(e) {
                 if (e.target === welcomeModal) {
                     closeWelcomeModal();
                 }
             });
-
             // Dark mode
             if (localStorage.getItem('darkMode') === 'enabled') {
                 document.body.classList.add('dark-mode');
                 document.querySelector('.dark-mode-toggle i').className = 'fas fa-sun';
                 document.querySelector('.dark-mode-toggle i').style.color = '#FFD700';
             }
-
             // Load settings
             const savedSettings = JSON.parse(localStorage.getItem('adminSettings')) || {};
             document.getElementById('site-title').value = savedSettings.siteTitle || 'STI Archives';
             document.getElementById('site-logo').value = savedSettings.siteLogo || '';
             document.getElementById('site-favicon').value = savedSettings.siteFavicon || '';
-
             // Load account settings
             const accountSettings = JSON.parse(localStorage.getItem('accountSettings')) || {};
             document.getElementById('admin-username').value = accountSettings.username || 'admin';
             document.getElementById('admin-gmail').value = accountSettings.gmail || 'admin@sti.archives.clmb';
             document.getElementById('admin-password').value = accountSettings.password || '';
-
             // Load terms and privacy
             const defaultTerms = `<h3>Terms and Conditions</h3>
 <p>1. Acceptance of Terms<br>By accessing and using STI Archives, you agree to comply with these Terms and Conditions. If you do not agree, please discontinue use of the service.</p>
@@ -2960,7 +3396,6 @@
 <p>6. Contact Us<br>If you have any questions or concerns about this Privacy Policy, please reach out to us through the STI Archives support system.</p>`;
             document.getElementById('terms-text').innerHTML = localStorage.getItem('termsContent') || defaultTerms;
             document.getElementById('privacy-text').innerHTML = localStorage.getItem('privacyContent') || defaultPrivacy;
-
             // Load reports
             const requests = [
                 { action: 'Request: Accept approval for new user interface design', time: '2023-10-01 10:00 AM' },
@@ -2975,7 +3410,6 @@
                 { action: 'Bug report: Login page not loading on mobile', time: '2023-10-04 01:00 PM' },
                 { action: 'Bug report: Search function returns incorrect results', time: '2023-10-05 03:30 PM' }
             ];
-
             function populateList(listId, items) {
                 const container = document.getElementById(listId);
                 items.forEach(item => {
@@ -2986,11 +3420,9 @@
                     container.appendChild(itemDiv);
                 });
             }
-
             populateList('requests-list', requests);
             populateList('suggestions-list', suggestions);
             populateList('bugs-list', bugs);
-
             // Load notifications
             const notifications = [
                 { type: 'new-user', typeText: 'New User', content: 'John Doe has registered as a new user.', time: '2 hours ago' },
@@ -3012,7 +3444,6 @@
             });
             document.querySelector('.notification-placeholder').style.display = 'none';
             document.querySelector('.notification-badge').textContent = notifications.length;
-
             // Populate notification lists in reports
             const categories = {
                 'new-users-notifications': notifications.filter(n => n.type === 'new-user' && n.typeText === 'New User'),
@@ -3021,7 +3452,6 @@
                 'user-suggestions-notifications': notifications.filter(n => n.type === 'suggestion' && n.typeText === 'User Suggestion'),
                 'sub-admin-bugs-notifications': notifications.filter(n => n.type === 'bug')
             };
-
             Object.keys(categories).forEach(id => {
                 const container = document.getElementById(id);
                 categories[id].forEach(notif => {
@@ -3032,7 +3462,6 @@
                     container.appendChild(notifDiv);
                 });
             });
-
             // Load existing articles from library
             const allArticles = JSON.parse(localStorage.getItem('allArticles')) || [];
             allArticles.forEach(article => {
@@ -3043,7 +3472,6 @@
                 }
                 container.appendChild(newArticle);
             });
-
             // Sidebar navigation
             document.querySelectorAll('.sidebar a[data-section]').forEach(link => {
                 link.addEventListener('click', function(e) {
@@ -3052,14 +3480,11 @@
                     showSection(section);
                 });
             });
-
             // Buttons
             document.getElementById('toggle-btn').addEventListener('click', toggleSidebar);
             document.querySelector('.dark-mode-toggle').addEventListener('click', toggleDarkMode);
-
             // Overlay click to close sidebar on mobile
             document.getElementById('sidebar-overlay').addEventListener('click', closeSidebarOnOverlayClick);
-
             // Account form
             document.getElementById('account-form').addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -3071,7 +3496,6 @@
                 localStorage.setItem('accountSettings', JSON.stringify(accountSettings));
                 alert('Account settings saved!');
             });
-
             // Settings form
             document.getElementById('settings-form').addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -3083,8 +3507,6 @@
                 localStorage.setItem('adminSettings', JSON.stringify(settings));
                 alert('Settings saved!');
             });
-
-
             // Initialize
             const savedSection = localStorage.getItem('adminCurrentSection') || 'dashboard';
             showSection(savedSection);
@@ -3094,6 +3516,15 @@
                 renderSigningUpChart('day');
                 renderTimeChart();
                 renderSuggestionsChart();
+                // Render statistics charts if statistics section is active
+                if (document.getElementById('statistics').classList.contains('active')) {
+                    renderDemographicsChart();
+                    renderTotalUsersChart();
+                    renderNewSignupsChart();
+                    renderUploadsByStrandChart();
+                    renderAvgTimeChart();
+                    renderSuggestionsReportsChart();
+                }
             }).catch(() => {
                 // Fallback if async fails
                 renderUserChart();
@@ -3101,6 +3532,14 @@
                 renderSigningUpChart('day');
                 renderTimeChart();
                 renderSuggestionsChart();
+                if (document.getElementById('statistics').classList.contains('active')) {
+                    renderDemographicsChart();
+                    renderTotalUsersChart();
+                    renderNewSignupsChart();
+                    renderUploadsByStrandChart();
+                    renderAvgTimeChart();
+                    renderSuggestionsReportsChart();
+                }
             });
             // Clear the saved section after loading
             localStorage.removeItem('adminCurrentSection');
@@ -3110,20 +3549,21 @@
         function openSendUpdateModal(email, name) {
             document.getElementById('update-email').value = email;
             document.getElementById('update-subject').value = `Update for ${name}`;
-            document.getElementById('update-message').value = `Dear ${name},\n\n[Enter reason, news, or update here]\n\nBest regards,\nSTI Archives Admin`;
+            document.getElementById('update-message').value = `Dear ${name},
+[Enter reason, news, or update here]
+Best regards,
+STI Archives Admin`;
             document.getElementById('send-update-modal').style.display = 'block';
         }
         function sendUpdateEmail() {
             const email = document.getElementById('update-email').value;
             const subject = document.getElementById('update-subject').value;
             const message = document.getElementById('update-message').value;
-
             if (!email || !subject || !message) {
                 alert('Please fill in all fields.');
                 return;
             }
-
-            fetch('http://localhost:5000/send_update_email', {
+            fetch('/api/send_update_email', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ to_email: email, subject: subject, message: message })
@@ -3142,9 +3582,8 @@
                 alert('Failed to send email. Please check your connection.');
             });
         }
-
         function updateUserStatus(userId, action) {
-            fetch('http://localhost:5000/update_user_status', {
+            fetch('/api/update_user_status', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ user_id: userId, action: action })
@@ -3154,7 +3593,6 @@
                 if (result.message) {
                     const actionMessage = action === 'accept' ? 'User accepted successfully! Welcome email sent.' : `User ${action}ed successfully!`;
                     alert(actionMessage);
-
                     // If accepting a user, redirect to index.html to show access granted message
                     if (action === 'accept') {
                         // Store the accepted user info temporarily
@@ -3163,7 +3601,6 @@
                         window.location.href = 'index.html?access_granted=true';
                         return; // Exit early to prevent further execution
                     }
-
                     // Refresh the users list in the current section for other actions
                     loadUsers().then(() => {
                         // Re-apply any current filters or section views
@@ -3193,10 +3630,9 @@
                 alert('Failed to update user status. Please check your connection.');
             });
         }
-
         function removeUser(userId, userName) {
             if (confirm(`Are you sure you want to remove ${userName}'s information? This action cannot be undone.`)) {
-                fetch('http://localhost:5000/remove_user', {
+                fetch('/api/remove_user', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ user_id: userId })
@@ -3238,7 +3674,24 @@
         function closeSendUpdateModal() {
             document.getElementById('send-update-modal').style.display = 'none';
         }
-        // Email sending is now handled by sendUpdateEmail() function
+
+        function getStatus(user) {
+            if (user.verified) return 'Verified';
+            if (user.rejected) return 'Rejected';
+            if (user.banned) return 'Banned';
+            if (user.role === 'admin') return 'Active';
+            // For signing up
+            if (!user.created_at) return 'N/A';
+            const now = new Date();
+            const created = new Date(user.created_at);
+            const diffMs = now - created;
+            const diffHours = diffMs / (1000 * 60 * 60);
+            if (diffHours < 1) {
+                return 'Just now';
+            } else {
+                return 'Pending';
+            }
+        }
 
         // === LOAD USERS FUNCTION ===
         async function loadUsers() {
@@ -3282,6 +3735,7 @@
                     <td>${formatRole(user.role)}</td>
                     <td>${user.section || '-'}</td>
                     <td>${date}</td>
+                    <td>${getStatus(user)}</td>
                     <td><button type="button" class="btn btn-sm" onclick="previewRaf('${user.raf_path || ''}')">Preview</button></td>
                     <td><button type="button" class="btn btn-info btn-sm" onclick="openSendUpdateModal('${emailToUse}', '${user.name}')">Send Update</button></td>
                     <td>${actions}</td>
@@ -3357,32 +3811,22 @@
                 window.userChart.destroy();
             }
             window.userChart = new Chart(ctx, {
-                type: 'bar',
+                type: 'line',
                 data: {
                     labels: labels,
                     datasets: [{
                         data: [roleCounts.admin, roleCounts.teacher, roleCounts.shs, roleCounts.college],
-                        backgroundColor: barColors,
-                        borderWidth: 1
+                        borderColor: barColors,
+                        backgroundColor: barColors.map(c => c + '20'),
+                        fill: true,
+                        tension: 0.4
                     }]
                 },
                 options: {
                     responsive: true,
                     plugins: {
                         legend: {
-                            display: true,
-                            labels: {
-                                generateLabels: (chart) => {
-                                    return chart.data.labels.map((label, index) => ({
-                                        text: label,
-                                        fillStyle: barColors[index],
-                                        strokeStyle: barColors[index],
-                                        lineWidth: 1,
-                                        hidden: false,
-                                        index: index
-                                    }));
-                                }
-                            }
+                            display: false
                         }
                     },
                     scales: {
@@ -3393,7 +3837,7 @@
                         },
                         y: {
                             beginAtZero: true,
-                            max: 500,
+                            max: 400,
                             ticks: {
                                 color: '#000000'
                             }
@@ -3439,18 +3883,12 @@
 
         function renderSigningUpChart(period, button) {
             let labels, data;
-            if (period === 'day') {
+            if (period === 'this-week' || period === 'last-week') {
                 labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-                data = [12, 15, 8, 20, 18, 10, 14];
-            } else if (period === 'week') {
+                data = period === 'this-week' ? [12, 15, 8, 20, 18, 10, 14] : [10, 13, 7, 18, 16, 9, 12];
+            } else if (period === 'this-month' || period === 'last-month') {
                 labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
-                data = [50, 60, 45, 70];
-            } else if (period === 'month') {
-                labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                data = [100, 120, 90, 110, 130, 95, 105, 115, 125, 135, 140, 150];
-            } else if (period === 'year') {
-                labels = ['2020', '2021', '2022', '2023', '2024'];
-                data = [500, 600, 700, 800, 900];
+                data = period === 'this-month' ? [50, 60, 45, 70] : [45, 55, 40, 65];
             }
             const ctx = document.getElementById('signing-up-chart').getContext('2d');
             if (window.signingUpChart) {
@@ -3483,7 +3921,7 @@
                         },
                         y: {
                             beginAtZero: true,
-                            max: 500,
+                            max: 400,
                             ticks: {
                                 color: '#000000'
                             }
@@ -3509,20 +3947,35 @@
                 window.timeChart.destroy();
             }
             window.timeChart = new Chart(ctx, {
-                type: 'doughnut',
+                type: 'line',
                 data: {
                     labels: labels,
                     datasets: [{
                         data: [120, 90, 60, 80], // Sample average session durations
-                        backgroundColor: barColors,
-                        borderWidth: 1,
-                        borderColor: '#ffffff'
+                        borderColor: barColors,
+                        backgroundColor: barColors.map(c => c + '20'),
+                        fill: true,
+                        tension: 0.4
                     }]
                 },
                 options: {
-                    cutout: '70%',
+                    responsive: true,
                     plugins: {
-                        legend: { display: true }
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#000000'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: 400,
+                            ticks: {
+                                color: '#000000'
+                            }
+                        }
                     }
                 }
             });
@@ -3540,37 +3993,48 @@
                 window.suggestionsChart.destroy();
             }
             window.suggestionsChart = new Chart(ctx, {
-                type: 'bar',
+                type: 'line',
                 data: {
                     labels: ['RESEARCH', 'CAPSTONE', 'IMPROVEMENTS'],
                     datasets: [{
                         label: 'ADMIN',
                         data: [20, 15, 10],
-                        backgroundColor: barColors[0]
+                        borderColor: barColors[0],
+                        backgroundColor: barColors[0] + '20',
+                        fill: true,
+                        tension: 0.4
                     }, {
                         label: 'TEACHER',
                         data: [5, 8, 3],
-                        backgroundColor: barColors[1]
+                        borderColor: barColors[1],
+                        backgroundColor: barColors[1] + '20',
+                        fill: true,
+                        tension: 0.4
                     }, {
                         label: 'SHS',
                         data: [10, 12, 5],
-                        backgroundColor: barColors[2]
+                        borderColor: barColors[2],
+                        backgroundColor: barColors[2] + '20',
+                        fill: true,
+                        tension: 0.4
                     }, {
                         label: 'COLLEGE',
                         data: [8, 6, 7],
-                        backgroundColor: barColors[3]
+                        borderColor: barColors[3],
+                        backgroundColor: barColors[3] + '20',
+                        fill: true,
+                        tension: 0.4
                     }]
                 },
                 options: {
                     responsive: true,
                     scales: {
                         x: {
-                            stacked: true,
                             ticks: { color: '#000000' }
                         },
                         y: {
-                            stacked: true,
                             beginAtZero: true,
+                            max: 400,
                             ticks: { color: '#000000' }
                         }
                     },
@@ -3588,7 +4052,6 @@
             const mainContent = document.getElementById('main-content');
             const header = document.querySelector('.header');
             const body = document.body;
-
             // Check if mobile view
             if (window.innerWidth <= 767) {
                 // Mobile: toggle overlay and sidebar
@@ -3610,6 +4073,7 @@
                 }
             }
         }
+
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
             const toggleBtn = document.querySelector('.dark-mode-toggle i');
@@ -3623,6 +4087,227 @@
                 localStorage.setItem('darkMode', 'disabled');
             }
         }
+
+        let currentPeriod = '';
+
+        function toggleDropdown(dropdownId) {
+            // Close all dropdowns first
+            document.querySelectorAll('.dropdown').forEach(dd => dd.classList.remove('show'));
+            document.querySelectorAll('.dropdown-content').forEach(dd => dd.classList.remove('show'));
+            // Open the clicked dropdown
+            const dropdown = document.getElementById(dropdownId).parentElement;
+            dropdown.classList.toggle('show');
+            // Add event listener to close dropdown when clicking outside
+            if (dropdown.classList.contains('show')) {
+                setTimeout(() => {
+                    document.addEventListener('click', closeDropdownOnOutsideClick);
+                }, 1);
+            }
+        }
+
+        function closeDropdownOnOutsideClick(e) {
+            if (!e.target.closest('.dropdown')) {
+                document.querySelectorAll('.dropdown').forEach(dd => dd.classList.remove('show'));
+                document.querySelectorAll('.dropdown-content').forEach(dd => dd.classList.remove('show'));
+                document.removeEventListener('click', closeDropdownOnOutsideClick);
+            }
+        }
+
+        function setPeriod(period) {
+            currentPeriod = period;
+            document.querySelectorAll('.filter-buttons button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.dropdown-content').forEach(dd => dd.classList.remove('show'));
+            // Find the parent button and make it active
+            const button = event.target.closest('.dropdown').querySelector('.filter-btn');
+            button.classList.add('active');
+            button.innerHTML = period.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()) + ' <i class="fas fa-chevron-down"></i>';
+            // Reset the other button to default
+            const isWeek = event.target.closest('.dropdown').querySelector('#week-dropdown') !== null;
+            if (isWeek) {
+                const monthButton = document.querySelector('#month-dropdown').parentElement.querySelector('.filter-btn');
+                monthButton.innerHTML = 'Month <i class="fas fa-chevron-down"></i>';
+            } else {
+                const weekButton = document.querySelector('#week-dropdown').parentElement.querySelector('.filter-btn');
+                weekButton.innerHTML = 'Week <i class="fas fa-chevron-down"></i>';
+            }
+            // Re-render all charts with the new period
+            const currentCategory = document.querySelector('.filter-btn.active[onclick*="renderTotalUsersChart"]') ?
+                document.querySelector('.filter-btn.active[onclick*="renderTotalUsersChart"]').textContent.toLowerCase().replace(' ', '') : 'grade11';
+            renderTotalUsersChart(currentCategory);
+            renderNewSignupsChart(currentCategory);
+            renderUploadsByStrandChart(currentCategory);
+            renderAvgTimeChart(currentCategory);
+            renderSuggestionsChart(currentCategory);
+            renderReportsChart(currentCategory);
+        }
+        function renderTotalUsersChart(category = 'grade11') {
+            const ctx = document.getElementById('statistics-totalUsersChart').getContext('2d');
+            if (window.totalUsersChart) window.totalUsersChart.destroy();
+
+            if (currentPeriod === 'year') {
+                const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                const dataGrade11 = [30, 35, 28, 40, 38, 25, 32, 45, 50, 48, 42, 55];
+                const dataGrade12 = [28, 32, 25, 35, 33, 22, 29, 40, 45, 43, 38, 50];
+                const dataCollege = [15, 18, 12, 20, 19, 10, 16, 25, 30, 28, 22, 35];
+                const dataTeacher = [7, 8, 6, 10, 9, 5, 8, 12, 15, 14, 11, 18];
+                window.totalUsersChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Grade 11',
+                            data: dataGrade11,
+                            borderColor: '#FF5722',
+                            backgroundColor: 'rgba(255, 87, 34, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Grade 12',
+                            data: dataGrade12,
+                            borderColor: '#9C27B0',
+                            backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'College',
+                            data: dataCollege,
+                            borderColor: '#4CAF50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Teacher',
+                            data: dataTeacher,
+                            borderColor: '#2196F3',
+                            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: true } },
+                        scales: {
+                            y: { beginAtZero: true, max: 400, ticks: { color: '#000000' } },
+                            x: { ticks: { color: '#000000' } }
+                        }
+                    }
+                });
+                return;
+            }
+
+            if (currentPeriod === 'this-week' || currentPeriod === 'last-week' || currentPeriod === 'this-month' || currentPeriod === 'last-month') {
+                let labels, dataGrade11, dataGrade12, dataCollege, dataTeacher;
+                if (currentPeriod === 'this-week') {
+                    labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                    dataGrade11 = [30, 35, 28, 40, 38, 25, 32];
+                    dataGrade12 = [28, 32, 25, 35, 33, 22, 29];
+                    dataCollege = [15, 18, 12, 20, 19, 10, 16];
+                    dataTeacher = [7, 8, 6, 10, 9, 5, 8];
+                } else if (currentPeriod === 'last-week') {
+                    labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                    dataGrade11 = [25, 30, 22, 35, 32, 20, 28];
+                    dataGrade12 = [22, 28, 20, 30, 28, 18, 25];
+                    dataCollege = [12, 15, 10, 18, 16, 8, 14];
+                    dataTeacher = [5, 7, 4, 8, 7, 3, 6];
+                } else if (currentPeriod === 'this-month') {
+                    labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+                    dataGrade11 = [120, 140, 110, 160];
+                    dataGrade12 = [110, 130, 100, 140];
+                    dataCollege = [60, 70, 50, 80];
+                    dataTeacher = [25, 30, 20, 35];
+                } else if (currentPeriod === 'last-month') {
+                    labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+                    dataGrade11 = [100, 120, 90, 140];
+                    dataGrade12 = [90, 110, 80, 120];
+                    dataCollege = [50, 60, 40, 70];
+                    dataTeacher = [20, 25, 15, 30];
+                }
+                window.totalUsersChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Grade 11',
+                            data: dataGrade11,
+                            borderColor: '#FF5722',
+                            backgroundColor: 'rgba(255, 87, 34, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Grade 12',
+                            data: dataGrade12,
+                            borderColor: '#9C27B0',
+                            backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'College',
+                            data: dataCollege,
+                            borderColor: '#4CAF50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Teacher',
+                            data: dataTeacher,
+                            borderColor: '#2196F3',
+                            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: true } },
+                        scales: {
+                            y: { beginAtZero: true, max: 400, ticks: { color: '#000000' } },
+                            x: { ticks: { color: '#000000' } }
+                        }
+                    }
+                });
+                return;
+            }
+
+            let labels, data;
+            if (category === 'grade11') {
+                labels = ['ABM', 'CulArts', 'ITMAWD', 'STEM'];
+                data = [100, 80, 120, 100];
+            } else if (category === 'grade12') {
+                labels = ['ABM', 'CulArts', 'ITMAWD', 'STEM'];
+                data = [90, 70, 110, 80];
+            } else if (category === 'college') {
+                labels = ['BSBA', 'BSCS', 'BSIT'];
+                data = [50, 60, 40];
+            } else if (category === 'teacher') {
+                labels = ['Department SHS', 'Department College'];
+                data = [30, 40];
+            }
+
+            window.totalUsersChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Total Users',
+                        data: data,
+                        borderColor: '#FF5722',
+                        backgroundColor: 'rgba(255, 87, 34, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: true } },
+                    scales: {
+                        y: { beginAtZero: true, max: 400, ticks: { color: '#000000' } },
+                        x: { ticks: { color: '#000000' } }
+                    }
+                }
+            });
+        }
+
         function showSection(sectionId) {
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
@@ -3634,9 +4319,18 @@
                 sectionId === 'settings' ? 'Settings' :
                 'Reports';
             if (sectionId === 'statistics') {
-                renderSHSTreemap();
+                // Small delay to ensure DOM is ready
+                setTimeout(() => {
+                    renderTotalUsersChart('grade11');
+                    renderNewSignupsChart('grade11');
+                    renderUploadsByStrandChart('grade11');
+                    renderAvgTimeChart('grade11');
+                    renderSuggestionsChart('grade11');
+                    renderReportsChart('grade11');
+                }, 100);
             }
         }
+
         function toggleProfileDropdown() {
             const dropdown = document.getElementById('profile-dropdown');
             const isOpen = dropdown.classList.contains('open');
@@ -3648,6 +4342,49 @@
                 }, 1);
             }
         }
+
+        function toggleAdminDropdown() {
+            const dropdown = document.querySelector('.admin-dropdown');
+            const isOpen = dropdown.classList.contains('open');
+            dropdown.classList.toggle('open');
+            if (!isOpen) {
+                // Add listener to close on outside click
+                setTimeout(() => {
+                    document.addEventListener('click', closeAdminDropdownOnOutsideClick);
+                }, 1);
+            }
+        }
+
+        function closeAdminDropdownOnOutsideClick(e) {
+            const dropdown = document.querySelector('.admin-dropdown');
+            const btn = document.querySelector('.admin-btn');
+            if (!dropdown.contains(e.target) && !btn.contains(e.target)) {
+                dropdown.classList.remove('open');
+                document.removeEventListener('click', closeAdminDropdownOnOutsideClick);
+            }
+        }
+
+        function toggleSidebarProfileDropdown() {
+            const dropdown = document.querySelector('.sidebar-profile-menu');
+            const isOpen = dropdown.classList.contains('open');
+            dropdown.classList.toggle('open');
+            if (!isOpen) {
+                // Add listener to close on outside click
+                setTimeout(() => {
+                    document.addEventListener('click', closeSidebarProfileDropdownOnOutsideClick);
+                }, 1);
+            }
+        }
+
+        function closeSidebarProfileDropdownOnOutsideClick(e) {
+            const dropdown = document.querySelector('.sidebar-profile-menu');
+            const adminInfo = document.querySelector('.admin-info');
+            if (!dropdown.contains(e.target) && !adminInfo.contains(e.target)) {
+                dropdown.classList.remove('open');
+                document.removeEventListener('click', closeSidebarProfileDropdownOnOutsideClick);
+            }
+        }
+
         function closeProfileDropdownOnOutsideClick(e) {
             const dropdown = document.getElementById('profile-dropdown');
             const btn = document.querySelector('.profile-btn');
@@ -3656,16 +4393,19 @@
                 document.removeEventListener('click', closeProfileDropdownOnOutsideClick);
             }
         }
+
         function closeSidebarOnOverlayClick() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
             sidebar.classList.remove('open');
             overlay.classList.remove('show');
         }
+
         function toggleNotificationModal() {
             const modal = document.getElementById('notification-modal');
             modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
         }
+
         function showUploadForm() {
             showSection('upload');
             document.getElementById('article-upload-form').style.display = 'block';
@@ -3673,6 +4413,7 @@
             document.getElementById('admin-uploaded-articles').style.display = 'none';
             document.getElementById('user-uploaded-articles').style.display = 'none';
         }
+
         function showUploaded(type) {
             showSection('upload');
             document.getElementById('article-upload-form').style.display = 'none';
@@ -3687,6 +4428,7 @@
                 document.getElementById('user-uploaded-articles').style.display = 'block';
             }
         }
+
         function showUserCategory(type) {
             // Hide all spec sections
             document.getElementById('shs-spec').style.display = 'none';
@@ -3695,6 +4437,7 @@
             // Show selected spec section
             document.getElementById(type + '-spec').style.display = 'block';
         }
+
         function showUserCategoryForStatus(status, type) {
             // Hide all spec sections for this status
             document.getElementById(status + '-shs-spec').style.display = 'none';
@@ -3703,27 +4446,32 @@
             // Show selected spec section
             document.getElementById(status + '-' + type + '-spec').style.display = 'block';
         }
+
         function showGradeForStatus(status, grade) {
             document.getElementById(status + '-grade-selection').style.display = 'block';
             document.getElementById(status + '-grade-title').textContent = 'Grade ' + grade;
             document.getElementById(status + '-grade-selection').dataset.grade = grade;
         }
+
         function showStrandForStatus(status, strand) {
             const grade = document.getElementById(status + '-grade-selection').dataset.grade;
             document.getElementById(status + '-strand-table').style.display = 'block';
             document.getElementById(status + '-strand-title').textContent = 'Grade ' + grade + ' - ' + strand.toUpperCase();
             loadStrandUsersForStatus(status, grade, strand);
         }
+
         function showDegreeForStatus(status, degree) {
             document.getElementById(status + '-degree-table').style.display = 'block';
             document.getElementById(status + '-degree-title').textContent = degree.toUpperCase();
             loadDegreeUsersForStatus(status, degree);
         }
+
         function showDepartmentForStatus(status, dept) {
             document.getElementById(status + '-department-table').style.display = 'block';
             document.getElementById(status + '-department-title').textContent = 'Department ' + dept.toUpperCase();
             loadDepartmentUsersForStatus(status, dept);
         }
+
         async function loadStrandUsersForStatus(status, grade, strand) {
             const users = await getUsers();
             const tbody = document.getElementById(status + '-strand-users-tbody');
@@ -3741,7 +4489,6 @@
                         <td>${user.email}</td>
                         <td>${formatRole(user.role)}</td>
                         <td>${user.section || '-'}</td>
-                        <td>${date}</td>
                         <td><button type="button" class="btn btn-sm" onclick="previewRaf('${user.raf_path || ''}')">Preview</button></td>
                         <td><button type="button" class="btn btn-info btn-sm" onclick="openSendUpdateModal('${user.email}', '${user.name}')">Send Update</button></td>
                         <td><button type="button" class="btn btn-danger btn-sm">Actions</button></td>
@@ -3750,6 +4497,7 @@
                 }
             });
         }
+
         async function loadDegreeUsersForStatus(status, degree) {
             const users = await getUsers();
             const tbody = document.getElementById(status + '-degree-users-tbody');
@@ -3775,6 +4523,7 @@
                 }
             });
         }
+
         async function loadDepartmentUsersForStatus(status, dept) {
             const users = await getUsers();
             const tbody = document.getElementById(status + '-department-users-tbody');
@@ -3791,7 +4540,6 @@
                         <td>${user.email}</td>
                         <td>${formatRole(user.role)}</td>
                         <td>${user.section || '-'}</td>
-                        <td>${date}</td>
                         <td><button type="button" class="btn btn-sm" onclick="previewRaf('${user.raf_path || ''}')">Preview</button></td>
                         <td><button type="button" class="btn btn-info btn-sm" onclick="openSendUpdateModal('${user.email}', '${user.name}')">Send Update</button></td>
                         <td><button type="button" class="btn btn-danger btn-sm">Actions</button></td>
@@ -3800,27 +4548,32 @@
                 }
             });
         }
+
         function showGrade(grade) {
             document.getElementById('grade-selection').style.display = 'block';
             document.getElementById('grade-title').textContent = 'Grade ' + grade;
             document.getElementById('grade-selection').dataset.grade = grade;
         }
+
         function showStrand(strand) {
             const grade = document.getElementById('grade-selection').dataset.grade;
             document.getElementById('strand-table').style.display = 'block';
             document.getElementById('strand-title').textContent = 'Grade ' + grade + ' - ' + strand.toUpperCase();
             loadStrandUsers(grade, strand);
         }
+
         function showDegree(degree) {
             document.getElementById('degree-table').style.display = 'block';
             document.getElementById('degree-title').textContent = degree.toUpperCase();
             loadDegreeUsers(degree);
         }
+
         function showDepartment(dept) {
             document.getElementById('department-table').style.display = 'block';
             document.getElementById('department-title').textContent = 'Department ' + dept.toUpperCase();
             loadDepartmentUsers(dept);
         }
+
         async function loadStrandUsers(grade, strand) {
             const users = await getUsers();
             const tbody = document.getElementById('strand-users-tbody');
@@ -3834,7 +4587,6 @@
                         <td>${user.email}</td>
                         <td>${formatRole(user.role)}</td>
                         <td>${user.section || '-'}</td>
-                        <td>${date}</td>
                         <td><button type="button" class="btn btn-sm" onclick="previewRaf('${user.raf_path || ''}')">Preview</button></td>
                         <td><button type="button" class="btn btn-info btn-sm" onclick="openSendUpdateModal('${user.email}', '${user.name}')">Send Update</button></td>
                         <td><button type="button" class="btn btn-danger btn-sm">Actions</button></td>
@@ -3843,6 +4595,7 @@
                 }
             });
         }
+
         async function loadDegreeUsers(degree) {
             const users = await getUsers();
             const tbody = document.getElementById('degree-users-tbody');
@@ -3865,6 +4618,7 @@
                 }
             });
         }
+
         async function loadDepartmentUsers(dept) {
             const users = await getUsers();
             const tbody = document.getElementById('department-users-tbody');
@@ -3887,6 +4641,7 @@
                 }
             });
         }
+
         function navigateToUploads(type) { showSection('upload'); }
         function navigateToUsers() { showSection('users'); }
         function navigateToReports() { showSection('reports'); }
@@ -3895,14 +4650,50 @@
             document.querySelectorAll('.user-subsection').forEach(sub => sub.style.display = 'none');
             document.getElementById(type + '-section').style.display = 'block';
         }
-        function handleProfileClick() { alert('Profile settings'); }
+        function handleProfileClick() { openProfileModal(); }
+        function openProfileModal() {
+            // Create and show profile edit modal
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.id = 'profile-modal';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <span class="close" onclick="closeProfileModal()">&times;</span>
+                    <h2>Edit Profile</h2>
+                    <form id="profile-form">
+                        <label for="profile-name">Name:</label>
+                        <input type="text" id="profile-name" value="Admin" required>
+                        <label for="profile-email">Email:</label>
+                        <input type="email" id="profile-email" value="admin@example.com" required>
+                        <button type="submit">Save Changes</button>
+                    </form>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            modal.style.display = 'block';
+
+            // Handle form submission
+            document.getElementById('profile-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('profile-name').value;
+                const email = document.getElementById('profile-email').value;
+                alert('Profile updated successfully!');
+                closeProfileModal();
+            });
+        }
+        function closeProfileModal() {
+            const modal = document.getElementById('profile-modal');
+            if (modal) {
+                modal.remove();
+            }
+        }
         function handleLogoutClick() { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; }
         function refreshUsers() {
-            fetch('http://localhost:5000/get_users')
+            fetch('/api/get_users')
                 .then(response => response.json())
                 .then(data => {
-                    if (data.users) {
-                        localStorage.setItem('users', JSON.stringify(data.users));
+                    if (data) {
+                        localStorage.setItem('users', JSON.stringify(data));
                         loadUsers();
                         alert('Users list refreshed successfully!');
                     } else {
@@ -3956,7 +4747,6 @@
             if (uploads) uploads.classList.toggle('open');
             if (reports) reports.classList.remove('open');
             if (terms) terms.classList.remove('open');
-
             // Add click listener to close dropdown when clicking outside
             if (uploads && uploads.classList.contains('open')) {
                 setTimeout(() => {
@@ -3964,7 +4754,6 @@
                 }, 1);
             }
         }
-
         function closeUploadsDropdownOnOutsideClick(e) {
             const uploads = document.getElementById('uploads-dropdown');
             if (uploads && !uploads.contains(e.target)) {
@@ -4071,12 +4860,10 @@
             // Default to APA
             switchCitationTab('APA');
         }
-
         function closeCitationModal() {
             const modal = document.getElementById('citationModal');
             modal.classList.remove('show');
         }
-
         function switchCitationTab(format) {
             document.querySelectorAll('.citation-tab').forEach(tab => tab.classList.remove('active'));
             event.target.classList.add('active');
@@ -4091,7 +4878,6 @@
             };
             content.textContent = citations[format] || 'Citation format not available.';
         }
-
         function copyCitation() {
             const content = document.getElementById('citationContent').textContent;
             navigator.clipboard.writeText(content).then(() => {
@@ -4105,6 +4891,90 @@
             });
         }
 
+        // Demographics Chart
+        async function renderDemographicsChart() {
+            const users = await getUsers();
+            const demographics = {
+                shs: { total: 0, grade11: { total: 0, abm: 0, cularts: 0, itmawd: 0, stem: 0 }, grade12: { total: 0, abm: 0, cularts: 0, itmawd: 0, stem: 0 } },
+                college: { total: 0, bsba: 0, bscs: 0, bsit: 0 },
+                teacher: { total: 0, shs: 0, college: 0 }
+            };
+            users.forEach(user => {
+                if (user.verified) {
+                    if (user.role === 'senior_high') {
+                        demographics.shs.total++;
+                        if (user.section === 'Grade 11') {
+                            demographics.shs.grade11.total++;
+                            const strand = user.strand ? user.strand.toLowerCase() : 'abm';
+                            if (demographics.shs.grade11[strand] !== undefined) {
+                                demographics.shs.grade11[strand]++;
+                            }
+                        } else if (user.section === 'Grade 12') {
+                            demographics.shs.grade12.total++;
+                            const strand = user.strand ? user.strand.toLowerCase() : 'abm';
+                            if (demographics.shs.grade12[strand] !== undefined) {
+                                demographics.shs.grade12[strand]++;
+                            }
+                        }
+                    } else if (user.role === 'college') {
+                        demographics.college.total++;
+                        const program = user.section ? user.section.toLowerCase() : 'bsba';
+                        if (demographics.college[program] !== undefined) {
+                            demographics.college[program]++;
+                        }
+                    } else if (user.role === 'teacher') {
+                        demographics.teacher.total++;
+                        const dept = user.section === 'Department SHS' ? 'shs' : 'college';
+                        demographics.teacher[dept]++;
+                    }
+                }
+            });
+            const ctx = document.getElementById('demographicsChart').getContext('2d');
+            if (window.demographicsChart) {
+                window.demographicsChart.destroy();
+            }
+            window.demographicsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['SHS', 'College', 'Teacher'],
+                    datasets: [{
+                        label: 'Total Users',
+                        data: [demographics.shs.total, demographics.college.total, demographics.teacher.total],
+                        borderColor: '#007bff',
+                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'User Demographics by Category'
+                        },
+                        legend: {
+                            display: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 400,
+                            ticks: {
+                                color: '#000000'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#000000'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
         // SHS Treemap
         function renderSHSTreemap() {
             const ctx = document.getElementById('shsTreemap').getContext('2d');
@@ -4112,32 +4982,23 @@
                 window.shsTreemap.destroy();
             }
             window.shsTreemap = new Chart(ctx, {
-                type: 'treemap',
+                type: 'line',
                 data: {
+                    labels: ['ABM', 'CulArts', 'ITMAWD', 'STEM'],
                     datasets: [{
-                        data: [
-                            { value: 400, name: 'Grade 11', children: [
-                                { value: 100, name: 'ABM' },
-                                { value: 80, name: 'CulArts' },
-                                { value: 120, name: 'ITMAWD' },
-                                { value: 100, name: 'STEM' }
-                            ]},
-                            { value: 350, name: 'Grade 12', children: [
-                                { value: 90, name: 'ABM' },
-                                { value: 70, name: 'CulArts' },
-                                { value: 110, name: 'ITMAWD' },
-                                { value: 80, name: 'STEM' }
-                            ]}
-                        ],
-                        backgroundColor: (ctx) => {
-                            const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF'];
-                            return colors[ctx.dataIndex % colors.length];
-                        },
-                        labels: {
-                            display: true,
-                            color: 'white',
-                            font: { size: 12 }
-                        }
+                        label: 'Grade 11',
+                        data: [100, 80, 120, 100],
+                        borderColor: '#FF6384',
+                        backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'Grade 12',
+                        data: [90, 70, 110, 80],
+                        borderColor: '#36A2EB',
+                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                        fill: true,
+                        tension: 0.4
                     }]
                 },
                 options: {
@@ -4146,32 +5007,961 @@
                         title: {
                             display: true,
                             text: 'SHS Users Distribution by Strand and Grade'
+                        },
+                        legend: { display: true }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 400,
+                            ticks: { color: '#000000' }
+                        },
+                        x: {
+                            ticks: { color: '#000000' }
                         }
                     }
                 }
             });
         }
-    </script>
 
-    <!-- Citation Modal -->
-    <div id="citationModal" class="citation-modal">
-      <div class="citation-modal-content">
-        <div class="citation-modal-header">
-          <h2>Citation Formats</h2>
-          <button class="citation-close" onclick="closeCitationModal()">&times;</button>
-        </div>
-        <div class="citation-format-tabs">
-          <button class="citation-tab active" onclick="switchCitationTab('APA')">APA</button>
-          <button class="citation-tab" onclick="switchCitationTab('MLA')">MLA</button>
-          <button class="citation-tab" onclick="switchCitationTab('Chicago')">Chicago</button>
-          <button class="citation-tab" onclick="switchCitationTab('IEEE')">IEEE</button>
-          <button class="citation-tab" onclick="switchCitationTab('Harvard')">Harvard</button>
-        </div>
-        <div class="citation-content" id="citationContent">
-          APA citation format will appear here.
-        </div>
-        <button class="citation-copy-btn" onclick="copyCitation()">Copy Citation</button>
-      </div>
-    </div>
+        // === FIXED CHART FUNCTIONS FOR COMPARE MODE ===
+        function renderTotalUsersChart(category = 'grade11') {
+            const ctx = document.getElementById('statistics-totalUsersChart').getContext('2d');
+            if (window.totalUsersChart) window.totalUsersChart.destroy();
+
+            if (category === 'compare') {
+                let labels, dataGrade11, dataGrade12, dataCollege, dataTeacher;
+                if (currentPeriod === 'this-week') {
+                    labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                    dataGrade11 = [30, 35, 28, 40, 38, 25, 32];
+                    dataGrade12 = [28, 32, 25, 35, 33, 22, 29];
+                    dataCollege = [15, 18, 12, 20, 19, 10, 16];
+                    dataTeacher = [7, 8, 6, 10, 9, 5, 8];
+                } else if (currentPeriod === 'last-week') {
+                    labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                    dataGrade11 = [25, 30, 22, 35, 32, 20, 28];
+                    dataGrade12 = [22, 28, 20, 30, 28, 18, 25];
+                    dataCollege = [12, 15, 10, 18, 16, 8, 14];
+                    dataTeacher = [5, 7, 4, 8, 7, 3, 6];
+                } else if (currentPeriod === 'this-month') {
+                    labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+                    dataGrade11 = [120, 140, 110, 160];
+                    dataGrade12 = [110, 130, 100, 140];
+                    dataCollege = [60, 70, 50, 80];
+                    dataTeacher = [25, 30, 20, 35];
+                } else if (currentPeriod === 'last-month') {
+                    labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+                    dataGrade11 = [100, 120, 90, 140];
+                    dataGrade12 = [90, 110, 80, 120];
+                    dataCollege = [50, 60, 40, 70];
+                    dataTeacher = [20, 25, 15, 30];
+                }
+                window.totalUsersChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Grade 11',
+                            data: dataGrade11,
+                            borderColor: '#FF5722',
+                            backgroundColor: 'rgba(255, 87, 34, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Grade 12',
+                            data: dataGrade12,
+                            borderColor: '#9C27B0',
+                            backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'College',
+                            data: dataCollege,
+                            borderColor: '#4CAF50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Teacher',
+                            data: dataTeacher,
+                            borderColor: '#2196F3',
+                            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: true } },
+                        scales: {
+                            y: { beginAtZero: true, max: 400, ticks: { color: '#000000' } },
+                            x: { ticks: { color: '#000000' } }
+                        }
+                    }
+                });
+                return;
+            }
+
+            let labels, data;
+            if (category === 'grade11') {
+                labels = ['ABM', 'CulArts', 'ITMAWD', 'STEM'];
+                data = [100, 80, 120, 100];
+            } else if (category === 'grade12') {
+                labels = ['ABM', 'CulArts', 'ITMAWD', 'STEM'];
+                data = [90, 70, 110, 80];
+            } else if (category === 'college') {
+                labels = ['BSBA', 'BSCS', 'BSIT'];
+                data = [50, 60, 40];
+            } else if (category === 'teacher') {
+                labels = ['Department SHS', 'Department College'];
+                data = [30, 40];
+            }
+
+            window.totalUsersChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Total Users',
+                        data: data,
+                        borderColor: '#FF5722',
+                        backgroundColor: 'rgba(255, 87, 34, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: true } },
+                    scales: {
+                        y: { beginAtZero: true, max: 400, ticks: { color: '#000000' } },
+                        x: { ticks: { color: '#000000' } }
+                    }
+                }
+            });
+        }
+
+        function renderNewSignupsChart(category = 'grade11') {
+            const ctx = document.getElementById('statistics-newSignupsChart').getContext('2d');
+            if (window.newSignupsChart) window.newSignupsChart.destroy();
+
+            if (currentPeriod === 'this-week' || currentPeriod === 'last-week') {
+                let labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                let dataGrade11, dataGrade12, dataCollege, dataTeacher;
+                if (currentPeriod === 'this-week') {
+                    dataGrade11 = [5, 7, 4, 8, 6, 3, 9];
+                    dataGrade12 = [4, 6, 3, 7, 5, 2, 8];
+                    dataCollege = [2, 3, 1, 4, 3, 1, 5];
+                    dataTeacher = [1, 2, 1, 2, 1, 1, 3];
+                } else if (currentPeriod === 'last-week') {
+                    dataGrade11 = [4, 6, 3, 7, 5, 2, 8];
+                    dataGrade12 = [3, 5, 2, 6, 4, 1, 7];
+                    dataCollege = [1, 2, 1, 3, 2, 1, 4];
+                    dataTeacher = [1, 1, 1, 2, 1, 1, 2];
+                }
+                window.newSignupsChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Grade 11',
+                            data: dataGrade11,
+                            borderColor: '#FF5722',
+                            backgroundColor: 'rgba(255, 87, 34, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Grade 12',
+                            data: dataGrade12,
+                            borderColor: '#9C27B0',
+                            backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'College',
+                            data: dataCollege,
+                            borderColor: '#4CAF50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Teacher',
+                            data: dataTeacher,
+                            borderColor: '#2196F3',
+                            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: true } },
+                        scales: {
+                            y: { beginAtZero: true, max: 400, ticks: { color: '#000000' } },
+                            x: { ticks: { color: '#000000' } }
+                        }
+                    }
+                });
+                return;
+            }
+
+            if (currentPeriod === 'this-month' || currentPeriod === 'last-month') {
+                let labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                let dataGrade11, dataGrade12, dataCollege, dataTeacher;
+                if (currentPeriod === 'this-month') {
+                    dataGrade11 = [20, 25, 18, 30, 22, 15, 28, 32, 26, 20, 18, 24];
+                    dataGrade12 = [18, 22, 15, 26, 20, 12, 25, 28, 22, 18, 16, 20];
+                    dataCollege = [8, 10, 6, 12, 9, 5, 11, 13, 10, 8, 7, 9];
+                    dataTeacher = [4, 5, 3, 6, 4, 2, 5, 6, 4, 3, 3, 4];
+                } else if (currentPeriod === 'last-month') {
+                    dataGrade11 = [18, 22, 15, 26, 20, 12, 25, 28, 22, 18, 16, 20];
+                    dataGrade12 = [16, 20, 13, 24, 18, 10, 22, 25, 20, 16, 14, 18];
+                    dataCollege = [7, 9, 5, 11, 8, 4, 10, 12, 9, 7, 6, 8];
+                    dataTeacher = [3, 4, 2, 5, 3, 1, 4, 5, 3, 2, 2, 3];
+                }
+                window.newSignupsChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Grade 11',
+                            data: dataGrade11,
+                            borderColor: '#FF5722',
+                            backgroundColor: 'rgba(255, 87, 34, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Grade 12',
+                            data: dataGrade12,
+                            borderColor: '#9C27B0',
+                            backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'College',
+                            data: dataCollege,
+                            borderColor: '#4CAF50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Teacher',
+                            data: dataTeacher,
+                            borderColor: '#2196F3',
+                            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: true } },
+                        scales: {
+                            y: { beginAtZero: true, max: 400, ticks: { color: '#000000' } },
+                            x: { ticks: { color: '#000000' } }
+                        }
+                    }
+                });
+                return;
+            }
+
+            let labels, data;
+            if (category === 'grade11') {
+                labels = ['ABM', 'CulArts', 'ITMAWD', 'STEM'];
+                data = [20, 15, 25, 18];
+            } else if (category === 'grade12') {
+                labels = ['ABM', 'CulArts', 'ITMAWD', 'STEM'];
+                data = [18, 12, 22, 15];
+            } else if (category === 'college') {
+                labels = ['BSBA', 'BSCS', 'BSIT'];
+                data = [10, 12, 8];
+            } else if (category === 'teacher') {
+                labels = ['Department SHS', 'Department College'];
+                data = [5, 7];
+            }
+
+            window.newSignupsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'New Signups',
+                        data: data,
+                        borderColor: '#007bff',
+                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, max: 400, ticks: { color: '#000000' } },
+                        x: { ticks: { color: '#000000' } }
+                    }
+                }
+            });
+        }
+
+        function renderUploadsByStrandChart(category = 'grade11') {
+            const ctx = document.getElementById('statistics-uploadsChart').getContext('2d');
+            if (window.uploadsByStrandChart) window.uploadsByStrandChart.destroy();
+
+            if (currentPeriod === 'this-week' || currentPeriod === 'last-week') {
+                let labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                let dataGrade11, dataGrade12, dataCollege, dataTeacher;
+                if (currentPeriod === 'this-week') {
+                    dataGrade11 = [10, 12, 8, 15, 14, 9, 18];
+                    dataGrade12 = [9, 11, 7, 14, 13, 8, 16];
+                    dataCollege = [4, 5, 3, 7, 6, 4, 9];
+                    dataTeacher = [2, 3, 2, 4, 3, 2, 5];
+                } else if (currentPeriod === 'last-week') {
+                    dataGrade11 = [8, 10, 6, 13, 12, 7, 16];
+                    dataGrade12 = [7, 9, 5, 12, 11, 6, 14];
+                    dataCollege = [3, 4, 2, 6, 5, 3, 8];
+                    dataTeacher = [1, 2, 1, 3, 2, 1, 4];
+                }
+                window.uploadsByStrandChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Grade 11',
+                            data: dataGrade11,
+                            borderColor: '#FF5722',
+                            backgroundColor: 'rgba(255, 87, 34, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Grade 12',
+                            data: dataGrade12,
+                            borderColor: '#9C27B0',
+                            backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'College',
+                            data: dataCollege,
+                            borderColor: '#4CAF50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Teacher',
+                            data: dataTeacher,
+                            borderColor: '#2196F3',
+                            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: true } },
+                        scales: {
+                            y: { beginAtZero: true, max: 400, ticks: { color: '#000000' } },
+                            x: { ticks: { color: '#000000' } }
+                        }
+                    }
+                });
+                return;
+            }
+
+            if (currentPeriod === 'this-month' || currentPeriod === 'last-month') {
+                let labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                let dataGrade11, dataGrade12, dataCollege, dataTeacher;
+                if (currentPeriod === 'this-month') {
+                    dataGrade11 = [40, 50, 35, 60, 45, 30, 55, 65, 50, 40, 35, 45];
+                    dataGrade12 = [38, 45, 32, 55, 42, 28, 50, 58, 45, 38, 32, 40];
+                    dataCollege = [15, 18, 12, 25, 20, 10, 22, 26, 20, 16, 14, 18];
+                    dataTeacher = [8, 10, 6, 12, 9, 5, 11, 13, 10, 8, 7, 9];
+                } else if (currentPeriod === 'last-month') {
+                    dataGrade11 = [35, 45, 30, 55, 40, 25, 50, 60, 45, 35, 30, 40];
+                    dataGrade12 = [33, 40, 28, 50, 38, 23, 45, 53, 40, 33, 28, 35];
+                    dataCollege = [13, 16, 10, 22, 18, 8, 20, 24, 18, 14, 12, 16];
+                    dataTeacher = [6, 8, 5, 10, 7, 4, 9, 11, 8, 6, 5, 7];
+                }
+                window.uploadsByStrandChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Grade 11',
+                            data: dataGrade11,
+                            borderColor: '#FF5722',
+                            backgroundColor: 'rgba(255, 87, 34, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Grade 12',
+                            data: dataGrade12,
+                            borderColor: '#9C27B0',
+                            backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'College',
+                            data: dataCollege,
+                            borderColor: '#4CAF50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Teacher',
+                            data: dataTeacher,
+                            borderColor: '#2196F3',
+                            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: true } },
+                        scales: {
+                            y: { beginAtZero: true, max: 400, ticks: { color: '#000000' } },
+                            x: { ticks: { color: '#000000' } }
+                        }
+                    }
+                });
+                return;
+            }
+
+            let labels, data;
+            if (category === 'grade11') {
+                labels = ['ABM', 'CulArts', 'ITMAWD', 'STEM'];
+                data = [30, 25, 40, 35];
+            } else if (category === 'grade12') {
+                labels = ['ABM', 'CulArts', 'ITMAWD', 'STEM'];
+                data = [28, 22, 38, 32];
+            } else if (category === 'college') {
+                labels = ['BSBA', 'BSCS', 'BSIT'];
+                data = [15, 18, 12];
+            } else if (category === 'teacher') {
+                labels = ['Department SHS', 'Department College'];
+                data = [10, 14];
+            }
+
+            window.uploadsByStrandChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Uploads',
+                        data: data,
+                        borderColor: '#FF5722',
+                        backgroundColor: 'rgba(255, 87, 34, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: true } },
+                    scales: {
+                        y: { beginAtZero: true, max: 400, ticks: { color: '#000000' } },
+                        x: { ticks: { color: '#000000' } }
+                    }
+                }
+            });
+        }
+
+        function renderAvgTimeChart(category = 'grade11') {
+            const ctx = document.getElementById('statistics-avgTimeChart').getContext('2d');
+            if (window.avgTimeChart) window.avgTimeChart.destroy();
+
+            if (currentPeriod === 'this-week' || currentPeriod === 'last-week') {
+                let labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                let dataGrade11, dataGrade12, dataCollege, dataTeacher;
+                if (currentPeriod === 'this-week') {
+                    dataGrade11 = [120, 125, 115, 130, 128, 118, 135];
+                    dataGrade12 = [115, 120, 110, 125, 123, 113, 130];
+                    dataCollege = [80, 85, 75, 90, 88, 78, 95];
+                    dataTeacher = [60, 65, 55, 70, 68, 58, 75];
+                } else if (currentPeriod === 'last-week') {
+                    dataGrade11 = [115, 120, 110, 125, 123, 113, 130];
+                    dataGrade12 = [110, 115, 105, 120, 118, 108, 125];
+                    dataCollege = [75, 80, 70, 85, 83, 73, 90];
+                    dataTeacher = [55, 60, 50, 65, 63, 53, 70];
+                }
+                window.avgTimeChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Grade 11',
+                            data: dataGrade11,
+                            borderColor: '#FF5722',
+                            backgroundColor: 'rgba(255, 87, 34, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Grade 12',
+                            data: dataGrade12,
+                            borderColor: '#9C27B0',
+                            backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'College',
+                            data: dataCollege,
+                            borderColor: '#4CAF50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Teacher',
+                            data: dataTeacher,
+                            borderColor: '#2196F3',
+                            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: true } },
+                        scales: {
+                            y: { beginAtZero: true, max: 400, ticks: { color: '#000000' } },
+                            x: { ticks: { color: '#000000' } }
+                        }
+                    }
+                });
+                return;
+            }
+
+            if (currentPeriod === 'this-month' || currentPeriod === 'last-month') {
+                let labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                let dataGrade11, dataGrade12, dataCollege, dataTeacher;
+                if (currentPeriod === 'this-month') {
+                    dataGrade11 = [480, 500, 460, 520, 490, 450, 510, 530, 500, 470, 460, 480];
+                    dataGrade12 = [460, 480, 440, 500, 470, 430, 490, 510, 480, 450, 440, 460];
+                    dataCollege = [320, 340, 300, 360, 330, 290, 350, 370, 340, 310, 300, 320];
+                    dataTeacher = [240, 260, 220, 280, 250, 210, 270, 290, 260, 230, 220, 240];
+                } else if (currentPeriod === 'last-month') {
+                    dataGrade11 = [460, 480, 440, 500, 470, 430, 490, 510, 480, 450, 440, 460];
+                    dataGrade12 = [440, 460, 420, 480, 450, 410, 470, 490, 460, 430, 420, 440];
+                    dataCollege = [300, 320, 280, 340, 310, 270, 330, 350, 320, 290, 280, 300];
+                    dataTeacher = [220, 240, 200, 260, 230, 190, 250, 270, 240, 210, 200, 220];
+                }
+                window.avgTimeChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Grade 11',
+                            data: dataGrade11,
+                            borderColor: '#FF5722',
+                            backgroundColor: 'rgba(255, 87, 34, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Grade 12',
+                            data: dataGrade12,
+                            borderColor: '#9C27B0',
+                            backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'College',
+                            data: dataCollege,
+                            borderColor: '#4CAF50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Teacher',
+                            data: dataTeacher,
+                            borderColor: '#2196F3',
+                            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: true } },
+                        scales: {
+                            y: { beginAtZero: true, max: 400, ticks: { color: '#000000' } },
+                            x: { ticks: { color: '#000000' } }
+                        }
+                    }
+                });
+                return;
+            }
+
+            let labels, data;
+            if (category === 'grade11') {
+                labels = ['ABM', 'CulArts', 'ITMAWD', 'STEM'];
+                data = [120, 90, 110, 100];
+            } else if (category === 'grade12') {
+                labels = ['ABM', 'CulArts', 'ITMAWD', 'STEM'];
+                data = [115, 85, 105, 95];
+            } else if (category === 'college') {
+                labels = ['BSBA', 'BSCS', 'BSIT'];
+                data = [80, 95, 70];
+            } else if (category === 'teacher') {
+                labels = ['Department SHS', 'Department College'];
+                data = [60, 75];
+            }
+
+            window.avgTimeChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Average Time (min)',
+                        data: data,
+                        borderColor: '#FF5722',
+                        backgroundColor: 'rgba(255, 87, 34, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'Average Time (hr)',
+                        data: data.map(min => (min / 60).toFixed(2)),
+                        borderColor: '#2196F3',
+                        backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: true } },
+                    scales: {
+                        y: { beginAtZero: true, max: 400, ticks: { color: '#000000' } },
+                        x: { ticks: { color: '#000000' } }
+                    }
+                }
+            });
+        }
+
+        function renderSuggestionsChart(category = 'grade11') {
+            const ctx = document.getElementById('statistics-suggestionsChart').getContext('2d');
+            if (window.suggestionsChart) window.suggestionsChart.destroy();
+
+            if (currentPeriod === 'this-week' || currentPeriod === 'last-week') {
+                let labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                let dataGrade11, dataGrade12, dataCollege, dataTeacher;
+                if (currentPeriod === 'this-week') {
+                    dataGrade11 = [10, 12, 8, 15, 14, 9, 18];
+                    dataGrade12 = [9, 11, 7, 14, 13, 8, 16];
+                    dataCollege = [4, 5, 3, 7, 6, 4, 9];
+                    dataTeacher = [2, 3, 2, 4, 3, 2, 5];
+                } else if (currentPeriod === 'last-week') {
+                    dataGrade11 = [8, 10, 6, 13, 12, 7, 16];
+                    dataGrade12 = [7, 9, 5, 12, 11, 6, 14];
+                    dataCollege = [3, 4, 2, 6, 5, 3, 8];
+                    dataTeacher = [1, 2, 1, 3, 2, 1, 4];
+                }
+                window.suggestionsChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Grade 11',
+                            data: dataGrade11,
+                            borderColor: '#FF5722',
+                            backgroundColor: 'rgba(255, 87, 34, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Grade 12',
+                            data: dataGrade12,
+                            borderColor: '#9C27B0',
+                            backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'College',
+                            data: dataCollege,
+                            borderColor: '#4CAF50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Teacher',
+                            data: dataTeacher,
+                            borderColor: '#2196F3',
+                            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: true } },
+                        scales: {
+                            y: { beginAtZero: true, max: 400, ticks: { color: '#000000' } },
+                            x: { ticks: { color: '#000000' } }
+                        }
+                    }
+                });
+                return;
+            }
+
+            if (currentPeriod === 'this-month' || currentPeriod === 'last-month') {
+                let labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                let dataGrade11, dataGrade12, dataCollege, dataTeacher;
+                if (currentPeriod === 'this-month') {
+                    dataGrade11 = [40, 50, 35, 60, 45, 30, 55, 65, 50, 40, 35, 45];
+                    dataGrade12 = [38, 45, 32, 55, 42, 28, 50, 58, 45, 38, 32, 40];
+                    dataCollege = [15, 18, 12, 25, 20, 10, 22, 26, 20, 16, 14, 18];
+                    dataTeacher = [8, 10, 6, 12, 9, 5, 11, 13, 10, 8, 7, 9];
+                } else if (currentPeriod === 'last-month') {
+                    dataGrade11 = [35, 45, 30, 55, 40, 25, 50, 60, 45, 35, 30, 40];
+                    dataGrade12 = [33, 40, 28, 50, 38, 23, 45, 53, 40, 33, 28, 35];
+                    dataCollege = [13, 16, 10, 22, 18, 8, 20, 24, 18, 14, 12, 16];
+                    dataTeacher = [6, 8, 5, 10, 7, 4, 9, 11, 8, 6, 5, 7];
+                }
+                window.suggestionsChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Grade 11',
+                            data: dataGrade11,
+                            borderColor: '#FF5722',
+                            backgroundColor: 'rgba(255, 87, 34, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Grade 12',
+                            data: dataGrade12,
+                            borderColor: '#9C27B0',
+                            backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'College',
+                            data: dataCollege,
+                            borderColor: '#4CAF50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Teacher',
+                            data: dataTeacher,
+                            borderColor: '#2196F3',
+                            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: true } },
+                        scales: {
+                            y: { beginAtZero: true, max: 400, ticks: { color: '#000000' } },
+                            x: { ticks: { color: '#000000' } }
+                        }
+                    }
+                });
+                return;
+            }
+
+            let labels, data;
+            if (category === 'grade11') {
+                labels = ['ABM', 'CulArts', 'ITMAWD', 'STEM'];
+                data = [10, 8, 12, 9];
+            } else if (category === 'grade12') {
+                labels = ['ABM', 'CulArts', 'ITMAWD', 'STEM'];
+                data = [9, 7, 11, 8];
+            } else if (category === 'college') {
+                labels = ['BSBA', 'BSCS', 'BSIT'];
+                data = [5, 6, 4];
+            } else if (category === 'teacher') {
+                labels = ['Department SHS', 'Department College'];
+                data = [3, 4];
+            }
+
+            window.suggestionsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Suggestions',
+                        data: data,
+                        borderColor: '#28a745',
+                        backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: true } },
+                    scales: {
+                        y: { beginAtZero: true, max: 400, ticks: { color: '#000000' } },
+                        x: { ticks: { color: '#000000' } }
+                    }
+                }
+            });
+        }
+
+        function renderReportsChart(category = 'grade11') {
+            const ctx = document.getElementById('statistics-reportsChart').getContext('2d');
+            if (window.reportsChart) window.reportsChart.destroy();
+
+            if (currentPeriod === 'this-week' || currentPeriod === 'last-week') {
+                let labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                let dataGrade11, dataGrade12, dataCollege, dataTeacher;
+                if (currentPeriod === 'this-week') {
+                    dataGrade11 = [5, 7, 4, 8, 6, 3, 9];
+                    dataGrade12 = [4, 6, 3, 7, 5, 2, 8];
+                    dataCollege = [2, 3, 1, 4, 3, 1, 5];
+                    dataTeacher = [1, 2, 1, 2, 1, 1, 3];
+                } else if (currentPeriod === 'last-week') {
+                    dataGrade11 = [4, 6, 3, 7, 5, 2, 8];
+                    dataGrade12 = [3, 5, 2, 6, 4, 1, 7];
+                    dataCollege = [1, 2, 1, 3, 2, 1, 4];
+                    dataTeacher = [1, 1, 1, 2, 1, 1, 2];
+                }
+                window.reportsChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Grade 11',
+                            data: dataGrade11,
+                            borderColor: '#FF5722',
+                            backgroundColor: 'rgba(255, 87, 34, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Grade 12',
+                            data: dataGrade12,
+                            borderColor: '#9C27B0',
+                            backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'College',
+                            data: dataCollege,
+                            borderColor: '#4CAF50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Teacher',
+                            data: dataTeacher,
+                            borderColor: '#2196F3',
+                            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: true } },
+                        scales: {
+                            y: { beginAtZero: true, max: 400, ticks: { color: '#000000' } },
+                            x: { ticks: { color: '#000000' } }
+                        }
+                    }
+                });
+                return;
+            }
+
+            if (currentPeriod === 'this-month' || currentPeriod === 'last-month') {
+                let labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                let dataGrade11, dataGrade12, dataCollege, dataTeacher;
+                if (currentPeriod === 'this-month') {
+                    dataGrade11 = [20, 25, 18, 30, 22, 15, 28, 32, 26, 20, 18, 24];
+                    dataGrade12 = [18, 22, 15, 26, 20, 12, 25, 28, 22, 18, 16, 20];
+                    dataCollege = [8, 10, 6, 12, 9, 5, 11, 13, 10, 8, 7, 9];
+                    dataTeacher = [4, 5, 3, 6, 4, 2, 5, 6, 4, 3, 3, 4];
+                } else if (currentPeriod === 'last-month') {
+                    dataGrade11 = [18, 22, 15, 26, 20, 12, 25, 28, 22, 18, 16, 20];
+                    dataGrade12 = [16, 20, 13, 24, 18, 10, 22, 25, 20, 16, 14, 18];
+                    dataCollege = [7, 9, 5, 11, 8, 4, 10, 12, 9, 7, 6, 8];
+                    dataTeacher = [3, 4, 2, 5, 3, 1, 4, 5, 3, 2, 2, 3];
+                }
+                window.reportsChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Grade 11',
+                            data: dataGrade11,
+                            borderColor: '#FF5722',
+                            backgroundColor: 'rgba(255, 87, 34, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Grade 12',
+                            data: dataGrade12,
+                            borderColor: '#9C27B0',
+                            backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'College',
+                            data: dataCollege,
+                            borderColor: '#4CAF50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Teacher',
+                            data: dataTeacher,
+                            borderColor: '#2196F3',
+                            backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: true } },
+                        scales: {
+                            y: { beginAtZero: true, max: 400, ticks: { color: '#000000' } },
+                            x: { ticks: { color: '#000000' } }
+                        }
+                    }
+                });
+                return;
+            }
+
+            let labels, data;
+            if (category === 'grade11') {
+                labels = ['ABM', 'CulArts', 'ITMAWD', 'STEM'];
+                data = [5, 3, 7, 4];
+            } else if (category === 'grade12') {
+                labels = ['ABM', 'CulArts', 'ITMAWD', 'STEM'];
+                data = [4, 2, 6, 3];
+            } else if (category === 'college') {
+                labels = ['BSBA', 'BSCS', 'BSIT'];
+                data = [2, 3, 1];
+            } else if (category === 'teacher') {
+                labels = ['Department SHS', 'Department College'];
+                data = [1, 2];
+            }
+
+            window.reportsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Reports',
+                        data: data,
+                        borderColor: '#dc3545',
+                        backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: true } },
+                    scales: {
+                        y: { beginAtZero: true, max: 400, ticks: { color: '#000000' } },
+                        x: { ticks: { color: '#000000' } }
+                    }
+                }
+            });
+        }
+    </script>
 </body>
 </html>

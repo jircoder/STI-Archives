@@ -1,0 +1,2058 @@
+<!-- subadmin.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sub-Admin Panel</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-treemap@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            transition: margin-left 0.3s;
+        }
+        .sidebar {
+            width: 200px;
+            max-width: 200px;
+            height: 100%;
+            border-radius: 0px 20px 0px 0px;
+            background-color: #0f1a41;
+            color: white;
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        .sidebar img {
+            max-width: 120px;
+            height: 105px;
+            margin-bottom: 20px;
+            object-fit: contain;
+        }
+        .sidebar .subadmin-info {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            margin-top: auto;
+            padding-top: 20px;
+            gap: 10px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+        .sidebar .subadmin-info:hover {
+            background-color: #555;
+        }
+        .sidebar .subadmin-info .profile-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #28a745;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .sidebar .subadmin-info .subadmin-name {
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .sidebar.collapsed {
+            transform: translateX(-250px);
+        }
+        .sidebar.collapsed  #user-chart {
+            padding-left:100px;
+        }
+        .sidebar ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+            padding-left: 0;
+        }
+        .sidebar ul li {
+            padding: 15px 0;
+            transition: background-color 0.3s;
+            width: 100%;
+            text-align: left;
+        }
+        .text {
+            transition: opacity 0.3s;
+        }
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            padding-left: 20px;
+            padding-right: 20px;
+            box-sizing: border-box;
+            justify-content: flex-start;
+        }
+        .sidebar ul li a i {
+            width: 24px;
+            text-align: center;
+            font-size: 18px;
+        }
+        .sidebar ul li:not(.uploads-dropdown):not(.reports-dropdown):hover {
+            background-color: #555;
+        }
+        .uploads-dropdown,
+        .reports-dropdown {
+            position: relative;
+            background-color: transparent !important;
+        }
+        .uploads-dropdown > a,
+        .reports-dropdown > a {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding-right: 20px !important;
+        }
+        .uploads-dropdown .arrow,
+        .reports-dropdown .arrow {
+            font-size: 12px;
+            transition: transform 0.3s;
+        }
+        .uploads-dropdown.open .arrow,
+        .reports-dropdown.open .arrow {
+            transform: rotate(180deg);
+        }
+
+        .submenu {
+            list-style: none;
+            padding: 0;
+            margin: 8px 0 0 0;
+            background: #0f1a41;
+            border-radius: 0 0 8px 8px;
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            z-index: 1100;
+            position: relative;
+        }
+        .submenu li {
+            padding: 10px 0 10px 20px !important;
+            color: white !important;
+        }
+        .submenu li a {
+            padding: 0 !important;
+            font-size: 14px;
+        }
+        .uploads-dropdown.open .submenu,
+        .reports-dropdown.open .submenu {
+            max-height: 200px;
+            padding: 8px 0;
+        }
+        .submenu li:hover {
+            background-color: #555;
+        }
+        .submenu li a:hover {
+            text-decoration: none !important;
+        }
+        body.dark-mode .submenu {
+            background: #0f1a41;
+            color: white;
+        }
+        .header {
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left:100px;
+            width: 100%;
+            z-index: 2;
+            transition: left 0.3s, width 0.3s;
+        }
+        .main-content {
+            margin-left: 200px;
+            margin-top: 80px;
+            padding: 20px 50px 0 50px;
+            height: calc(100% - 80px);
+            background-color: #f8f9fa;
+            transition: margin-left 0.3s;
+            overflow-y: auto;
+        }
+
+        #page-title {
+            font-size:30px;
+            font-weight: bold;
+            color: #333;
+            margin-left:20px;
+        }
+        body.dark-mode .header  #page-title{
+            background-color: #232f41;
+            color: #ffffff;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        @media (max-width: 500px) {
+            .header-right {
+                gap: 10px;
+            }
+            .notification-bell {
+                padding: 6px;
+            }
+            .notification-bell i {
+                font-size: 18px;
+            }
+            .dark-mode-toggle {
+                padding: 6px;
+            }
+            .dark-mode-toggle i {
+                font-size: 18px;
+            }
+        }
+        .notification-bell {
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #FFA500;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .notification-bell i {
+            font-size: 20px;
+        }
+        .notification-bell:hover {
+            background-color: #f0f0f0;
+        }
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #ff4444;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            display: none;
+        }
+        .dark-mode-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #777;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .dark-mode-toggle i {
+            font-size: 20px;
+        }
+        .dark-mode-toggle:hover {
+            background-color: #f0f0f0;
+
+        }
+        .profile-dropdown {
+            position: relative;
+        }
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 20px;
+            transition: background-color 0.3s;
+        }
+        .profile-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .profile-menu {
+            display: none;
+            position: absolute;
+            top:100%;
+            right: 0;
+            background-color: white;
+            min-width: 180px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            border-radius: 8px;
+            z-index: 1001;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar-profile-menu {
+            display: none;
+            position: absolute;
+            top: -60px;
+            left: 0;
+            right: 0;
+            background-color: #0f1a41;
+            z-index: 1002;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            border-radius: 8px 8px 0 0;
+        }
+        .sidebar-profile-menu.open {
+            display: block;
+        }
+        .sidebar-profile-menu li {
+            padding: 10px 20px;
+            border-bottom: 1px solid #333;
+        }
+        .sidebar-profile-menu li:last-child {
+            border-bottom: none;
+        }
+        .sidebar-profile-menu li a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0;
+        }
+        .sidebar-profile-menu li a:hover {
+            color: #ffd700;
+        }
+        .profile-dropdown.open .profile-menu {
+            display: block;
+        }
+        .profile-menu li {
+            padding: 10px 15px;
+        }
+        .profile-menu a {
+            color: #333;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: background-color 0.3s;
+        }
+        .profile-menu a:hover {
+            background-color: #f0f0f0;
+        }
+        .profile-menu .logout-item {
+            border-top: 1px solid #eee;
+            color: #ff4444;
+        }
+        .profile-menu .logout-item:hover {
+            background-color: #ffebee;
+        }
+        body.dark-mode .profile-menu {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+        body.dark-mode .profile-menu a {
+            color: white;
+        }
+        body.dark-mode .profile-menu a:hover {
+            background-color: #3d3d3d;
+        }
+        body.dark-mode .profile-menu .logout-item {
+            border-top-color: #444;
+            color: #ff4444;
+        }
+        body.dark-mode .profile-menu .logout-item:hover {
+            background-color: #4d2d2d;
+        }
+        body.dark-mode .sidebar-profile-menu {
+            background-color: #0f1a41;
+        }
+        body.dark-mode .sidebar-profile-menu li a:hover {
+            color: #ffd700;
+        }
+        body.dark-mode {
+            background-color: #181f2a;
+            color: #ffffff;
+        }
+        body.dark-mode .header {
+            background-color: #232f41;
+            color: #ffffff;
+        }
+        body.dark-mode .toggle-btn {
+            color: #ffd700;
+        }
+        body.dark-mode .card {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+        body.dark-mode .users-section,
+        body.dark-mode .settings-section,
+        body.dark-mode .reports-section,
+        body.dark-mode .upload-section,
+        body.dark-mode .statistics-section {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+        body.dark-mode table {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+        body.dark-mode th {
+            background-color: #3d3d3d;
+        }
+        body.dark-mode .modal-content {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+        body.dark-mode #report-content div {
+            background: #2d2d2d !important;
+            color: #ffffff !important;
+        }
+        body.dark-mode .notification-bell {
+            color: #FFA500;
+        }
+        body.dark-mode .dark-mode-toggle {
+            color: #ccc;
+        }
+        body.dark-mode .notification-bell:hover,
+        body.dark-mode .dark-mode-toggle:hover,
+        body.dark-mode .profile-btn:hover {
+            background-color: #3d3d3d;
+        }
+        body.dark-mode .profile-btn span {
+            color: white;
+        }
+        body.dark-mode .graphs-section h2 {
+            color: white;
+        }
+        body.dark-mode .graph-item {
+            background: #2d2d2d;
+        }
+        body.dark-mode .graph-item h4 {
+            color: white;
+        }
+        body.dark-mode .graph label {
+            color: #ccc;
+        }
+        .toggle-btn {
+            margin-left:20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+        .dashboard {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 200px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            user-select: none;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .card h3 {
+            margin-bottom: 10px;
+        }
+        .card p {
+            color: #666;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .graphs-section {
+            margin-top: 15px;
+
+        }
+        .graphs-section h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .graph-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        body.sidebar-collapsed .graph-container {
+            justify-content: center;
+        }
+        .graph-item {
+
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .graph-item h4 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 70%;
+        }
+        /*USER STATISTIC EACH CONTAINER & CHARTS*/
+        #usr-grph{
+
+            height:400px;
+            width: 550px;
+
+        }
+        #usr-chart{
+            height:350px;
+            width: 520px;
+        }
+
+        #sgn-grph{
+            height:400px;
+            width: 600px;
+        }
+
+        #sgn-chart{
+            height:350px;
+            width: 550px;
+        }
+        #upld-grph{
+            height:320px;
+            width: 280px;
+
+        }
+        #upld-chart{
+
+            height:240px;
+            width: 240px;
+        }
+        #avg-grph{
+            height:320px;
+            width: 300px;
+        }
+        #avg-chart{
+            height:280px;
+            width: 250px;
+        }
+        #sgst-grph{
+            height:320px;
+            width: 550px;
+        }
+        #sgst-chart{
+            height:450px;
+            width: 520px;
+        }
+
+
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .users-section, .settings-section, .reports-section, .upload-section, .statistics-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 8px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: black;
+        }
+        .notification-modal {
+            display: none;
+            position: fixed;
+            z-index: 2001;
+            right: 20px;
+            top: 70px;
+            width: 350px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border: 1px solid #ddd;
+        }
+        .notification-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .notification-header h3 {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+        .notification-close {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: #666;
+        }
+        .notification-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .notification-item {
+            padding: 12px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s;
+        }
+        .notification-item:hover {
+            background-color: #f8f9fa;
+        }
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+        .notification-type {
+            font-weight: bold;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        .notification-type.new-user {
+            color: #28a745;
+        }
+        .notification-type.upload {
+            color: #007bff;
+        }
+        .notification-type.suggestion {
+            color: #ffc107;
+        }
+        .notification-type.bug {
+            color: #dc3545;
+        }
+        .notification-content {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        .notification-time {
+            font-size: 12px;
+            color: #666;
+        }
+        .notification-footer {
+            padding: 12px 20px;
+            text-align: center;
+            border-top: 1px solid #eee;
+        }
+        .view-all-btn {
+            background: none;
+            border: none;
+            color: #007bff;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: underline;
+        }
+        .view-all-btn:hover {
+            color: #0056b3;
+        }
+        .view-all-btn {
+            cursor: pointer;
+        }
+        body.dark-mode .notification-modal {
+            background-color: #2d2d2d;
+            border-color: #444;
+        }
+        body.dark-mode .notification-header {
+            border-bottom-color: #444;
+        }
+        body.dark-mode .notification-header h3 {
+            color: #ffffff;
+        }
+        body.dark-mode .notification-close {
+            color: #ccc;
+        }
+        body.dark-mode .notification-item {
+            border-bottom-color: #444;
+        }
+        body.dark-mode .notification-item:hover {
+            background-color: #3d3d3d;
+        }
+        body.dark-mode .notification-content {
+            color: #ffffff;
+        }
+        body.dark-mode .notification-time {
+            color: #ccc;
+        }
+        body.dark-mode .notification-footer {
+            border-top-color: #444;
+        }
+        body.dark-mode .user-info-container {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+        .notification-placeholder {
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            font-size: 16px;
+        }
+        body.dark-mode .notification-placeholder {
+            color: #ccc;
+        }
+        .sidebar-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+
+        }
+        .sidebar-header img {
+            max-width: 140px;
+            height: 105px;
+            margin: 20px;
+
+
+            object-fit: contain;
+        }
+        .sidebar-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 160px;
+            }
+            .sidebar .subadmin-info {
+                padding-top: 10px;
+            }
+            .sidebar .subadmin-info .profile-avatar {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+            .sidebar .subadmin-info .subadmin-name {
+                font-size: 12px;
+            }
+            .sidebar-header {
+                margin-bottom: 20px;
+                padding: 0 10px;
+            }
+            .sidebar-header img {
+                max-width: 150px;
+                height: 70px;
+                margin: 15px;
+                border-radius: 10px;
+            }
+
+            .sidebar ul li {
+                padding: 12px 10px;
+                font-size: 14px;
+            }
+            .sidebar ul li a i {
+                width: auto;
+                text-align: left;
+            }
+            .sidebar ul li a{
+                padding-left:0px;
+                text-align: left;
+                margin-left:0px;
+            }
+            .sidebar ul li a ul{
+                padding-left:0px ;
+                text-align: left;
+                margin-left:0px;
+            }
+            .uploads-dropdown > a, .reports-dropdown > a {
+                padding-left: 0px !important;
+            }
+            .submenu li {
+                padding-left: 0px !important;
+            }
+            .main-content {
+                margin-left: 150px;
+                padding: 20px 15px;
+            }
+            .header {
+                left: 140px;
+                width: calc(100% - 130px);
+            }
+        }
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 120px;
+            }
+            .sidebar .subadmin-info {
+                padding-top: 5px;
+            }
+            .sidebar .subadmin-info .profile-avatar {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+            }
+            .sidebar .subadmin-info .subadmin-name {
+                font-size: 11px;
+            }
+            .sidebar-header img {
+                max-width: 100px;
+                height: 50px;
+                border-radius: 10px;
+            }
+            .sidebar ul li {
+                margin-left: 0;
+                padding-left: 0px;
+                font-size: 12px;
+                text-align: left;
+            }
+            .sidebar ul li a i {
+                width: auto;
+                text-align: left;
+            }
+            .uploads-dropdown > a, .reports-dropdown > a {
+                padding-left: 0px !important;
+            }
+            .submenu li {
+                padding-left: 0px !important;
+            }
+            .sidebar ul li a ul {
+                padding-left:0px;
+                text-align: left;
+                margin-left:0px;
+            }
+            .main-content {
+                margin-left: 120px;
+                padding: 15px 10px;
+            }
+            .header {
+                left: 115px;
+                width: calc(100% - 110px);
+            }
+            .toggle-btn {
+                font-size: 25px;
+                margin-left:2px;
+            }
+        }
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .sidebar {
+                width: 220px;
+            }
+            .sidebar-header img {
+                max-width: 140px;
+                height: 70px;
+
+                border-radius: 10px;
+            }
+            .main-content {
+                margin-left: 195px;
+            }
+            .header {
+                left: 180px;
+                width: calc(100% - 180px);
+            }
+
+        }
+        @media (min-width: 1200px) {
+            .sidebar {
+                width: 200px;
+            }
+            .sidebar-header img {
+                max-width: 160px;
+                height: 100px;
+                border-radius: 10px;
+
+            }
+            .main-content {
+                margin-left: 200px;
+            }
+            .header {
+                left: 180px;
+                width: calc(100% - 180px);
+            }
+
+        }
+
+        /* Hide subadmin info on screens larger than 500px */
+        @media (min-width: 501px) {
+            .sidebar .subadmin-info {
+                display: none;
+            }
+            .sidebar {
+                justify-content: flex-start;
+            }
+            .profile-dropdown {
+                display: flex;
+            }
+        }
+
+        /* Show subadmin info on screens 500px and below */
+        @media (max-width: 500px) {
+            .sidebar .subadmin-info {
+                display: flex;
+            }
+            .sidebar {
+                justify-content: space-between;
+            }
+            .profile-dropdown {
+                display: none;
+            }
+            .card{
+
+            }
+        }
+
+        /* Tablet responsiveness (768px - 1024px) */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .sidebar {
+                width: 180px;
+            }
+            .main-content {
+                margin-left: 180px;
+                padding: 20px 15px;
+            }
+            .header {
+                left: 160px;
+                width: calc(100% - 160px);
+            }
+            .graph-item {
+                width: 45%;
+            }
+            .chart-container {
+                height: 250px;
+            }
+            .dashboard {
+                gap: 15px;
+            }
+            .card {
+                min-width: 150px;
+            }
+            /* Resize specific charts for tablets */
+            #usr-grph {
+                height: 400px;
+                width: 100%;
+            }
+            #sgn-grph {
+                height: 400px;
+                width: 100%;
+            }
+            #sgst-grph {
+                height: 350px;
+                width: 100%;
+            }
+        }
+
+        /* Phone responsiveness (max-width: 767px) */
+        @media (max-width: 767px) {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 250px;
+                height: 100%;
+                transform: translateX(-100%);
+                z-index: 1001;
+                transition: transform 0.3s ease;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 20px 10px;
+            }
+            .header {
+                left: 0;
+                width: 100%;
+                padding: 15px;
+                position: fixed;
+                top: 0;
+                z-index: 999;
+                height: 70px;
+                display: flex;
+                align-items: center;
+            }
+            .main-content {
+                margin-top: 70px;
+            }
+            .dashboard {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .card {
+                min-width: unset;
+                width: 100%;
+                padding: 15px;
+            }
+            .graphs-section h2 {
+                font-size: 20px;
+            }
+            .graph-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .graph-item {
+                width: 100%;
+                padding: 15px;
+            }
+            .chart-container {
+                height: 200px;
+                width: 100%;
+                position: relative;
+            }
+            .chart-container canvas {
+                max-width: 100%;
+                height: 100% !important;
+            }
+            /* Make charts responsive */
+            .chart-container {
+                position: relative;
+                width: 100%;
+                height: 200px;
+            }
+            .chart-container canvas {
+                width: 100% !important;
+                height: 100% !important;
+                max-width: 100%;
+                max-height: 100%;
+            }
+            table {
+                font-size: 12px;
+                min-width: 600px;
+                overflow-x: auto;
+                display: block;
+            }
+            .users-section table {
+                min-width: 600px;
+            }
+            .modal-content {
+                width: 95%;
+                max-width: none;
+                margin: 10% auto;
+                padding: 15px;
+            }
+            .citation-modal-content {
+                width: 95%;
+                padding: 15px;
+            }
+            .upload-section form {
+                grid-template-columns: 1fr !important;
+                gap: 10px;
+            }
+            .upload-section form div {
+                grid-template-columns: 1fr !important;
+            }
+            .filter-buttons {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            .filter-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            .article {
+                padding: 15px;
+            }
+            .actions {
+                flex-direction: column;
+                gap: 5px;
+                align-items: flex-start;
+            }
+            /* Overlay for sidebar */
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0.5);
+                z-index: 1000;
+            }
+            .sidebar-overlay.show {
+                display: block;
+            }
+            /* Resize specific charts for phones */
+            #usr-grph {
+                height: 350px;
+                width: 100%;
+            }
+            #sgn-grph {
+                height: 350px;
+                width: 100%;
+            }
+            #sgst-grph {
+                height: 300px;
+                width: 100%;
+            }
+            .chart-container canvas {
+                width: 100% !important;
+                height: 100% !important;
+                max-width: 100%;
+                max-height: 100%;
+            }
+        }
+
+        /* Additional media query for screens 703px and below */
+        @media (max-width: 703px) {
+            .users-section {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .users-section .user-subsection {
+                overflow-x: visible;
+            }
+            .users-section table {
+                min-width: 600px;
+                overflow-x: visible;
+                display: block;
+                font-size: 12px;
+            }
+        }
+
+        /* Specific fixes for max-width: 500px and below */
+        @media (max-width: 500px) {
+            .sidebar {
+                width: 150px;
+            }
+            .users-section table {
+                min-width: 600px;
+                overflow-x: auto;
+                display: block;
+            }
+            .users-section {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .users-section .user-subsection {
+                overflow-x: visible;
+            }
+            .users-section table {
+                font-size: 12px;
+                min-width: 600px;
+                overflow-x: auto;
+                display: block;
+            }
+            .dashboard {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 8px;
+                justify-content: space-between;
+            }
+            .card {
+                width: calc(50% - 4px);
+                min-width: unset;
+                padding: 12px;
+                height: auto;
+                min-height: 80px;
+                box-sizing: border-box;
+            }
+            .card h3 {
+                font-size: 15px;
+            }
+            #usr-grph {
+                height: 300px;
+                width: 100%;
+            }
+            #usr-chart {
+                height: 250px;
+                width: 100%;
+            }
+            #sgn-grph {
+                height: 300px;
+                width: 100%;
+            }
+            #sgn-chart {
+                height: 250px;
+                width: 100%;
+            }
+            #sgst-grph {
+                height: 300px;
+                width: 100%;
+            }
+            #sgst-chart {
+                height: 250px;
+                width: 100%;
+            }
+        }
+        .welcome-container {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .welcome-container h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        .welcome-container p {
+            margin: 0;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        .welcome-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        .welcome-modal.show {
+            display: flex;
+        }
+        .welcome-modal-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: welcomeFadeIn 0.5s ease-out;
+        }
+        @keyframes welcomeFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .uploads-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .uploads-table th,
+        .uploads-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .uploads-table th {
+            background-color: #f2f2f2;
+        }
+        .preview-cell {
+            text-align: center;
+        }
+        .preview-thumb {
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .pdf-icon {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: #ff5722;
+            color: white;
+            text-align: center;
+            line-height: 50px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        #file-preview-modal .modal-content {
+            width: 80%;
+            max-width: 800px;
+            height: 80%;
+            display: flex;
+            flex-direction: column;
+            margin: 5% auto;
+        }
+        #preview-content {
+            flex: 1;
+            overflow: auto;
+        }
+        #preview-content img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        #preview-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        body.dark-mode .uploads-table th {
+            background-color: #3d3d3d;
+            color: white;
+        }
+        body.dark-mode .uploads-table {
+            color: white;
+        }
+        body.dark-mode .uploads-table td {
+            border-bottom-color: #444;
+        }
+        .user-subsection {
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid var(--border-color);
+        }
+        body.dark-mode .user-subsection {
+            background-color: #2d2d2d;
+            border-left-color: var(--border-color);
+        }
+        .role-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: white;
+        }
+        .role-badge.senior_high { background-color: #007bff; }
+        .role-badge.college { background-color: #28a745; }
+        .role-badge.teacher { background-color: #dc3545; }
+        .role-badge.admin { background-color: #6f42c1; }
+        .btn-sm {
+            padding: 4px 8px;
+            font-size: 12px;
+            margin: 2px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-success { background-color: #28a745; color: white; }
+        .btn-success:hover { background-color: #218838; }
+        .btn-danger { background-color: #dc3545; color: white; }
+        .btn-danger:hover { background-color: #c82333; }
+        .btn-warning { background-color: #ffc107; color: #212529; }
+        .btn-warning:hover { background-color: #e0a800; }
+        .btn-info { background-color: #17a2b8; color: white; }
+        .btn-info:hover { background-color: #138496; }
+        .btn-primary { background-color: #007bff; color: white; }
+        .btn-primary:hover { background-color: #0069d9; }
+        body.dark-mode .btn-success { background-color: #28a745; }
+        body.dark-mode .btn-success:hover { background-color: #218838; }
+        body.dark-mode .btn-danger { background-color: #dc3545; }
+        body.dark-mode .btn-danger:hover { background-color: #c82333; }
+        body.dark-mode .btn-warning { background-color: #ffc107; color: #212529; }
+        body.dark-mode .btn-warning:hover { background-color: #e0a800; }
+        body.dark-mode .btn-info { background-color: #17a2b8; }
+        body.dark-mode .btn-info:hover { background-color: #138496; }
+        body.dark-mode .btn-primary { background-color: #007bff; }
+        body.dark-mode .btn-primary:hover { background-color: #0069d9; }
+        .user-subsection h3 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--header-color);
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            font-style: italic;
+        }
+        body.dark-mode .empty-state {
+            color: #ccc;
+        }
+        .user-subsection table {
+            margin-top: 15px;
+        }
+        .user-subsection table th {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .user-subsection table td {
+            vertical-align: middle;
+        }
+        .suggestions-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .suggestions-table th,
+        .suggestions-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .suggestions-table th {
+            background-color: #f2f2f2;
+        }
+        .suggestion-container {
+            max-width: 200px;
+            word-wrap: break-word;
+        }
+        .suggestion-container img {
+            max-width: 100px;
+            max-height: 100px;
+            margin-top: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #reply-modal .modal-content {
+            width: 80%;
+            max-width: 500px;
+        }
+        #reply-modal textarea {
+            font-family: Arial, sans-serif;
+        }
+        body.dark-mode .suggestions-table th {
+            background-color: #3d3d3d;
+            color: white;
+        }
+        body.dark-mode .suggestions-table {
+            color: white;
+        }
+        body.dark-mode .suggestions-table td {
+            border-bottom-color: #444;
+        }
+        body.dark-mode #reply-modal .modal-content {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+        body.dark-mode #reply-modal textarea {
+            background-color: #3d3d3d;
+            color: #ffffff;
+            border-color: #555;
+        }
+        body.dark-mode #reply-modal h3 {
+            color: #ffffff;
+        }
+        body.dark-mode #reply-user-info {
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+        .img-preview {
+            width: 50px;
+            height: 50px;
+            background: #ff9500f5;
+            color: #fff;
+            border-radius: 4px;
+            line-height: 50px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: normal;
+            font-size: 12px;
+            display: inline-block;
+        }
+        body.dark-mode .main-content {
+            background-color: #181f2a;
+        }
+        body.dark-mode .content-text {
+            background: #1a2636 !important;
+            color: #e2e8f0 !important;
+            border-color: #374151 !important;
+        }
+        body.dark-mode .edit-mode textarea {
+            background: #1a2636 !important;
+            color: #e2e8f0 !important;
+            border-color: #374151 !important;
+        }
+        .settings-subsection,
+        .reports-subsection {
+            display: none;
+        }
+        .settings-subsection.active,
+        .reports-subsection.active {
+            display: block;
+        }
+        @media (max-width: 768px) {
+            .users-section table {
+                font-size: 12px;
+                min-width: 600px;
+            }
+            .users-section {
+                overflow-x: auto;
+            }
+            .user-subsection h3 {
+                font-size: 16px;
+            }
+            .user-subsection p {
+                font-size: 14px;
+            }
+        }
+        .bar-abm { background: #FF5722; }
+        .bar-cularts { background: #9C27B0; }
+        .bar-itmawd { background: #4CAF50; }
+        .bar-stem { background: #2196F3; }
+        .bar-bsba { background: #FF9800; }
+        .bar-bscs { background: #9C27B0; }
+        .bar-bsit { background: #4CAF50; }
+    </style>
+</head>
+<body>
+    <button class="toggle-btn" onclick="toggleSidebar()">&#9776;</button>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="STI Logo.png" alt="STI Logo">
+        </div>
+        <ul>
+            <li><a href="#" onclick="showSection('dashboard')"><i class="fas fa-tachometer-alt"></i><span class="text">Dashboard</span></a></li>
+            <li class="uploads-dropdown">
+                <a href="#" onclick="toggleUploadsDropdown(event)"><i class="fas fa-upload"></i><span class="text">Uploads</span><i class="fas fa-chevron-down arrow"></i></a>
+                <ul class="submenu">
+                    <li><a href="#" onclick="showUploaded('admin')"><i class="fas fa-user-shield"></i>Admin Uploads</a></li>
+                    <li><a href="#" onclick="showUploaded('user')"><i class="fas fa-users"></i>User Uploads</a></li>
+                </ul>
+            </li>
+            <li class="reports-dropdown">
+                <a href="#" onclick="toggleReportsDropdown(event)"><i class="fas fa-chart-bar"></i><span class="text">Reports</span><i class="fas fa-chevron-down arrow"></i></a>
+                <ul class="submenu">
+                    <li><a href="#" onclick="showReportsSection('user-activity')"><i class="fas fa-user-clock"></i>User Activity</a></li>
+                    <li><a href="#" onclick="showReportsSection('upload-stats')"><i class="fas fa-upload"></i>Upload Statistics</a></li>
+                </ul>
+            </li>
+        </ul>
+        <div class="subadmin-info" onclick="toggleProfileDropdown()">
+            <div class="profile-avatar">S</div>
+            <div class="subadmin-name">Sub Admin</div>
+        </div>
+        <div class="sidebar-profile-menu" id="sidebar-profile-menu">
+            <li><a href="#" onclick="handleProfileClick()"><i class="fas fa-user"></i>Profile</a></li>
+            <li><a href="#" onclick="handleLogoutClick()"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+        </div>
+    </div>
+
+    <div class="header">
+        <div id="page-title">Dashboard</div>
+        <div class="header-right">
+            <button class="notification-bell" onclick="toggleNotificationModal()">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge" id="notification-badge">0</span>
+            </button>
+            <button class="dark-mode-toggle" onclick="toggleDarkMode()">
+                <i class="fas fa-moon"></i>
+            </button>
+            <div class="profile-dropdown" id="profile-dropdown">
+                <button class="profile-btn" onclick="toggleProfileDropdown()">
+                    <div class="profile-avatar">S</div>
+                    <span>Sub Admin</span>
+                </button>
+                <ul class="profile-menu">
+                    <li><a href="#" onclick="handleProfileClick()"><i class="fas fa-user"></i>Profile</a></li>
+                    <li class="logout-item"><a href="#" onclick="handleLogoutClick()"><i class="fas fa-sign-out-alt"></i>Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="content-section active">
+            <div class="welcome-container">
+                <h1>Welcome to Sub-Admin Panel</h1>
+                <p>Manage uploads, view reports, and oversee user activities.</p>
+            </div>
+            <div class="dashboard">
+                <div class="card" onclick="showSection('upload')">
+                    <h3><i class="fas fa-upload"></i> Total Uploads</h3>
+                    <p id="total-uploads">0</p>
+                </div>
+                <div class="card" onclick="showSection('reports')">
+                    <h3><i class="fas fa-chart-bar"></i> Reports</h3>
+                    <p id="total-reports">0</p>
+                </div>
+                <div class="card" onclick="showSection('statistics')">
+                    <h3><i class="fas fa-chart-pie"></i> Statistics</h3>
+                    <p id="total-stats">0</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Section -->
+        <div id="upload" class="content-section upload-section">
+            <h2>Upload Management</h2>
+            <div class="upload-controls">
+                <button class="btn" onclick="showUploadForm()">Upload New Article</button>
+                <button class="btn" onclick="refreshUploads()">Refresh</button>
+            </div>
+
+            <div id="article-upload-form" style="display: none;">
+                <h3>Upload New Article</h3>
+                <form id="upload-form" enctype="multipart/form-data">
+                    <div>
+                        <label for="article-title">Title:</label>
+                        <input type="text" id="article-title" name="title" required>
+                    </div>
+                    <div>
+                        <label for="article-author">Author:</label>
+                        <input type="text" id="article-author" name="author" required>
+                    </div>
+                    <div>
+                        <label for="article-abstract">Abstract:</label>
+                        <textarea id="article-abstract" name="abstract" required></textarea>
+                    </div>
+                    <div>
+                        <label for="article-file">File:</label>
+                        <input type="file" id="article-file" name="file" accept=".pdf,.doc,.docx" required>
+                    </div>
+                    <div>
+                        <label for="article-category">Category:</label>
+                        <select id="article-category" name="category" required>
+                            <option value="">Select Category</option>
+                            <option value="research">Research Paper</option>
+                            <option value="capstone">Capstone Project</option>
+                            <option value="thesis">Thesis</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">Upload</button>
+                </form>
+            </div>
+
+            <div id="admin-uploaded-articles">
+                <h3>Admin Uploaded Articles</h3>
+                <table class="uploads-table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Category</th>
+                            <th>Upload Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-uploads-tbody">
+                        <!-- Admin uploads will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="user-uploaded-articles">
+                <h3>User Uploaded Articles</h3>
+                <table class="uploads-table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Category</th>
+                            <th>Upload Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="user-uploads-tbody">
+                        <!-- User uploads will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Reports Section -->
+        <div id="reports" class="content-section reports-section">
+            <h2>Reports</h2>
+            <div class="reports-nav">
+                <button class="btn" onclick="showReportsSection('user-activity')">User Activity</button>
+                <button class="btn" onclick="showReportsSection('upload-stats')">Upload Statistics</button>
+            </div>
+
+            <div id="reports-user-activity" class="reports-subsection active">
+                <h3>User Activity Report</h3>
+                <div id="user-activity-content">
+                    <!-- User activity content will be populated here -->
+                </div>
+            </div>
+
+            <div id="reports-upload-stats" class="reports-subsection">
+                <h3>Upload Statistics</h3>
+                <div id="upload-stats-content">
+                    <!-- Upload statistics content will be populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div id="statistics" class="content-section statistics-section">
+            <h2>Statistics</h2>
+            <div class="graphs-section">
+                <h3>Upload Statistics</h3>
+                <div class="graph-container">
+                    <div class="graph-item">
+                        <h4>Uploads by Category</h4>
+                        <div class="chart-container">
+                            <canvas id="category-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="graph-item">
+                        <h4>Monthly Uploads</h4>
+                        <div class="chart-container">
+                            <canvas id="monthly-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div id="notification-modal" class="notification-modal">
+        <div class="notification-header">
+            <h3>Notifications</h3>
+            <button class="notification-close" onclick="toggleNotificationModal()">&times;</button>
+        </div>
+        <div class="notification-list" id="notification-list">
+            <div class="notification-placeholder">No new notifications</div>
+        </div>
+        <div class="notification-footer">
+            <button class="view-all-btn" onclick="viewAllNotifications()">View All</button>
+        </div>
+    </div>
+
+    <!-- File Preview Modal -->
+    <div id="file-preview-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeFilePreviewModal()">&times;</span>
+            <h3>File Preview</h3>
+            <div id="preview-content"></div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize charts and data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            loadDashboardData();
+            loadNotifications();
+        });
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const mainContent = document.getElementById('main-content');
+            const header = document.querySelector('.header');
+
+            if (window.innerWidth <= 767) {
+                sidebar.classList.toggle('open');
+                if (overlay) overlay.classList.toggle('show');
+            } else {
+                sidebar.classList.toggle('collapsed');
+                if (sidebar.classList.contains('collapsed')) {
+                    mainContent.style.marginLeft = '0';
+                    header.style.left = '0';
+                    header.style.width = '100%';
+                } else {
+                    mainContent.style.marginLeft = '';
+                    header.style.left = '';
+                    header.style.width = '';
+                }
+            }
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const toggleBtn = document.querySelector('.dark-mode-toggle i');
+            if (document.body.classList.contains('dark-mode')) {
+                toggleBtn.className = 'fas fa-sun';
+                toggleBtn.style.color = '#FFD700';
+            } else {
+                toggleBtn.className = 'fas fa-moon';
+                toggleBtn.style.color = '#777';
+            }
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            document.getElementById('page-title').textContent =
+                sectionId === 'dashboard' ? 'Dashboard' :
+                sectionId === 'upload' ? 'Upload Management' :
+                sectionId === 'reports' ? 'Reports' :
+                sectionId === 'statistics' ? 'Statistics' : 'Dashboard';
+        }
+
+        function toggleProfileDropdown() {
+            const dropdown = document.getElementById('profile-dropdown');
+            const sidebarMenu = document.getElementById('sidebar-profile-menu');
+            const isOpen = dropdown.classList.contains('open') || sidebarMenu.classList.contains('open');
+
+            if (window.innerWidth <= 500) {
+                sidebarMenu.classList.toggle('open');
+                dropdown.classList.remove('open');
+            } else {
+                dropdown.classList.toggle('open');
+                sidebarMenu.classList.remove('open');
+            }
+
+            if (!isOpen) {
+                setTimeout(() => {
+                    document.addEventListener('click', closeProfileDropdownOnOutsideClick);
+                }, 1);
+            }
+        }
+
+        function closeProfileDropdownOnOutsideClick(e) {
+            const dropdown = document.getElementById('profile-dropdown');
+            const sidebarMenu = document.getElementById('sidebar-profile-menu');
+            const btn = document.querySelector('.profile-btn');
+            const info = document.querySelector('.subadmin-info');
+
+            if (!dropdown.contains(e.target) && !btn.contains(e.target) &&
+                !sidebarMenu.contains(e.target) && !info.contains(e.target)) {
+                dropdown.classList.remove('open');
+                sidebarMenu.classList.remove('open');
+                document.removeEventListener('click', closeProfileDropdownOnOutsideClick);
+            }
+        }
+
+        function toggleNotificationModal() {
+            const modal = document.getElementById('notification-modal');
+            modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function toggleUploadsDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const uploads = document.querySelector('.uploads-dropdown');
+            const reports = document.querySelector('.reports-dropdown');
+            if (reports) reports.classList.remove('open');
+            if (uploads) uploads.classList.toggle('open');
+        }
+
+        function toggleReportsDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const uploads = document.querySelector('.uploads-dropdown');
+            const reports = document.querySelector('.reports-dropdown');
+            if (uploads) uploads.classList.remove('open');
+            if (reports) reports.classList.toggle('open');
+        }
+
+        function showUploadForm() {
+            document.getElementById('article-upload-form').style.display = 'block';
+            document.querySelectorAll('.upload-section h3').forEach(h3 => h3.style.display = 'none');
+            document.getElementById('admin-uploaded-articles').style.display = 'none';
+            document.getElementById('user-uploaded-articles').style.display = 'none';
+        }
+
+        function showUploaded(type) {
+            showSection('upload');
+            document.getElementById('article-upload-form').style.display = 'none';
+            document.querySelectorAll('.upload-section h3').forEach(h3 => h3.style.display = 'none');
+            if (type === 'admin') {
+                document.querySelector('.upload-section h3').style.display = 'block';
+                document.getElementById('admin-uploaded-articles').style.display = 'block';
+                document.getElementById('user-uploaded-articles').style.display = 'none';
+            } else {
+                document.querySelectorAll('.upload-section h3')[1].style.display = 'block';
+                document.getElementById('admin-uploaded-articles').style.display = 'none';
+                document.getElementById('user-uploaded-articles').style.display = 'block';
+            }
+        }
+
+        function showReportsSection(type) {
+            document.querySelectorAll('.reports-subsection').forEach(s => s.classList.remove('active'));
+            document.getElementById('reports-' + type).classList.add('active');
+        }
+
+        function handleProfileClick() {
+            alert('Profile settings - Feature coming soon!');
+        }
+
+        function handleLogoutClick() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            }
+        }
+
+        function initializeCharts() {
+            // Category chart
+            const categoryCtx = document.getElementById('category-chart').getContext('2d');
+            new Chart(categoryCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Research', 'Capstone', 'Thesis'],
+                    datasets: [{
+                        data: [30, 25, 15],
+                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+
+            // Monthly chart
+            const monthlyCtx = document.getElementById('monthly-chart').getContext('2d');
+            new Chart(monthlyCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Uploads',
+                        data: [12, 19, 15, 25, 22, 30],
+                        borderColor: '#4CAF50',
+                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        function loadDashboardData() {
+            // Simulate loading dashboard data
+            document.getElementById('total-uploads').textContent = '45';
+            document.getElementById('total-reports').textContent = '12';
+            document.getElementById('total-stats').textContent = '8';
+        }
+
+        function loadNotifications() {
+            // Simulate loading notifications
+            const notificationList = document.getElementById('notification-list');
+            const badge = document.getElementById('notification-badge');
+
+            // Sample notifications
+            const notifications = [
+                { type: 'upload', content: 'New article uploaded by user123', time: '2 hours ago' },
+                { type: 'user', content: 'New user registered', time: '1 day ago' }
+            ];
+
+            if (notifications.length > 0) {
+                notificationList.innerHTML = '';
+                notifications.forEach(notification => {
+                    const item = document.createElement('div');
+                    item.className = 'notification-item';
+                    item.innerHTML = `
+                        <div class="notification-type ${notification.type}">${notification.type.toUpperCase()}</div>
+                        <div class="notification-content">${notification.content}</div>
+                        <div class="notification-time">${notification.time}</div>
+                    `;
+                    notificationList.appendChild(item);
+                });
+                badge.textContent = notifications.length;
+                badge.style.display = 'flex';
+            }
+        }
+
+        function viewAllNotifications() {
+            alert('View all notifications - Feature coming soon!');
+        }
+
+        function refreshUploads() {
+            // Simulate refreshing uploads
+            alert('Uploads refreshed successfully!');
+        }
+
+        function closeFilePreviewModal() {
+            document.getElementById('file-preview-modal').style.display = 'none';
+        }
+
+        // Upload form handling
+        document.getElementById('upload-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Simulate upload
+            alert('Article uploaded successfully!');
+            this.reset();
+            document.getElementById('article-upload-form').style.display = 'none';
+        });
+    </script>
+</body>
+</html>

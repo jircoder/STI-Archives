@@ -66,6 +66,15 @@
             width: auto;
             border-radius: 6px;
             margin-left: 30px;
+            margin-top:2px;
+        }
+        .sti-logo img {
+            display:flex;
+            align-items: center;
+            height: 40px;
+            width: auto;
+            border-radius: 6px;
+            margin-left: 30px;
         }
         .sti-logo span {
             font-size: 24px;
@@ -113,10 +122,11 @@
             display: flex;
             align-items: center;
         }
-        .fa-user-circle {
-            font-size: 28px;
-            color: #0057b8;
-        }
+        .navbar-right.user-nav-fixed .fa-user-circle {
+    font-size: 32px; /* Reduced to fit */
+    color: #0057b8;
+}
+        
         .dark-mode .fa-user-circle {
             color: #ffd700;
         }
@@ -1035,7 +1045,7 @@
 <body>
     <nav class="main-navbar" id="main-navbar">
         <div class="sti-logo">
-            <a href="Homepage.html"><img src="STI Logo.png" alt="STI Logo" class="sti-logo"></a>
+            <a href="Homepage.html"><img src="STI Logo.png" alt="STI Logo" ></a>
             <a href="#home"><span>ARCHIVES</span></a>
         </div>
         <div style="flex:1"></div>
@@ -1503,6 +1513,15 @@
             let lastScrollY = window.scrollY;
             let isScrollingDown = false;
 
+            // Load previously animated items from localStorage
+            const animatedItems = JSON.parse(localStorage.getItem('animatedFeatureItems')) || [];
+            featureItems.forEach((item, index) => {
+                if (animatedItems.includes(index)) {
+                    item.classList.add('animate');
+                    item.classList.remove('animate-out');
+                }
+            });
+
             window.addEventListener('scroll', () => {
                 const currentScrollY = window.scrollY;
                 isScrollingDown = currentScrollY > lastScrollY;
@@ -1511,13 +1530,24 @@
 
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
+                    const itemIndex = Array.from(featureItems).indexOf(entry.target);
                     if (entry.isIntersecting && isScrollingDown && !entry.target.classList.contains('animate')) {
                         entry.target.classList.add('animate');
                         entry.target.classList.remove('animate-out');
+                        // Save to localStorage
+                        const currentAnimated = JSON.parse(localStorage.getItem('animatedFeatureItems')) || [];
+                        if (!currentAnimated.includes(itemIndex)) {
+                            currentAnimated.push(itemIndex);
+                            localStorage.setItem('animatedFeatureItems', JSON.stringify(currentAnimated));
+                        }
                     }
                     if (!entry.isIntersecting && !isScrollingDown && entry.target.classList.contains('animate')) {
                         entry.target.classList.remove('animate');
                         entry.target.classList.add('animate-out');
+                        // Remove from localStorage
+                        const currentAnimated = JSON.parse(localStorage.getItem('animatedFeatureItems')) || [];
+                        const updatedAnimated = currentAnimated.filter(idx => idx !== itemIndex);
+                        localStorage.setItem('animatedFeatureItems', JSON.stringify(updatedAnimated));
                     }
                 });
             }, {

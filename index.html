@@ -872,7 +872,7 @@
                 </div>
                 <form class="auth-form active" id="loginForm" autocomplete="off" method="POST" action="javascript:void(0);">
                     <label for="login-email">Email</label>
-                    <input type="email" id="login-email" placeholder="Enter your email" required maxlength="45">
+                    <input type="email" id="login-email" placeholder="username@clmb.sti.archives" required maxlength="45">
                     <span id="login-email-error" class="error-message" style="display: none;"><i class="fas fa-exclamation-circle"></i> Please enter a valid email address.</span>
                     <label for="login-password">Password</label>
                     <div class="password-container">
@@ -1146,14 +1146,14 @@
         const loginPasswordError = document.getElementById('login-password-error');
         function validateLoginEmail() {
             const email = loginEmailInput.value.trim();
-            const emailRegex = /^[A-Za-z0-9._%+-]+@calamba\.sti\.edu\.ph$/;
+            const emailRegex = /^[A-Za-z0-9._%+-]+@clmb\.sti\.archives$/;
             if (!email) {
-                loginEmailError.innerHTML = '<i class="fas fa-exclamation-circle"></i> Only emails from @calamba.sti.edu.ph are accepted. Please use your official school email.';
+                loginEmailError.innerHTML = '<i class="fas fa-exclamation-circle"></i> Only emails from @clmb.sti.archives are accepted. Please use your official school email.';
                 loginEmailError.style.display = 'block';
                 loginEmailInput.classList.add('input-error');
                 return false;
             } else if (!emailRegex.test(email)) {
-                loginEmailError.innerHTML = '<i class="fas fa-exclamation-circle"></i> Only emails from @calamba.sti.edu.ph are accepted. Please use your official school email.';
+                loginEmailError.innerHTML = '<i class="fas fa-exclamation-circle"></i> Only emails from @clmb.sti.archives are accepted. Please use your official school email.';
                 loginEmailError.style.display = 'block';
                 loginEmailInput.classList.add('input-error');
                 return false;
@@ -1215,14 +1215,14 @@
             loginEmailInput.classList.remove('input-error');
             loginPasswordInput.classList.remove('input-error');
             let hasErrors = false;
-            const emailRegex = /^[A-Za-z0-9._%+-]+@calamba\.sti\.edu\.ph$/;
+            const emailRegex = /^[A-Za-z0-9._%+-]+@clmb\.sti\.archives$/;
             if (!email) {
-                loginEmailError.innerHTML = '<i class="fas fa-exclamation-circle"></i> Only emails from @calamba.sti.edu.ph are accepted. Please use your official school email.';
+                loginEmailError.innerHTML = '<i class="fas fa-exclamation-circle"></i> Only emails from @clmb.sti.archives are accepted. Please use your official school email.';
                 loginEmailError.style.display = 'block';
                 loginEmailInput.classList.add('input-error');
                 hasErrors = true;
             } else if (!emailRegex.test(email)) {
-                loginEmailError.innerHTML = '<i class="fas fa-exclamation-circle"></i> Only @calamba.sti.edu.ph are accepted. Please use your official school email.';
+                loginEmailError.innerHTML = '<i class="fas fa-exclamation-circle"></i> Only @clmb.sti.archives are accepted. Please use your official school email.';
                 loginEmailError.style.display = 'block';
                 loginEmailInput.classList.add('input-error');
                 hasErrors = true;
@@ -1244,9 +1244,9 @@
             }
             const users = getUsers();
             // Check if user is admin (hardcoded email)
-            const isAdmin = email === 'admin@calamba.sti.edu.ph';
-            // >>> NEW: Check for user@calamba.sti.edu.ph
-            const isUser = email === 'user@calamba.sti.edu.ph';
+            const isAdmin = email === 'admin@clmb.sti.archives';
+            // >>> NEW: Check for user@clmb.sti.archives
+            const isUser = email === 'user@clmb.sti.archives';
             const user = users.find(u => u.email === email) || (isAdmin ? null : null);
             // If not found in users, check if it's the hardcoded admin or user
             if (user) {
@@ -1271,7 +1271,7 @@
                 // Check for hardcoded admin account
                 if (isAdmin) {
                     const adminCredentials = [
-                        { email: 'admin@calamba.sti.edu.ph', password: 'admin123', name: 'Permanent Admin', role: 'admin', id: 'admin-permanent' }
+                        { email: 'admin@clmb.sti.archives', password: 'admin123', name: 'Permanent Admin', role: 'admin', id: 'admin-permanent' }
                     ];
                     const admin = adminCredentials.find(u => u.email === email);
                     if (admin && admin.password === password) {
@@ -1294,7 +1294,7 @@
                 // >>> NEW: Check for user@calamba.sti.edu.ph
                 } else if (isUser) {
                     if (password === 'usertesting') {
-                        const userAccount = { email: 'user@calamba.sti.edu.ph', name: 'Test User', role: 'user', id: 'user-test' };
+                        const userAccount = { email: 'user@clmb.sti.archives', name: 'Test User', role: 'user', id: 'user-test' };
                         localStorage.setItem('currentUser', JSON.stringify(userAccount));
                         if (rememberMe) {
                             localStorage.setItem('userRememberMe', email);
@@ -1513,7 +1513,7 @@
             messageDiv.style.display = 'block';
 
             // Send signup data to backend with file
-            fetch('http://localhost:5000/signup_user', {
+            fetch('/api/signup_user', {
                 method: 'POST',
                 body: formData
             })
@@ -1562,6 +1562,19 @@
         darkModeToggle.onclick = () => {
             setDarkMode(!document.body.classList.contains('dark-mode'));
         };
+        // Migration: Update old domain emails to new domain
+        function migrateEmailDomains() {
+            const keys = ['rememberMe', 'adminRememberMe', 'userRememberMe'];
+            keys.forEach(key => {
+                const storedEmail = localStorage.getItem(key);
+                if (storedEmail && storedEmail.includes('@calamba.sti.edu.ph')) {
+                    const newEmail = storedEmail.replace('@calamba.sti.edu.ph', '@clmb.sti.archives');
+                    localStorage.setItem(key, newEmail);
+                }
+            });
+        }
+        migrateEmailDomains();
+
         const rememberedEmail = localStorage.getItem('rememberMe');
         // >>> UPDATED: Check for user remember me too
         const rememberedUserEmail = localStorage.getItem('userRememberMe');
@@ -1571,6 +1584,12 @@
         } else if (rememberedUserEmail) {
             document.getElementById('login-email').value = rememberedUserEmail;
             document.getElementById('rememberMe').checked = true;
+        }
+        // Pre-fill with domain for convenience
+        const emailInput = document.getElementById('login-email');
+        if (!emailInput.value) {
+            emailInput.value = '@clmb.sti.archives';
+            emailInput.setSelectionRange(0, 0); // Place cursor at start
         }
         const forgotPasswordLink = document.getElementById('forgotPassword');
         forgotPasswordLink.addEventListener('click', function(e) {
@@ -1703,7 +1722,7 @@
 
             // Optional: Check if user exists (depends on your backend logic)
             // const users = JSON.parse(localStorage.getItem('users')) || [];
-            // const user = users.find(u => u.email === email) || email === 'user@calamba.sti.edu.ph' || email === 'admin@calamba.sti.edu.ph';
+            // const user = users.find(u => u.email === email) || email === 'user@clmb.sti.archives' || email === 'admin@clmb.sti.archives';
             //
             // if (!user) {
             //     errorMessageElement.textContent = 'No account found with this email address.';
@@ -1735,14 +1754,14 @@
         const adminLoginMessage = document.getElementById('admin-login-message');
         function validateAdminEmail() {
             const email = adminEmailInput.value.trim();
-            const emailRegex = /^[A-Za-z0-9._%+-]+@calamba\.sti\.edu\.ph$/;
+            const emailRegex = /^[A-Za-z0-9._%+-]+@clmb\.sti\.archives$/;
             if (!email) {
-                adminEmailError.innerHTML = '<i class="fas fa-exclamation-circle"></i> Only emails from @calamba.sti.edu.ph are accepted.';
+                adminEmailError.innerHTML = '<i class="fas fa-exclamation-circle"></i> Only emails from @clmb.sti.archives are accepted.';
                 adminEmailError.style.display = 'flex';
                 adminEmailInput.classList.add('input-error');
                 return false;
             } else if (!emailRegex.test(email)) {
-                adminEmailError.innerHTML = '<i class="fas fa-exclamation-circle"></i> Only emails from @calamba.sti.edu.ph are accepted.';
+                adminEmailError.innerHTML = '<i class="fas fa-exclamation-circle"></i> Only emails from @clmb.sti.archives are accepted.';
                 adminEmailError.style.display = 'flex';
                 adminEmailInput.classList.add('input-error');
                 return false;
@@ -1756,7 +1775,7 @@
             adminEmailInput.addEventListener('input', () => {
                 if (adminEmailError.style.display === 'flex') {
                     const email = adminEmailInput.value.trim();
-                    const emailRegex = /^[A-Za-z0-9._%+-]+@calamba\.sti\.edu\.ph$/;
+                    const emailRegex = /^[A-Za-z0-9._%+-]+@clmb\.sti\.archives$/;
                     if (email && emailRegex.test(email)) {
                         adminEmailError.style.display = 'none';
                         adminEmailInput.classList.remove('input-error');
@@ -1795,7 +1814,7 @@
         }
         // Note: Admin login is now handled in the main login form above.
         // const adminCredentials = [
-        //     { email: 'admin@calamba.sti.edu.ph', password: 'admin123', name: 'Permanent Admin', role: 'admin', id: 'admin-permanent' }
+        //     { email: 'admin@clmb.sti.archives', password: 'admin123', name: 'Permanent Admin', role: 'admin', id: 'admin-permanent' }
         // ];
         // adminLoginForm.addEventListener('submit', function(e) {
         //     e.preventDefault();

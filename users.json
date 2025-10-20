@@ -1,18 +1,18 @@
 [
-    {
-        "id": "1760609719.722856",
-        "user_id": "02000395945",
-        "name": "Jirmaic Delos Santos",
-        "email": "santos@sti.archives.clmb",
-        "personal_email": "jirmaic@gmail.com",
-        "password": "sZj!ZpOsb!Wz",
-        "role": "senior_high",
-        "section": "itmawd",
-        "created_at": "2025-10-16T18:15:19.722884",
-        "verified": true,
-        "rejected": false,
-        "banned": false,
-        "raf_path": "uploads\\02000395945_Raf_jirmaic.pdf",
-        "verified_at": "2025-10-16T18:15:29.365410"
-    }
+  {
+    "id": "1760611619.985016",
+    "user_id": "02000395945",
+    "name": "Jirmaic Delos Santos",
+    "email": "santos@sti.archives.clmb",
+    "personal_email": "jirmaicds@gmail.com",
+    "password": "G1RuH6C#I3d6",
+    "role": "senior_high",
+    "section": "itmawd",
+    "created_at": "2025-10-16T18:46:59.985031",
+    "verified": false,
+    "rejected": false,
+    "banned": false,
+    "status": "pending",
+    "raf_path": "uploads\\02000395945_Raf_jirmaic.pdf"
+  }
 ]

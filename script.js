@@ -645,7 +645,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function validateAdminEmail() {
         const email = adminEmailInput.value.trim();
-        const emailRegex = /^[A-Za-z0-9._%+-]+@calamba\.sti\.edu\.ph$/;
+        const emailRegex = /^[A-Za-z0-9._%+-]+@sti\.archives\.clmb$/;
         if (!email) {
             adminEmailError.innerHTML = '<i class="fas fa-exclamation-circle"></i> Only emails from @calamba.sti.edu.ph are accepted.';
             adminEmailError.style.display = 'block';
@@ -705,7 +705,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Hardcoded admin credentials (for demo)
     const adminCredentials = [
-        { email: 'admin@calamba.sti.edu.ph', password: 'admintesting', name: 'Admin', role: 'admin', id: 'admin1' }
+        { email: 'admin@sti.archives.clmb', password: 'admintesting', name: 'Admin', role: 'admin', id: 'admin1' }
     ];
 
     adminLoginForm.addEventListener('submit', function(e) {
